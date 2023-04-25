@@ -1,0 +1,53 @@
+name: web_geospatial
+channels:
+  - conda-forge
+  - nodefaults
+
+dependencies:
+  - python =3.11
+
+  # For data processing 
+  - pandas
+  - xarray
+  - cf_xarray
+  - rioxarray
+  - dask
+  - geopandas
+  - gdptools
+
+
+  # For API access and data formats
+  - intake
+  - intake-xarray
+  - pydap
+  - xpublish
+  - odc-stac
+  - kerchunk
+  - fsspec
+  - s3fs
+  - h5netcdf
+  - pyarrow
+  - zarr
+
+    # Interactivity & Visualization (optional, but required for viz)
+  - jupyterlab
+  - ipympl
+  - nodejs
+  - hvplot
+  - holoviews
+  - geoviews
+  - cartopy
+
+# Dev tools: Language Server Protocol (LSP) (Optional), for:
+  - python-lsp-server # LSP extension for Python (pylsp), including:
+  - pylsp-mypy  # MyPy type checking for Python >=3.7.
+  - jupyterlab-lsp # Provides both server extension and lab extension
+
+  # Package management
+  - conda
+  - mamba
+  - conda-libmamba-solver  # Faster env solver, https://conda.github.io/conda-libmamba-solver/
+  - pip
+
+pip:
+  - pystac-client

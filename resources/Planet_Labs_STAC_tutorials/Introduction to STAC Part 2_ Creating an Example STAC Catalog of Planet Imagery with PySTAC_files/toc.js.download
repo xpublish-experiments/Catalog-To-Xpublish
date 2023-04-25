@@ -1,0 +1,15 @@
+const toggle = {
+  block: 'none',
+  none: 'block'
+}
+
+function ToggleMenu(event) {
+  event.stopPropagation();
+  event.target.classList.toggle('active');
+  event.target.nextElementSibling.style.display = toggle[event.target.nextElementSibling.style.display] || 'block';
+}
+
+var menuParents = document.querySelectorAll(".toc");
+menuParents.forEach(menuParent => {
+  menuParent.addEventListener("click", ToggleMenu);
+});

@@ -1,0 +1,126 @@
+/* global OneTrust $ */
+/**
+ * Get the value of a cookie
+ * Source: https://gist.github.com/wpsmith/6cf23551dd140fb72ae7
+ * @param  {String} name  The name of the cookie
+ * @return {String}       The cookie value
+ */
+function getCookie(name) {
+  let value = '; ' + document.cookie;
+  let parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function onClose() {
+  var d = new Date();
+  document.cookie = `plpbcpp=${d}; domain=.planet.com; path=/;  max-age=${60 * 60 * 24 * 14};`;
+  var elem = document.getElementById('plpbcpp');
+  elem.style.display = 'none';
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  const bannerDate = '12/14/2022';
+  const lastUpdate = new Date(bannerDate);
+  const currentDate = new Date();
+  let sixtyDaysLater = new Date(bannerDate);
+  sixtyDaysLater.setDate(sixtyDaysLater.getDate() + 60);
+
+  if (sixtyDaysLater.getTime() < currentDate.getTime()) {
+    return;
+  }
+
+  if (getCookie('plpbcpp')) {
+    let lastNotified = new Date(getCookie('plpbcpp'));
+
+    if (lastNotified.getTime() > lastUpdate.getTime()) {
+      return;
+    }
+  }
+
+  var banner = document.createElement('div');
+  banner.id = 'plpbcpp';
+  banner.class = 'plpbcpp';
+  banner.innerHTML = `
+        <style>
+        .pl_link {
+          color: rgb(56, 96, 190) !important;
+        }
+        #plpbcpp {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: auto;
+            opacity: 1;
+            z-index: 100;
+            background: #ccebef;
+            padding: 10px;
+        }
+        #plpbcpp .plpbcpp_main {
+            display: flex;
+            flex-direction: row;
+            font-size: 14px;
+            justify-content: center;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+        #plpbcpp button {
+            float: right;
+            margin-top: 3px;
+            margin-left: 20px;
+            background: none;
+            border: none;
+            
+        }
+        #plpbcpp button svg {
+            width: 16px;
+            color: currentcolor;
+        }
+        #plpbcpp a {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    
+        </style>
+        <div class="plpbcpp_main">
+          <div class="plpbcpp_message">We have updated our <a href="https://www.planet.com/privacy/">Privacy Policy</a>.  By closing this notice, continuing to browse our sites, or using Planet Services, you understand and agree that we process your data as set forth in our updated Privacy Policy.</div>
+            <div class="plpbcpp_button"><button onClick="onClose(); return false;"><svg viewBox="0 0 24 24" focusable="false" class="chakra-icon css-onkibi" aria-hidden="true"><path fill="currentColor" d="M.439,21.44a1.5,1.5,0,0,0,2.122,2.121L11.823,14.3a.25.25,0,0,1,.354,0l9.262,9.263a1.5,1.5,0,1,0,2.122-2.121L14.3,12.177a.25.25,0,0,1,0-.354l9.263-9.262A1.5,1.5,0,0,0,21.439.44L12.177,9.7a.25.25,0,0,1-.354,0L2.561.44A1.5,1.5,0,0,0,.439,2.561L9.7,11.823a.25.25,0,0,1,0,.354Z"></path></svg></button></div>
+        </div>
+        `;
+  document.body.appendChild(banner);
+});
+
+/// Subdomain Specific ///
+document.addEventListener('DOMContentLoaded', function () {
+  if (typeof $ !== 'undefined') {
+    if ($('.BodyBackground .policy-list').length === 1) {
+      //Investors Page
+      $('.BodyBackground .policy-list').html(`
+      <li><span class="symbol-st"> | </span>  <a target="_blank" href="https://www.planet.com/privacy/">Privacy Policy</a> <span class="symbol-st">|</span></li>
+	    <li><a target="_blank" href="https://www.planet.com/privacy/#california">California Privacy Notice</a>    <span class="symbol-st"> | </span>  </li>
+	    <li id="pl_cdns" style="display: none;"><a onClick="OneTrust.ToggleInfoDisplay()">California&nbsp;Do&nbsp;Not&nbsp;Sell</a>    <span class="symbol-st"> | </span>  </li>
+	    <li><a style="cursor: pointer;" class="chakra-link chakra-link css-1tux4w9" onclick="OneTrust.ToggleInfoDisplay()">Your&nbsp;Privacy&nbsp;Choices <svg class="css-6mkpc2" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 30 14" style="height: 1em; display: inline; " xml:space="preserve"><style type="text/css">
+      .st0{fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;}
+      .st1{fill-rule:evenodd;clip-rule:evenodd;fill:#0066FF;}
+      .st2{fill:#FFFFFF;}
+      .st3{fill:#0066FF;}
+  </style><g><g id="final---dec.11-2020_1_"><g id="_x30_208-our-toggle_2_" transform="translate(-1275.000000, -200.000000)"><g id="Final-Copy-2_2_" transform="translate(1275.000000, 200.000000)"><path class="st0" d="M7.4,12.8h6.8l3.1-11.6H7.4C4.2,1.2,1.6,3.8,1.6,7S4.2,12.8,7.4,12.8z"></path></g></g></g><g id="final---dec.11-2020"><g id="_x30_208-our-toggle" transform="translate(-1275.000000, -200.000000)"><g id="Final-Copy-2" transform="translate(1275.000000, 200.000000)"><path class="st1" d="M22.6,0H7.4c-3.9,0-7,3.1-7,7s3.1,7,7,7h15.2c3.9,0,7-3.1,7-7S26.4,0,22.6,0z M1.6,7c0-3.2,2.6-5.8,5.8-5.8
+                      h9.9l-3.1,11.6H7.4C4.2,12.8,1.6,10.2,1.6,7z"></path><path id="x" class="st2" d="M24.6,4c0.2,0.2,0.2,0.6,0,0.8l0,0L22.5,7l2.2,2.2c0.2,0.2,0.2,0.6,0,0.8c-0.2,0.2-0.6,0.2-0.8,0
+                      l0,0l-2.2-2.2L19.5,10c-0.2,0.2-0.6,0.2-0.8,0c-0.2-0.2-0.2-0.6,0-0.8l0,0L20.8,7l-2.2-2.2c-0.2-0.2-0.2-0.6,0-0.8
+                      c0.2-0.2,0.6-0.2,0.8,0l0,0l2.2,2.2L23.8,4C24,3.8,24.4,3.8,24.6,4z"></path><path id="y" class="st3" d="M12.7,4.1c0.2,0.2,0.3,0.6,0.1,0.8l0,0L8.6,9.8C8.5,9.9,8.4,10,8.3,10c-0.2,0.1-0.5,0.1-0.7-0.1l0,0
+                      L5.4,7.7c-0.2-0.2-0.2-0.6,0-0.8c0.2-0.2,0.6-0.2,0.8,0l0,0L8,8.6l3.8-4.5C12,3.9,12.4,3.9,12.7,4.1z"></path></g></g></g></g></svg></a>    <span class="symbol-st"> | </span>  </li>
+	    <li><a target="_blank" href="https://www.planet.com/cookie-notice">Cookie Notice</a>    <span class="symbol-st"> | </span>  </li>
+	    <li><a target="_blank" href="https://www.planet.com/terms-of-use/">Terms of Use</a></li>
+  `);
+      $('.copyright .module_container--inner').css('display', 'inherit');
+      $('ul.social-list').css('padding-left', '0');
+      if (OneTrust) {
+        var geolocation = OneTrust.getGeolocationData();
+        if (geolocation.country === 'US' && geolocation.state === 'CA') {
+          var el = document.getElementById('pl_cdns');
+          el.style.display = 'inline';
+        }
+      }
+    } // End Investor Footer
+  }
+});

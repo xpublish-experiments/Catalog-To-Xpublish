@@ -1,0 +1,37 @@
+const theme = 
+{
+    "colors": {
+      "primary": {
+        "main": "#009DB1",
+        "light": "#99D8E0",
+        "dark": "#025E6A",
+        "contrastText": "#001f23"
+      },
+      "border": {
+        "dark": "#001f23"
+      }
+    },
+    "rightPanel": {
+      "backgroundColor": "#122f33"
+    },
+    typography: {
+        links: {
+            hover: '#4DBAC8 !important',
+        }
+      },
+      codeBlock: {
+          backgroundColor: '#001f23'
+      }
+};
+
+
+function initializeRedoc(specUrl, elementId) {
+    Redoc.init(specUrl, {
+        noAutoAuth: true,
+        suppressWarnings: true,
+        pathInMiddlePanel: true,
+        expandResponses: "200,201",
+        theme
+    },
+    document.getElementById(elementId));
+}
