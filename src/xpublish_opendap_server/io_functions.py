@@ -13,6 +13,7 @@ from typing import (
     Dict,
     Union,
     Any,
+    Optional,
 )
 
 
@@ -37,7 +38,8 @@ class IntakeToXarray(CatalogToXarray):
 
     def __init__(
         self,
-        catalog_yaml_path: Union[Path, str],
+        catalog_yaml_path: Optional[Union[Path, str]],
+        catalog_obj: Optional[intake.catalog.Catalog] = None,
     ) -> None:
 
         # create an intake catalog object
@@ -46,6 +48,8 @@ class IntakeToXarray(CatalogToXarray):
             self.catalog: intake.catalog.Catalog = intake.open_catalog(
                 catalog_yaml_path,
             )
+        elif catalog_obj:
+            self.catalog = catalog_obj
         else:
             raise ValueError(
                 'Please provide a valid input to create a catalog object! .'
