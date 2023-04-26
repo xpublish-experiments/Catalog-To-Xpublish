@@ -11,6 +11,8 @@ def _add_subcatalog_routes(
     parent_path: Optional[str] = None,
 ) -> None:
     """Adds sub-routes for all sub-catalogs to a FastAPI router."""
+    # TODO: come back to this once we have a suitable STAC catalog with storage info
+    raise NotImplementedError
     if parent_path is None:
         parent_path = ''
 
@@ -46,6 +48,8 @@ def stac_catalog_router(catalog_url: str) -> APIRouter:
     Returns:
         FastAPI router for the STAC catalog.
     """
+    # TODO: come back to this once we have a suitable STAC catalog with storage info
+    raise NotImplementedError
     router = APIRouter()
 
     client = Client.open(catalog_url)
