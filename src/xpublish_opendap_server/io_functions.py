@@ -10,8 +10,8 @@ import string
 from pathlib import Path
 from typing import (
     Dict,
-    Any,
     Callable,
+    Any,
 )
 
 DRIVER_TO_ENGINE = {
@@ -21,6 +21,8 @@ DRIVER_TO_ENGINE = {
     'numpy': 'scipy',
     'rasterio': 'rasterio',
 }
+
+CATALOG_TO_XARRAY_FUNC = Callable[[intake.catalog.Catalog, str], xr.Dataset]
 
 
 def intake_to_xarray(
@@ -95,8 +97,18 @@ def intake_to_xarray(
     else:
         open_file = fs.open(intake_catalog_obj.urlpath)
 
-    # return as a xarray dataset
-    return xr.open_dataset(
+    # open as a xarray dataset
+    ds = xr.open_dataset(
         open_file,
         engine=engine,
     )
+
+    # add relevant attributes
+    if 'name' in info_dict.keys():
+        ds.name = info_dict['name']
+    if 'description' in info_dict.keys():
+        ds.attrs['description'] = info_dict['description']
+    ds.attrs['url_path'] = intake_catalog_obj.urlpath
+
+    # return the dataset
+    return ds
