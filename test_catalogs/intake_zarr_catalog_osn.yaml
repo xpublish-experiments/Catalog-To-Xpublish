@@ -1,0 +1,61 @@
+sources:
+
+  conus404-hourly-osn:
+    driver: zarr
+    description: "CONUS404 - OSN pod storage, 70 TB, 40 years of hourly data, CONUS extent with 4 km gridded spatial resolution, 157 variables"
+    args:
+      urlpath: 's3://rsignellbucket2/hytest/conus404/conus404_hourly_202302.zarr'
+      consolidated: true
+      storage_options:
+        anon: true
+        requester_pays: false
+        client_kwargs:
+          endpoint_url: https://renc.osn.xsede.org
+
+  nwis-streamflow-usgs-gages-osn:
+    driver: zarr
+    description: "subset of NWIS streamflow - OSN pod storage, 275 MB, 40 years of daily data, CONUS extent point data, 1 real variable (streamflow)"
+    args:
+      urlpath: 's3://rsignellbucket2/hytest/nwm/nwis_chanobs.zarr'
+      consolidated: true
+      storage_options:
+        anon: true
+        requester_pays: false
+        client_kwargs:
+          endpoint_url: https://renc.osn.xsede.org
+
+  red-river-subset-osn:
+    driver: zarr
+    description: "Sample subset - OSN pod storage, 470M, Very High-Resolution Dynamic Downscaling of Regional Climate for Use in Long-term Hydrologic Planning along the Red River Valley System"
+    args:
+      urlpath: 's3://rsignellbucket2/nhgf/sample_data/red_river_2020.zarr'
+      consolidated: true
+      storage_options:
+        anon: true
+        requester_pays: false
+        client_kwargs:
+          endpoint_url: https://renc.osn.xsede.org
+
+  alaska-et-2020-subset-osn:
+    driver: zarr
+    description: "Sample subset - OSN pod storage, 863M, Gridded 20km Daily Reference Evapotranspiration for the State of Alaska from 1979 to 2017/CCSM4 historical simulation"
+    args:
+      urlpath: 's3://rsignellbucket2/nhgf/sample_data/ccsm4.zarr'
+      consolidated: true
+      storage_options:
+        anon: true
+        requester_pays: false
+        client_kwargs:
+          endpoint_url: https://renc.osn.xsede.org
+
+  prism-v2-osn:
+    driver: zarr
+    description: "USGS THREDDS Holdings/Parameter-elevation Regressions on Independent Slopes Model Monthly Climate Data for the Continental United States"
+    args:
+      urlpath: 's3://rsignellbucket2/nhgf/sample_data/prism_v2.zarr'
+      consolidated: true
+      storage_options:
+        anon: true
+        requester_pays: false
+        client_kwargs:
+          endpoint_url: https://renc.osn.xsede.org

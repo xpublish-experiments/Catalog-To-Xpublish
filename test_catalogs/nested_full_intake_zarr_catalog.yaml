@@ -1,0 +1,15 @@
+sources:
+
+  s3_catalog:
+    args:
+      path: test_catalogs/intake_zarr_catalog_s3.yaml
+    description: ''
+    driver: intake.catalog.local.YAMLFileCatalog
+    metadata: {}
+
+  osn_catalog:
+    args:
+      path: test_catalogs/intake_zarr_catalog_osn.yaml
+    description: ''
+    driver: intake.catalog.local.YAMLFileCatalog
+    metadata: {}
