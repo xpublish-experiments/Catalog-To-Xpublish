@@ -1,1 +1,2 @@
 from xpublish_opendap_server import io_functions
+from xpublish_opendap_server import catalog_search
