@@ -1,7 +1,25 @@
 Xavier's Development Notes
 ===========================
+* Following instructions / formatting shown here: https://fastapi.tiangolo.com/tutorial/bigger-applications/
+
+**ROUTERS**
+* So the opendap router as it exists is built on the basic xpublish set up where the dataset is already loaded and required the `opendap` prefix.
+* One option is to build "Dataset Provider Plugin" (see docs) uses the URL to get to the correct catalog position, then uses our existing catalog function. These routers take priority apparently, but we should test it out.
+    * The issue is you need to define a function with a list of datasets it knows about a-priori.
+    * BOOM: What if we init these plugins when we fire up the server, and have them references by catalog position as the prefix!!! Therefore each specific provider plugin could know what it has to offer.
+    * Yes this is the way. When we use the recursion we don't actually make a router, we instead get a chain of catalog hierarchy and a prefix (catalog hierarchy). Ideally we have the catalog object cached from the get-go, so when the prefix is triggered the correct router is used.
+    * FACTORY? -> we need a way to make these construct these classes as we go?
+
+## STAC + Intake
+* OKAY BIG SWITCH UP. We want a router that maps out the hierachy of both STAC and Intake catalogs.
+* We then want to pass the final catalog level to a catalog specific implementation of `CatalogToXarray`.
+    * Figuring our how to do this may take some trial and error, but would be pretty darn lit.
+    * Potentially follow this convention for STAC: https://github.com/stac-extensions/storage (and write in docs).
+    * Start with intake.
+
 ## Components
 * For `xpublish_opendap` we need data in `xarray.Dataset`, therefore we will have `fsspec` functions to open the zarr files.
+* For `xpublish` we either need all served datasets opened, or find a way around that where they can be accessed as needed (ideal) and cached. This is very important to figure out.
 
 
 ## [`fsspec`](https://filesystem-spec.readthedocs.io/en/latest/index.html)
