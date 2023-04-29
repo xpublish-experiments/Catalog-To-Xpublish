@@ -1,5 +1,7 @@
 """Main server file"""
+# NOTE: we are using a local version of xpublish (release is missing features we need)
 import xpublish
+from xpublish_opendap import OpenDapPlugin
 from xpublish_opendap_server.catalog_search import (
     CatalogEndpoint,
     IntakeCatalogSearch,
@@ -33,7 +35,7 @@ def main():
 
     # 2. Instantiate and register a Dataset Provider plugin object for each CatalogEndpoint
     for cat_end in catalog_endpoints:
-        provider_plugin = DatasetProviderPlugin(
+        provider_plugin = DatasetProviderPlugin.from_endpoint(
             catalog_endpoint=cat_end,
             io_class=IntakeToXarray,
         )
@@ -42,7 +44,19 @@ def main():
             plugin_name=cat_end.catalog_path,
         )
 
-    rest_server.start_server(
+    # add opendap router plugin
+    # NOTE: this doesn't work because it expect a dataset as a dependency
+    # rest_server.register_plugin(
+    #    OpenDapPlugin,
+    #    plugin_name='opendap',
+    # )
+
+    # assert our plugins are registered
+    for cat_end in catalog_endpoints:
+        assert cat_end.catalog_path in rest_server.plugins
+
+    # fire up the server!
+    rest_server.serve(
         host=LOCAL_HOST,
         port=LOCAL_PORT,
     )
