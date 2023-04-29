@@ -5,8 +5,11 @@ from xpublish_opendap_server.catalog_search.base import (
 )
 from typing import (
     List,
+    Dict,
     Optional,
 )
+
+# TODO: Make a test STAC catalog and get this to work
 
 
 class STACCatalogSearch(CatalogSearcher):
@@ -24,57 +27,63 @@ class STACCatalogSearch(CatalogSearcher):
         parent_path: Optional[str] = None,
         list_of_catalog_endpoints: Optional[List[CatalogEndpoint]] = None,
     ) -> List[CatalogEndpoint]:
-        raise NotImplementedError
+        """Recursively searches a catalog for a search term."""
+        if parent_path is None:
+            parent_path = ''
 
+        if list_of_catalog_endpoints is None:
+            list_of_catalog_endpoints = []
 
-def _add_subcatalog_routes(
-    router: APIRouter,
-    catalog: Client,
-    parent_path: Optional[str] = None,
-) -> None:
-    """Adds sub-routes for all sub-catalogs to a FastAPI router."""
-    # TODO: come back to this once we have a suitable STAC catalog with storage info
-    raise NotImplementedError
-    if parent_path is None:
-        parent_path = ''
+        dataset_ids: List[str] = []
+        dataset_info_dicts: Dict[str, Dict[str, Any]] = {}
+        for child_name, child in catalog.items():
+            path: str = parent_path + '/' + child_name
 
-    for child in catalog.get_children():
-        path = parent_path + '/' + child.id
+            # if a catalog, drill deeper recursively
+            if child.assets:
+                list_of_catalog_endpoints = self.parse_catalog(
+                    catalog=child,
+                    parent_path=path,
+                    list_of_catalog_endpoints=list_of_catalog_endpoints,
+                )
 
-        if child.assets:
-            dataset_router = dataset_router(child.get_self_href())
-            router.include_router(dataset_router, prefix=path)
+            # if the catalog contains a data source, make it a valid get dataset router
+            elif child.items:
+                dataset_ids.append(child_name)
+                dataset_info_dicts[child_name] = child.describe()
 
-        else:
-            subcatalog = catalog.get_catalog(child.get_self_href())
-            subcatalog_router = stac_catalog_router(
-                subcatalog.get_self_href(),
+        if len(dataset_ids) > 0:
+            if parent_path == '':
+                parent_path = '/'
+            list_of_catalog_endpoints.append(
+                CatalogEndpoint(
+                    catalog_obj=catalog,
+                    catalog_path=parent_path,
+                    dataset_ids=dataset_ids,
+                    dataset_info_dicts=dataset_info_dicts,
+                )
             )
-            router.include_router(subcatalog_router, prefix=path)
 
-        _add_subcatalog_routes(
-            router,
-            child,
-            parent_path=path,
-        )
+        return list_of_catalog_endpoints
+
+# for child in catalog.get_children():
+#    path = parent_path + '/' + child.id
+#
+#    if child.assets:
+#        dataset_router = dataset_router(child.get_self_href())
+#        router.include_router(dataset_router, prefix=path)
+#
+#    else:
+#        subcatalog = catalog.get_catalog(child.get_self_href())
+#        subcatalog_router = stac_catalog_router(
+#            subcatalog.get_self_href(),
 
 
-def stac_catalog_router(catalog_url: str) -> APIRouter:
-    """Creates a FastAPI router for a STAC catalog.
-
-    All sub-catalogs are traversed recursively and a router is created for each.
-
-    Arguments:
-        catalog_url: URL of the STAC catalog (.json endpoint).
-
-    Returns:
-        FastAPI router for the STAC catalog.
-    """
-    # TODO: come back to this once we have a suitable STAC catalog with storage info
-    raise NotImplementedError
-    router = APIRouter()
-
-    client = Client.open(catalog_url)
-    _add_subcatalog_routes(client.get_root_catalog())
-
-    return router
+if __name__ == '__main__':
+    catalog_obj = STACCatalogSearch().build_catalog_object(
+        catalog_path=Path.cwd() / 'test_catalogs' / 'nested_full_intake_zarr_catalog.yaml'
+    )
+    list_of_cats = STACCatalogSearch().parse_catalog(
+        catalog=catalog_obj,
+    )
+    print(list_of_cats)

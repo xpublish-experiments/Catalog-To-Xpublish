@@ -1,44 +1,22 @@
-"""
-Read data from catalogs into xarray datasets.
-"""
-
 import intake
-import intake_xarray
 import xarray as xr
-import fsspec
-import string
-import abc
+from xpublish_opendap_server.io_classes.base import (
+    CatalogToXarray,
+)
 from pathlib import Path
 from typing import (
-    Dict,
-    Union,
     Any,
+    Dict,
     Optional,
+    Union,
 )
-
-
-class CatalogToXarray(abc.ABC):
-
-    @abc.abstractmethod
-    def write_attributes(
-        self,
-        ds: xr.Dataset,
-    ) -> xr.Dataset:
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    def get_dataset_from_catalog(
-        self,
-        catalog_item_name: str,
-    ) -> xr.Dataset:
-        raise NotImplementedError
 
 
 class IntakeToXarray(CatalogToXarray):
 
     def __init__(
         self,
-        catalog_yaml_path: Optional[Union[Path, str]],
+        catalog_yaml_path: Optional[Union[Path, str]] = None,
         catalog_obj: Optional[intake.catalog.Catalog] = None,
     ) -> None:
 
@@ -49,7 +27,7 @@ class IntakeToXarray(CatalogToXarray):
                 catalog_yaml_path,
             )
         elif catalog_obj:
-            self.catalog = catalog_obj
+            self.catalog: intake.catalog.Catalog = catalog_obj
         else:
             raise ValueError(
                 'Please provide a valid input to create a catalog object! .'
@@ -73,20 +51,20 @@ class IntakeToXarray(CatalogToXarray):
 
     def get_dataset_from_catalog(
         self,
-        catalog_item_name: str,
+        dataset_id: str,
     ) -> xr.Dataset:
 
         # find the object in the catalog (sub-catalog)
         try:
-            intake_catalog_obj: intake.source.base.DataSource = self.catalog[catalog_item_name]
+            intake_catalog_obj: intake.source.base.DataSource = self.catalog[dataset_id]
             info_dict: Dict[str, Any] = intake_catalog_obj.describe()
         except KeyError:
-            raise KeyError(f'{catalog_item_name} not found in catalog.')
+            raise KeyError(f'{dataset_id} not found in catalog.')
 
         # verify the object is readable by xarray
         if info_dict['container'] != 'xarray':
             raise ValueError(
-                f'{catalog_item_name} is not readable by xarray. '
+                f'{dataset_id} is not readable by xarray. '
                 f'Container={info_dict["container"]}'
             )
 
@@ -104,24 +82,3 @@ class IntakeToXarray(CatalogToXarray):
 
         # return the dataset
         return ds
-
-
-class STACToXarray(CatalogToXarray):
-
-    def __init__(
-        self,
-        catalog_json_path: Union[Path, str],
-    ) -> None:
-        raise NotImplementedError
-
-    def write_attributes(
-        self,
-        ds: xr.Dataset,
-    ) -> xr.Dataset:
-        raise NotImplementedError
-
-    def get_dataset_from_catalog(
-        self,
-        catalog_item_name: str,
-    ) -> xr.Dataset:
-        raise NotImplementedError
