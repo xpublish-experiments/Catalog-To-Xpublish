@@ -31,10 +31,20 @@ def main():
     )
 
     # 2. Start a Xpublish server
-    rest_server = xpublish.Rest()
+    from fastapi import FastAPI
+    app = FastAPI(
+        title='Intake Catalog Xpublish Server',
+    )
+    # rest_server = xpublish.Rest()
+    # rest_server.init_app_kwargs(
+    #    app_kws={
+    #        'title': 'Intake Catalog Xpublish Server',
+    #    }
+    # )
 
     # 2. Instantiate and register a Dataset Provider plugin object for each CatalogEndpoint
     for cat_end in catalog_endpoints:
+        rest_server = xpublish.Rest()
         provider_plugin = DatasetProviderPlugin.from_endpoint(
             catalog_endpoint=cat_end,
             io_class=IntakeToXarray,
@@ -44,23 +54,27 @@ def main():
             plugin_name=cat_end.catalog_path,
         )
 
-    # add opendap router plugin
-    # NOTE: this doesn't work because it expect a dataset as a dependency
-    # rest_server.register_plugin(
-    #    OpenDapPlugin,
-    #    plugin_name='opendap',
-    # )
+        # add opendap router plugin
+        rest_server.register_plugin(
+            OpenDapPlugin(),
+            plugin_name='opendap',
+        )
 
-    # assert our plugins are registered
-    for cat_end in catalog_endpoints:
-        assert cat_end.catalog_path in rest_server.plugins
-
-    # fire up the server!
-    rest_server.serve(
-        host=LOCAL_HOST,
-        port=LOCAL_PORT,
-    )
+        # mount to the main application
+        app.mount(
+            path=cat_end.catalog_path,
+            app=rest_server.app,
+        )
+    app.openapi()
+    return app
 
 
 if __name__ == '__main__':
-    main()
+    app = main()
+    import uvicorn
+    uvicorn.run(
+        app,
+        host=LOCAL_HOST,
+        port=LOCAL_PORT,
+        # reload=True,
+    )
