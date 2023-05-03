@@ -42,7 +42,7 @@ class IntakeToXarray(CatalogToXarray):
 
         info_dict = self.catalog.describe()
         if 'name' in info_dict.keys():
-            ds['name'] = info_dict['name']
+            ds.attrs['name'] = info_dict['name']
         if 'description' in info_dict.keys():
             ds.attrs['description'] = info_dict['description']
         ds.attrs['url_path'] = self.catalog.path
