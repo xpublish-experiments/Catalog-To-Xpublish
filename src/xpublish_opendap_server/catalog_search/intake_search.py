@@ -5,14 +5,13 @@ from fastapi import (
 )
 from fastapi.responses import (
     HTMLResponse,
-    FileResponse,
+    PlainTextResponse,
     JSONResponse,
 )
 from xpublish_opendap_server.catalog_classes.base import (
     CatalogSearcher,
     CatalogEndpoint,
     CatalogRouter,
-    BaseRouter,
 )
 from typing import (
     List,
@@ -59,6 +58,7 @@ class IntakeCatalogSearch(CatalogSearcher):
 
         dataset_ids: List[str] = []
         dataset_info_dicts: Dict[str, Dict[str, Any]] = {}
+        sub_catalogs: List[str] = []
         for child_name, child in catalog.items():
             path: str = parent_path + '/' + child_name
 
@@ -69,6 +69,7 @@ class IntakeCatalogSearch(CatalogSearcher):
                     parent_path=path,
                     list_of_catalog_endpoints=list_of_catalog_endpoints,
                 )
+                sub_catalogs.append(child_name)
 
             # if the catalog contains a data source, make it a valid get dataset router
             elif isinstance(child, intake.source.base.DataSource):
@@ -82,6 +83,7 @@ class IntakeCatalogSearch(CatalogSearcher):
                 catalog_obj=catalog,
                 catalog_path=parent_path,
                 dataset_ids=dataset_ids,
+                sub_catalogs=sub_catalogs,
                 dataset_info_dicts=dataset_info_dicts,
                 contains_datasets=bool(len(dataset_ids) > 0),
             )
@@ -90,99 +92,96 @@ class IntakeCatalogSearch(CatalogSearcher):
         return list_of_catalog_endpoints
 
 
-class IntakeRouter(BaseRouter, CatalogRouter):
+class IntakeRouter(CatalogRouter):
 
     def __init__(
         self,
         catalog_endpoint_obj: CatalogEndpoint,
+        prefix: Optional[str] = None,
     ) -> None:
         """
         Defines ABC:CatalogRouter methods for IntakeRouter.
         """
+        # init router
+        self.router = APIRouter()
+
+        # get catalog info
         self.catalog_endpoint_obj = catalog_endpoint_obj
-        super().__init__(
-            prefix=self.catalog_endpoint_obj.catalog_path,
+        self.cat_prefix = self.catalog_endpoint_obj.catalog_path
+        if prefix:
+            if self.cat_prefix == '/':
+                self.cat_prefix = ''
+        else:
+            self.cat_prefix = ''
+
+        # add all the routes
+        self.router.add_api_route(
+            path=f'{self.cat_prefix}/ui',
+            endpoint=self.get_catalog_ui,
+            methods=['GET'],
+        )
+        self.router.add_api_route(
+            path=f'{self.cat_prefix}/catalogs',
+            endpoint=self.list_sub_catalogs,
+            methods=['GET'],
+        )
+        self.router.add_api_route(
+            path=f'{self.cat_prefix}/parent_catalog',
+            endpoint=self.get_parent_catalog,
+            methods=['GET'],
+        )
+        self.router.add_api_route(
+            path=f'{self.cat_prefix}/yaml',
+            endpoint=self.get_catalog_as_yaml,
+            methods=['GET'],
+        )
+        self.router.add_api_route(
+            path=f'{self.cat_prefix}/json',
+            endpoint=self.get_catalog_as_json,
+            methods=['GET'],
         )
 
-        @self.router.get('/')
-        def get_catalog_ui(self) -> HTMLResponse:
-            """Returns the catalog ui."""
-            gui = intake.interface.gui.GUI(
-                [self.catalog_endpoint_obj.catalog_obj]
-            )
-            return HTMLResponse(
-                content=gui.servable().to_html(),
-                status_code=200,
-            )
-
-        @self.router.get('/catalogs', tags=['catalogs'])
-        def list_sub_catalogs(self) -> List[str]:
-            """Returns a list of sub-catalogs.
-
-            Will be decorated with 
-            """
-            sub_catalogs = []
-            for child_name in self.catalog_endpoint_obj.catalog_obj.keys():
-                sub_catalogs.append(child_name)
-            return sub_catalogs
-
-        @self.router.get('/parent_catalog', tags=['parent_catalog'])
-        def get_parent_catalog(self) -> str:
-            """Returns the parent catalog."""
-            if self.catalog_endpoint_obj.catalog_path == '/':
-                return 'This is the root catalog'
-            return self.catalog_endpoint_obj.catalog_path[
-                :int(self.catalog_endpoint_obj.catalog_path.rfind('/'))
-            ]
-
-        @self.router.get('.yaml', tags=['.yaml'])
-        def get_catalog_as_yaml(self) -> FileResponse:
-            """Returns the catalog yaml.
-
-            NOTE: This may return None for some catalog types.
-            """
-            return FileResponse(
-                content=self.catalog_endpoint_obj.catalog_obj.yaml(),
-                media_type='application/x-yaml',
-                status_code=200,
-            )
-
-        @self.router.get('.json', tags=['.json'])
-        def get_catalog_as_json(self) -> JSONResponse:
-            """Returns the catalog as JSON.
-
-            Will be decorated with 
-            NOTE: This may return None for some catalog types.
-            """
-            return JSONResponse(
-                content='This catalog type does not support JSON serialization.',
-                media_type='application/json',
-                status_code=501,
-            )
-
-    # dummy implementation, will get overwritten by the above
-
     def get_catalog_ui(self) -> HTMLResponse:
-        raise NotImplementedError
+        """Returns the catalog ui."""
+        gui = intake.interface.gui.GUI(
+            [self.catalog_endpoint_obj.catalog_obj]
+        )
+        return HTMLResponse(
+            content=gui.servable().embed(),  # .to_html(),
+            status_code=200,
+        )
 
     def list_sub_catalogs(self) -> List[str]:
-        raise NotImplementedError
+        """Returns a list of sub-catalogs."""
+        return self.catalog_endpoint_obj.sub_catalogs
 
     def get_parent_catalog(self) -> str:
-        raise NotImplementedError
+        """Returns the parent catalog."""
+        if self.catalog_endpoint_obj.catalog_path == '/':
+            return 'This is the root catalog'
+        return self.catalog_endpoint_obj.catalog_path[
+            :int(self.catalog_endpoint_obj.catalog_path.rfind('/')) + 1
+        ]
 
-    def get_catalog_as_yaml(self) -> FileResponse:
-        raise NotImplementedError
+    def get_catalog_as_yaml(self) -> PlainTextResponse:
+        """Returns the catalog yaml.
+
+        NOTE: This may return None for some catalog types.
+        """
+        return PlainTextResponse(
+            content=self.catalog_endpoint_obj.catalog_obj.yaml(),
+            media_type='text/plain',
+            status_code=200,
+        )
 
     def get_catalog_as_json(self) -> JSONResponse:
-        raise NotImplementedError
+        """Returns the catalog as JSON.
 
-
-if __name__ == '__main__':
-    catalog_obj = IntakeCatalogSearch().build_catalog_object(
-        catalog_path=Path.cwd() / 'test_catalogs' / 'nested_full_intake_zarr_catalog.yaml'
-    )
-    list_of_cats = IntakeCatalogSearch().parse_catalog(
-        catalog=catalog_obj,
-    )
-    print(list_of_cats)
+        Will be decorated with 
+        NOTE: This may return None for some catalog types.
+        """
+        return JSONResponse(
+            content='This catalog type does not support JSON serialization.',
+            media_type='application/json',
+            status_code=501,
+        )
