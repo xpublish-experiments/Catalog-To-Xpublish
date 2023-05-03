@@ -1,6 +1,3 @@
-from fastapi import (
-    APIRouter,
-)
 from fastapi.responses import (
     HTMLResponse,
     PlainTextResponse,
@@ -10,18 +7,34 @@ from typing import (
     List,
     Optional,
 )
+from xpublish_opendap_server.catalog_search.base import (
+    CatalogEndpoint,
+)
+from xpublish_opendap_server.routers.base import (
+    CatalogRouter,
+)
+
 
 class STACRouter(CatalogRouter):
-    """A router for a endpoint catalog (with or without datasets)."""
+    """A router for a STAC endpoint catalog (with or without datasets)."""
 
-    # router: APIRouter
-    # catalog_endpoint_obj: CatalogEndpoint
+    def __init__(
+        self,
+        catalog_endpoint_obj: CatalogEndpoint,
+        prefix: Optional[str] = None,
+    ) -> None:
+        """Init the class using the CatalogRouter ABC."""
+        super().__init__(
+            catalog_endpoint_obj=catalog_endpoint_obj,
+            prefix=prefix,
+        )
 
     def get_catalog_ui(self) -> HTMLResponse:
         """Returns the catalog ui.
 
         Will be decorated with @router.get('/')
         """
+        # TODO: https://panel.holoviz.org/user_guide/FastAPI.html
         raise NotImplementedError
 
     def list_sub_catalogs(self) -> List[str]:
@@ -42,7 +55,6 @@ class STACRouter(CatalogRouter):
         """Returns the catalog yaml as plain text."""
         raise NotImplementedError
 
-    @abc.abstractmethod
     def get_catalog_as_json(self) -> JSONResponse:
         """Returns the catalog as JSON."""
         raise NotImplementedError

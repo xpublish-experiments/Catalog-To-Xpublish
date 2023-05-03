@@ -1,6 +1,4 @@
-from fastapi import (
-    APIRouter,
-)
+import intake
 from fastapi.responses import (
     HTMLResponse,
     PlainTextResponse,
@@ -19,56 +17,23 @@ from xpublish_opendap_server.routers.base import (
 
 
 class IntakeRouter(CatalogRouter):
+    """A router for an Intake endpoint catalog (with or without datasets)."""
 
     def __init__(
         self,
         catalog_endpoint_obj: CatalogEndpoint,
         prefix: Optional[str] = None,
     ) -> None:
-        """
-        Defines ABC:CatalogRouter methods for IntakeRouter.
-        """
-        # init router
-        self.router = APIRouter()
-
-        # get catalog info
-        self.catalog_endpoint_obj = catalog_endpoint_obj
-        self.cat_prefix = self.catalog_endpoint_obj.catalog_path
-        if prefix:
-            if self.cat_prefix == '/':
-                self.cat_prefix = ''
-        else:
-            self.cat_prefix = ''
-
-        # add all the routes
-        self.router.add_api_route(
-            path=f'{self.cat_prefix}/ui',
-            endpoint=self.get_catalog_ui,
-            methods=['GET'],
-        )
-        self.router.add_api_route(
-            path=f'{self.cat_prefix}/catalogs',
-            endpoint=self.list_sub_catalogs,
-            methods=['GET'],
-        )
-        self.router.add_api_route(
-            path=f'{self.cat_prefix}/parent_catalog',
-            endpoint=self.get_parent_catalog,
-            methods=['GET'],
-        )
-        self.router.add_api_route(
-            path=f'{self.cat_prefix}/yaml',
-            endpoint=self.get_catalog_as_yaml,
-            methods=['GET'],
-        )
-        self.router.add_api_route(
-            path=f'{self.cat_prefix}/json',
-            endpoint=self.get_catalog_as_json,
-            methods=['GET'],
+        """Init the class using the CatalogRouter ABC."""
+        super().__init__(
+            catalog_endpoint_obj=catalog_endpoint_obj,
+            prefix=prefix,
         )
 
     def get_catalog_ui(self) -> HTMLResponse:
         """Returns the catalog ui."""
+        # TODO: https://panel.holoviz.org/user_guide/FastAPI.html
+        raise NotImplementedError
         gui = intake.interface.gui.GUI(
             [self.catalog_endpoint_obj.catalog_obj]
         )
@@ -110,4 +75,32 @@ class IntakeRouter(CatalogRouter):
             content='This catalog type does not support JSON serialization.',
             media_type='application/json',
             status_code=501,
+        )
+
+    def add_routes(self) -> None:
+        """Adds routes to the router."""
+        self.router.add_api_route(
+            path=f'{self.cat_prefix}/ui',
+            endpoint=self.get_catalog_ui,
+            methods=['GET'],
+        )
+        self.router.add_api_route(
+            path=f'{self.cat_prefix}/catalogs',
+            endpoint=self.list_sub_catalogs,
+            methods=['GET'],
+        )
+        self.router.add_api_route(
+            path=f'{self.cat_prefix}/parent_catalog',
+            endpoint=self.get_parent_catalog,
+            methods=['GET'],
+        )
+        self.router.add_api_route(
+            path=f'{self.cat_prefix}/yaml',
+            endpoint=self.get_catalog_as_yaml,
+            methods=['GET'],
+        )
+        self.router.add_api_route(
+            path=f'{self.cat_prefix}/json',
+            endpoint=self.get_catalog_as_json,
+            methods=['GET'],
         )

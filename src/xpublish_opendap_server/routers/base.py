@@ -9,14 +9,36 @@ from fastapi.responses import (
 )
 from typing import (
     List,
+    Optional,
+)
+from xpublish_opendap_server.catalog_search.base import (
+    CatalogEndpoint,
 )
 
 
 class CatalogRouter(abc.ABC):
     """A router for a endpoint catalog (with or without datasets)."""
 
-    # router: APIRouter
-    # catalog_endpoint_obj: CatalogEndpoint
+    def __init__(
+        self,
+        catalog_endpoint_obj: CatalogEndpoint,
+        prefix: Optional[str] = None,
+    ) -> None:
+        """Init is the same for all subclasses."""
+        # init router
+        self.router = APIRouter()
+
+        # get catalog info
+        self.catalog_endpoint_obj = catalog_endpoint_obj
+        self.cat_prefix = self.catalog_endpoint_obj.catalog_path
+        if prefix:
+            if self.cat_prefix == '/':
+                self.cat_prefix = ''
+        else:
+            self.cat_prefix = ''
+
+        # add routes
+        self.add_routes()
 
     @abc.abstractmethod
     def get_catalog_ui(self) -> HTMLResponse:
@@ -50,4 +72,9 @@ class CatalogRouter(abc.ABC):
     @abc.abstractmethod
     def get_catalog_as_json(self) -> JSONResponse:
         """Returns the catalog as JSON."""
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def add_routes(self) -> None:
+        """Adds routes to the APIRouter object."""
         raise NotImplementedError
