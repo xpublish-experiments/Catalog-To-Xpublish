@@ -1,5 +1,9 @@
 import abc
 from pydantic import BaseModel
+from fastapi import (
+    Response,
+    APIRouter,
+)
 from typing import (
     Any,
     Dict,
@@ -52,4 +56,42 @@ class CatalogSearcher(abc.ABC):
         list_of_catalog_endpoints: Optional[List[CatalogEndpoint]] = None,
     ) -> List[CatalogEndpoint]:
         """Recursively searches a catalog for a search term."""
+        raise NotImplementedError
+
+
+class CatalogRouter(abc.ABC):
+    """A router for a endpoint catalog (with or without datasets)."""
+
+    router: APIRouter
+    catalog_endpoint_obj: CatalogEndpoint
+
+    @abc.abstractmethod
+    @router.get('/catalogs')
+    def list_sub_catalogs(self) -> List[str]:
+        """Returns a list of sub-catalogs.
+
+        Will be decorated with @router.get('/{catalog_path}/catalogs')
+        """
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    @router.get('/parent_catalog')
+    def get_parent_catalog(self) -> str:
+        """Returns the parent catalog."""
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    @router.get('.yaml')
+    def get_catalog_yaml(self) -> Response:
+        """Returns the catalog yaml."""
+        # Response(content=yaml_data, media_type="application/x-yaml")
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    @router.get('/datasets')
+    def no_datasets(self) -> str:
+        """Returns a message that there are not datasets.
+
+        Will be overridden by Xpublish app where there are datasets.
+        """
         raise NotImplementedError

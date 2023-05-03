@@ -2,20 +2,15 @@ import xarray as xr
 # NOTE: I had to add a import dask.array line to zarr.py in the xpublish source code.
 # a bit wierd... since I can just get dask.array.Array in my terminal
 
-from xpublish_opendap_server.catalog_search import (
+from xpublish_opendap_server.catalog_classes.base import (
     CatalogEndpoint,
 )
 from xpublish_opendap_server.io_classes import (
     CatalogToXarray,
 )
-from fastapi import (
-    APIRouter,
-    Depends,
-)
 from xpublish import (
     Plugin,
     hookimpl,
-    Dependencies,
 )
 from typing import (
     List,
@@ -34,7 +29,9 @@ class DatasetProviderPlugin(Plugin):
     """
     name = 'catalog-endpoint-provider'
     catalog_endpoint_obj: CatalogEndpoint = Field(
-        ..., alias='catalog_endpoint_obj')
+        ...,
+        alias='catalog_endpoint_obj',
+    )
     io_class: CatalogToXarray = Field(..., alias='io_class')
 
     class Config(BaseConfig):
@@ -84,42 +81,3 @@ class DatasetProviderPlugin(Plugin):
         if dataset_id in self.catalog_endpoint_obj.dataset_ids:
             return self.io_class.get_dataset_from_catalog(dataset_id)
         return None
-
-
-class DatasetInfoPlugin(Plugin):
-    """A dataset router plugin for the xpublish-opendap-server.
-
-    May be a better implementation than the one above.
-    The problem is this expects an xarray dataset ready to go.
-
-    NOTE: NOT IMPLEMENTED YET!
-    """
-    name = 'dataset-info-provider'
-
-    def __init__(
-        self,
-        catalog_endpoint: CatalogEndpoint,
-        io_class: CatalogToXarray,
-    ) -> None:
-
-        self.catalog_endpoint_obj = catalog_endpoint
-        self.io_class = io_class
-        self.catalog_to_xarray = self.io_class(
-            catalog_obj=self.catalog_endpoint_obj.catalog_obj,
-        )
-
-    @hookimpl
-    def dataset_router(
-        self,
-        deps: Dependencies,
-    ) -> APIRouter:
-        router = APIRouter(
-            prefix=self.catalog_endpoint_obj.catalog_path,
-            tags=[self.catalog_endpoint_obj.catalog_path],
-        )
-
-        @router.get('/datasets')
-        def list_datasets(dataset=Depends(deps.dataset)):
-            return dataset.variables
-
-        return router

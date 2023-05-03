@@ -1,42 +1,29 @@
-import intake
-from pathlib import Path
-from xpublish_opendap_server.catalog_search.base import (
+from pystac_client import Client
+from xpublish_opendap_server.catalog_classes.base import (
     CatalogSearcher,
     CatalogEndpoint,
 )
 from typing import (
     List,
     Dict,
-    Any,
     Optional,
 )
 
+# TODO: Make a test STAC catalog and get this to work
 
-class IntakeCatalogSearch(CatalogSearcher):
+
+class STACCatalogSearch(CatalogSearcher):
 
     def build_catalog_object(
         self,
         catalog_path: str,
-    ) -> intake.Catalog:
+    ) -> Client:
         """Builds a catalog object."""
-        catalog_path = Path(catalog_path)
-
-        # check that the catalog path exists
-        if not catalog_path.exists():
-            raise FileNotFoundError(
-                f'Please provide a valid intake catalog .yaml file path! '
-                f'Could not find {catalog_path}'
-            )
-        if catalog_path.suffix != '.yaml':
-            raise ValueError(
-                f'Please provide a valid intake catalog .yaml file path! '
-                f'File suffix must be .yaml, not {catalog_path.suffix}'
-            )
-        return intake.open_catalog(catalog_path)
+        return Client.open(catalog_path)
 
     def parse_catalog(
         self,
-        catalog: intake.Catalog,
+        catalog: Client,
         parent_path: Optional[str] = None,
         list_of_catalog_endpoints: Optional[List[CatalogEndpoint]] = None,
     ) -> List[CatalogEndpoint]:
@@ -53,7 +40,7 @@ class IntakeCatalogSearch(CatalogSearcher):
             path: str = parent_path + '/' + child_name
 
             # if a catalog, drill deeper recursively
-            if isinstance(child, intake.catalog.Catalog):
+            if child.assets:
                 list_of_catalog_endpoints = self.parse_catalog(
                     catalog=child,
                     parent_path=path,
@@ -61,7 +48,7 @@ class IntakeCatalogSearch(CatalogSearcher):
                 )
 
             # if the catalog contains a data source, make it a valid get dataset router
-            elif isinstance(child, intake.source.base.DataSource):
+            elif child.items:
                 dataset_ids.append(child_name)
                 dataset_info_dicts[child_name] = child.describe()
 
@@ -79,12 +66,24 @@ class IntakeCatalogSearch(CatalogSearcher):
 
         return list_of_catalog_endpoints
 
+# for child in catalog.get_children():
+#    path = parent_path + '/' + child.id
+#
+#    if child.assets:
+#        dataset_router = dataset_router(child.get_self_href())
+#        router.include_router(dataset_router, prefix=path)
+#
+#    else:
+#        subcatalog = catalog.get_catalog(child.get_self_href())
+#        subcatalog_router = stac_catalog_router(
+#            subcatalog.get_self_href(),
+
 
 if __name__ == '__main__':
-    catalog_obj = IntakeCatalogSearch().build_catalog_object(
+    catalog_obj = STACCatalogSearch().build_catalog_object(
         catalog_path=Path.cwd() / 'test_catalogs' / 'nested_full_intake_zarr_catalog.yaml'
     )
-    list_of_cats = IntakeCatalogSearch().parse_catalog(
+    list_of_cats = STACCatalogSearch().parse_catalog(
         catalog=catalog_obj,
     )
     print(list_of_cats)
