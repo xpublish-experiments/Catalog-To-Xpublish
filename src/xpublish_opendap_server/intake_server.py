@@ -7,6 +7,7 @@ from xpublish_opendap import OpenDapPlugin
 from xpublish_opendap_server.catalog_classes import (
     CatalogEndpoint,
     IntakeCatalogSearch,
+    IntakeRouter,
     DatasetProviderPlugin,
 )
 from xpublish_opendap_server.io_classes import (
@@ -46,33 +47,41 @@ def create_app(
 
     # 2. Instantiate and register a Dataset Provider plugin object for each CatalogEndpoint
     for cat_end in catalog_endpoints:
-        rest_server = xpublish.Rest()
-        rest_server.init_app_kwargs(
-            app_kws={
-                'title': catalog_name + cat_end.catalog_path,
-            },
+        # make a router for each endpoint
+        router = IntakeRouter(
+            catalog_endpoint_obj=cat_end,
         )
+        app.include_router(router=router.router)
 
-        provider_plugin = DatasetProviderPlugin.from_endpoint(
-            catalog_endpoint=cat_end,
-            io_class=IntakeToXarray,
-        )
-        rest_server.register_plugin(
-            plugin=provider_plugin,
-            plugin_name=cat_end.catalog_path,
-        )
+        # if the endpoint has data, mount a Xpublish server
+        if cat_end.contains_datasets:
+            rest_server = xpublish.Rest()
+            rest_server.init_app_kwargs(
+                app_kws={
+                    'title': catalog_name + cat_end.catalog_path,
+                },
+            )
 
-        # add opendap router plugin
-        rest_server.register_plugin(
-            OpenDapPlugin(),
-            plugin_name='opendap',
-        )
+            provider_plugin = DatasetProviderPlugin.from_endpoint(
+                catalog_endpoint=cat_end,
+                io_class=IntakeToXarray,
+            )
+            rest_server.register_plugin(
+                plugin=provider_plugin,
+                plugin_name=cat_end.catalog_path,
+            )
 
-        # mount to the main application
-        app.mount(
-            path=cat_end.catalog_path,
-            app=rest_server.app,
-        )
+            # add opendap router plugin
+            rest_server.register_plugin(
+                OpenDapPlugin(),
+                plugin_name='opendap',
+            )
+
+            # mount to the main application
+            app.mount(
+                path=cat_end.catalog_path,
+                app=rest_server.app,
+            )
     return app
 
 
