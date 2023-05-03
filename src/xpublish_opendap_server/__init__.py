@@ -1,2 +1,3 @@
 from xpublish_opendap_server import io_classes
-from xpublish_opendap_server import catalog_classes
+from xpublish_opendap_server import catalog_search
+from xpublish_opendap_server import routers

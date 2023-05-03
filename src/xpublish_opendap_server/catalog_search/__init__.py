@@ -1,14 +1,13 @@
 """Init file for catalog search module."""
-from xpublish_opendap_server.catalog_classes.base import (
+from xpublish_opendap_server.catalog_search.base import (
     CatalogEndpoint,
 )
-from xpublish_opendap_server.catalog_classes.intake_catalog import (
+from xpublish_opendap_server.catalog_search.intake_search import (
     IntakeCatalogSearch,
-    IntakeRouter,
 )
-from xpublish_opendap_server.catalog_classes.stac_catalog import (
+from xpublish_opendap_server.catalog_search.stac_search import (
     STACCatalogSearch,
 )
-from xpublish_opendap_server.catalog_classes.provider_plugin import (
+from xpublish_opendap_server.catalog_search.provider_plugin import (
     DatasetProviderPlugin,
 )
