@@ -1,8 +1,12 @@
 import abc
 from pydantic import BaseModel
 from fastapi import (
-    Response,
     APIRouter,
+)
+from fastapi.responses import (
+    HTMLResponse,
+    FileResponse,
+    JSONResponse,
 )
 from typing import (
     Any,
@@ -28,6 +32,7 @@ class CatalogEndpoint(BaseModel):
     catalog_path: str
     dataset_ids: List[str]
     dataset_info_dicts: Dict[str, Dict[str, Any]]
+    contains_datasets: bool
 
 
 class CatalogSearcher(abc.ABC):
@@ -62,36 +67,59 @@ class CatalogSearcher(abc.ABC):
 class CatalogRouter(abc.ABC):
     """A router for a endpoint catalog (with or without datasets)."""
 
-    router: APIRouter
-    catalog_endpoint_obj: CatalogEndpoint
+    # router: APIRouter
+    # catalog_endpoint_obj: CatalogEndpoint
 
     @abc.abstractmethod
-    @router.get('/catalogs')
+    def get_catalog_ui(self) -> HTMLResponse:
+        """Returns the catalog ui.
+
+        Will be decorated with @router.get('/')
+        """
+        raise NotImplementedError
+
+    @abc.abstractmethod
     def list_sub_catalogs(self) -> List[str]:
         """Returns a list of sub-catalogs.
 
-        Will be decorated with @router.get('/{catalog_path}/catalogs')
+        Will be decorated with @router.get('/catalogs', tags=['catalogs'])
         """
         raise NotImplementedError
 
     @abc.abstractmethod
-    @router.get('/parent_catalog')
     def get_parent_catalog(self) -> str:
-        """Returns the parent catalog."""
-        raise NotImplementedError
+        """Returns the parent catalog.
 
-    @abc.abstractmethod
-    @router.get('.yaml')
-    def get_catalog_yaml(self) -> Response:
-        """Returns the catalog yaml."""
-        # Response(content=yaml_data, media_type="application/x-yaml")
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    @router.get('/datasets')
-    def no_datasets(self) -> str:
-        """Returns a message that there are not datasets.
-
-        Will be overridden by Xpublish app where there are datasets.
+        Will be decorated with @router.get('/parent_catalog', tags=['parent_catalog'])
         """
         raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_catalog_as_yaml(self) -> FileResponse:
+        """Returns the catalog yaml.
+
+        Will be decorated with @router.get('.yaml', tags=['.yaml'])
+        NOTE: This may return None for some catalog types.
+        """
+        # FileResponse(content=yaml_data, media_type="application/x-yaml")
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_catalog_as_json(self) -> JSONResponse:
+        """Returns the catalog as JSON.
+
+        Will be decorated with @router.get('.json', tags=['.json'])
+        NOTE: This may return None for some catalog types.
+        """
+        raise NotImplementedError
+
+
+class BaseRouter:
+
+    def __init__(
+        self,
+        prefix: Optional[str] = None,
+    ) -> None:
+        if prefix == '/':
+            prefix = ''
+        self.router = APIRouter(prefix=prefix)
