@@ -1,4 +1,6 @@
 import intake
+import yaml
+import json
 from fastapi.responses import (
     HTMLResponse,
     PlainTextResponse,
@@ -72,9 +74,13 @@ class IntakeRouter(CatalogRouter):
         NOTE: This may return None for some catalog types.
         """
         return JSONResponse(
-            content='This catalog type does not support JSON serialization.',
+            content=json.dumps(
+                yaml.safe_load(
+                    self.catalog_endpoint_obj.catalog_obj.yaml(),
+                ),
+            ),
             media_type='application/json',
-            status_code=501,
+            status_code=200,
         )
 
     def add_routes(self) -> None:
