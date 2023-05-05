@@ -55,18 +55,12 @@ def create_app(
 
         # if the endpoint has data, mount a Xpublish server
         if cat_end.contains_datasets:
-            router = IntakeRouter(
-                catalog_endpoint_obj=cat_end,
-                prefix='',
-            )
-
             rest_server = xpublish.Rest()
             rest_server.init_app_kwargs(
                 app_kws={
                     'title': catalog_name + cat_prefix,
                 },
             )
-            rest_server.app.include_router(router=router.router)
 
             # add dataset provider plugin
             provider_plugin = DatasetProviderPlugin.from_endpoint(
@@ -81,8 +75,15 @@ def create_app(
             # add opendap router plugin
             rest_server.register_plugin(
                 OpenDapPlugin(),
-                plugin_name='opendap',
             )
+            assert 'opendap' in rest_server.plugins
+
+            # add the base router (for some reason this needs to come after)
+            router = IntakeRouter(
+                catalog_endpoint_obj=cat_end,
+                prefix='',
+            )
+            rest_server.app.include_router(router=router.router)
 
             # mount to the main application
             app.mount(
