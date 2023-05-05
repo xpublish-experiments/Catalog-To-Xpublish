@@ -26,7 +26,7 @@ from typing import (
 
 CATALOG_PATH = Path.cwd() / 'test_catalogs' / \
     'nested_full_intake_zarr_catalog.yaml'
-APP_NAME = 'Intake_Catalog_Xpublish_Server'
+APP_NAME = 'Xpublish Server'
 LOCAL_HOST = '127.0.0.1'
 LOCAL_PORT = 8000
 
@@ -88,7 +88,7 @@ def create_app(
 
     # 2. Start a Xpublish server
     app = FastAPI(
-        title=app_name
+        title=f'{app_name}: {catalog_name}'
     )
 
     # 2. Iterate through the endpoints and add them to the server
@@ -107,7 +107,7 @@ def create_app(
             )
 
             # add dataset provider plugin
-            provider_plugin = DatasetProviderPlugin.from_endpoint(
+            provider_plugin = DatasetProviderPlugin(
                 catalog_endpoint=cat_end,
                 io_class=IntakeToXarray,
             )
@@ -115,6 +115,7 @@ def create_app(
                 plugin=provider_plugin,
                 plugin_name=cat_prefix,
             )
+            assert cat_prefix in rest_server.plugins
 
             # add all non-dataset provider plugins
             try:
