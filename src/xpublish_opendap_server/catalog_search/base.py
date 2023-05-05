@@ -1,5 +1,6 @@
 import abc
 from pydantic import BaseModel
+from pathlib import Path
 from typing import (
     Any,
     Dict,
@@ -29,27 +30,24 @@ class CatalogEndpoint(BaseModel):
 
 
 class CatalogSearcher(abc.ABC):
+    """A base class for catalog searchers."""
 
-    suffixes: List[str] = [
-        '.nc',
-        '.zarr',
-    ]
+    @abc.abstractproperty
+    def catalog_path(self) -> Path:
+        raise NotImplementedError
 
-    @abc.abstractmethod
-    def build_catalog_object(
-        self,
-        catalog_path: str,
-    ) -> object:
-        """Builds a catalog object (ex: intake.Catalog).
+    @abc.abstractproperty
+    def suffixes(self) -> List[str]:
+        raise NotImplementedError
 
-        NOTE: The exact object type will depend on the catalog type.
-        """
+    @abc.abstractproperty
+    def catalog_object(self) -> object:
         raise NotImplementedError
 
     @abc.abstractmethod
     def parse_catalog(
         self,
-        catalog: object,
+        catalog: Optional[object] = None,
         parent_path: Optional[str] = None,
         list_of_catalog_endpoints: Optional[List[CatalogEndpoint]] = None,
     ) -> List[CatalogEndpoint]:

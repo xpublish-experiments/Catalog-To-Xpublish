@@ -14,46 +14,80 @@ from typing import (
 
 class IntakeCatalogSearch(CatalogSearcher):
 
-    def build_catalog_object(
+    def __init__(
         self,
-        catalog_path: str,
-    ) -> intake.Catalog:
-        """Builds a catalog object."""
-        catalog_path = Path(catalog_path)
+        catalog_path: Path | str,
+        suffixes: Optional[List[str]] = None,
+    ) -> None:
+        """Initializes the catalog searcher."""
 
-        # check that the catalog path exists
-        if not catalog_path.exists():
+        self.__catalog_path: Path = catalog_path
+        self.__suffixes: List[str] = suffixes
+        self.__catalog_obj: intake.Catalog = None
+
+    @property
+    def catalog_path(self) -> Path:
+        if isinstance(self.__catalog_path, str):
+            self.__catalog_path = Path(self.__catalog_path)
+        if not isinstance(self.__catalog_path, Path):
+            raise TypeError(
+                f'Please provide a valid intake catalog .yaml file path! '
+                f'Expected a str or Path, got {type(self.__catalog_path)}'
+            )
+        if not self.__catalog_path.exists():
             raise FileNotFoundError(
                 f'Please provide a valid intake catalog .yaml file path! '
-                f'Could not find {catalog_path}'
+                f'Could not find {self.__catalog_path}'
             )
-        if catalog_path.suffix != '.yaml':
+        if self.__catalog_path.suffix != '.yaml':
             raise ValueError(
                 f'Please provide a valid intake catalog .yaml file path! '
-                f'File suffix must be .yaml, not {catalog_path.suffix}'
+                f'File suffix must be .yaml, not {self.__catalog_path.suffix}'
             )
-        return intake.open_catalog(catalog_path)
+        return self.__catalog_path
+
+    @property
+    def suffixes(self) -> List[str]:
+        if self.__suffixes is None:
+            self.__suffixes = [
+                '.nc',
+                '.zarr',
+            ]
+        return self.__suffixes
+
+    @property
+    def catalog_object(self) -> intake.Catalog:
+        """Builds/returns a catalog object (ex: intake.Catalog)."""
+        if self.__catalog_obj is None:
+            self.__catalog_obj = intake.open_catalog(self.catalog_path)
+        return self.__catalog_obj
 
     def parse_catalog(
         self,
-        catalog: intake.Catalog,
+        catalog: Optional[intake.Catalog] = None,
         parent_path: Optional[str] = None,
         list_of_catalog_endpoints: Optional[List[CatalogEndpoint]] = None,
     ) -> List[CatalogEndpoint]:
         """Recursively searches a catalog for a search term."""
+        # start things off with the full catalog
+        if catalog is None:
+            catalog = self.catalog_object
         if parent_path is None:
             parent_path = ''
 
         if list_of_catalog_endpoints is None:
             list_of_catalog_endpoints = []
 
+        # init some vars to store endpoint data
         dataset_ids: List[str] = []
         dataset_info_dicts: Dict[str, Dict[str, Any]] = {}
         sub_catalogs: List[str] = []
+
+        # use recursion to drill down into the catalog
         for child_name, child in catalog.items():
             path: str = parent_path + '/' + child_name
 
-            # if a catalog, drill deeper recursively
+            # if a catalog, drill deeper
             if isinstance(child, intake.catalog.Catalog):
                 list_of_catalog_endpoints = self.parse_catalog(
                     catalog=child,
