@@ -1,11 +1,8 @@
 import dataclasses
-import xpublish
 from xpublish_opendap_server.catalog_search import (
-    CatalogEndpoint,
     CatalogSearcher,
     IntakeCatalogSearch,
     STACCatalogSearch,
-    DatasetProviderPlugin,
 )
 from xpublish_opendap_server.io_classes import (
     CatalogToXarray,
@@ -17,6 +14,7 @@ from xpublish_opendap_server.routers import (
     IntakeRouter,
     STACRouter,
 )
+from xpublish import Plugin
 from pathlib import Path
 from typing import (
     List,
@@ -24,7 +22,7 @@ from typing import (
     Optional,
 )
 
-# TODO: this could be a factory style implementation?
+# TODO: replace with a factory style architecture (like my XarrayDataAccessor repo)
 
 
 @dataclasses.dataclass
@@ -63,7 +61,7 @@ def validate_arguments(
     catalog_path: Path,
     catalog_type: str,
     app_name: Optional[str] = None,
-    xpublish_plugins: Optional[List[xpublish.Plugin]] = None,
+    xpublish_plugins: Optional[List[Plugin]] = None,
 ) -> AppComponents:
     """Validates the arguments passed to the create_app function."""
     # check catalog path argument and get name
