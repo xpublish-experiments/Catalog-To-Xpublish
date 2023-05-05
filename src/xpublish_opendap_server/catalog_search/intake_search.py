@@ -1,17 +1,8 @@
 import intake
 from pathlib import Path
-from fastapi import (
-    APIRouter,
-)
-from fastapi.responses import (
-    HTMLResponse,
-    PlainTextResponse,
-    JSONResponse,
-)
 from xpublish_opendap_server.catalog_search.base import (
     CatalogSearcher,
     CatalogEndpoint,
-    CatalogRouter,
 )
 from typing import (
     List,
