@@ -3,68 +3,71 @@ from xpublish_opendap_server.catalog_search.base import (
     CatalogSearcher,
     CatalogEndpoint,
 )
+from pathlib import Path
 from typing import (
     List,
     Dict,
     Optional,
+    Any,
 )
 
 # TODO: Make a test STAC catalog and get this to work
 
 
 class STACCatalogSearch(CatalogSearcher):
+    """STAC Catalog searcher."""
 
-    def build_catalog_object(
+    def __init__(
         self,
-        catalog_path: str,
-    ) -> Client:
-        """Builds a catalog object."""
-        return Client.open(catalog_path)
+        catalog_path: Optional[Path | str] = None,
+    ) -> None:
+        """Initializes the catalog searcher."""
+        self.__catalog_path = catalog_path
+        self.__suffixes = None
+        self.__catalog_obj = None
+
+    @property
+    def catalog_path(self) -> Path:
+        if isinstance(self.__catalog_path, str):
+            self.__catalog_path = Path(self.__catalog_path)
+        if not isinstance(self.__catalog_path, Path):
+            raise TypeError(
+                f'Please provide a valid intake catalog .json file path or URL! '
+                f'Expected a str or Path, got {type(self.__catalog_path)}'
+            )
+        if not self.__catalog_path.exists():
+            raise FileNotFoundError(
+                f'Please provide a valid intake catalog .json file path or URL! '
+                f'Could not find {self.__catalog_path}'
+            )
+        if self.__catalog_path.suffix != '.json':
+            raise ValueError(
+                f'Please provide a valid intake catalog .json file path or URL! '
+                f'File suffix must be .json, not {self.__catalog_path.suffix}'
+            )
+        return self.__catalog_path
+
+    @property
+    def suffixes(self) -> List[str]:
+        if self.__suffixes is None:
+            self.__suffixes = [
+                '.nc',
+                '.zarr',
+            ]
+        return self.__suffixes
+
+    @property
+    def catalog_object(self) -> object:
+        raise NotImplementedError
 
     def parse_catalog(
         self,
-        catalog: Client,
+        catalog: Optional[object] = None,
         parent_path: Optional[str] = None,
         list_of_catalog_endpoints: Optional[List[CatalogEndpoint]] = None,
     ) -> List[CatalogEndpoint]:
         """Recursively searches a catalog for a search term."""
-        if parent_path is None:
-            parent_path = ''
-
-        if list_of_catalog_endpoints is None:
-            list_of_catalog_endpoints = []
-
-        dataset_ids: List[str] = []
-        dataset_info_dicts: Dict[str, Dict[str, Any]] = {}
-        for child_name, child in catalog.items():
-            path: str = parent_path + '/' + child_name
-
-            # if a catalog, drill deeper recursively
-            if child.assets:
-                list_of_catalog_endpoints = self.parse_catalog(
-                    catalog=child,
-                    parent_path=path,
-                    list_of_catalog_endpoints=list_of_catalog_endpoints,
-                )
-
-            # if the catalog contains a data source, make it a valid get dataset router
-            elif child.items:
-                dataset_ids.append(child_name)
-                dataset_info_dicts[child_name] = child.describe()
-
-        if len(dataset_ids) > 0:
-            if parent_path == '':
-                parent_path = '/'
-            list_of_catalog_endpoints.append(
-                CatalogEndpoint(
-                    catalog_obj=catalog,
-                    catalog_path=parent_path,
-                    dataset_ids=dataset_ids,
-                    dataset_info_dicts=dataset_info_dicts,
-                )
-            )
-
-        return list_of_catalog_endpoints
+        raise NotImplementedError
 
 # for child in catalog.get_children():
 #    path = parent_path + '/' + child.id
