@@ -1,29 +1,25 @@
-"""Main Intake server file"""
-# NOTE: we are using a local version of xpublish (release is missing features we need)
+"""Main server file"""
 import warnings
 import xpublish
+# NOTE: we are using a local version of xpublish (release is missing features we need)
 from fastapi import FastAPI
 import uvicorn
 from xpublish_opendap import OpenDapPlugin
 from xpublish_opendap_server.catalog_search import (
     CatalogEndpoint,
-    IntakeCatalogSearch,
     DatasetProviderPlugin,
 )
-from xpublish_opendap_server.io_classes import (
-    IntakeToXarray,
+from xpublish_opendap_server.shared import (
+    validate_arguments,
+    AppComponents,
 )
-from xpublish_opendap_server.routers import (
-    IntakeRouter,
-)
-
 from pathlib import Path
 from typing import (
-    Tuple,
     List,
     Optional,
 )
 
+CATALOG_TYPE: str = 'intake'  # or 'stac'
 CATALOG_PATH = Path.cwd() / 'test_catalogs' / \
     'nested_full_intake_zarr_catalog.yaml'
 APP_NAME = 'Xpublish Server'
@@ -31,64 +27,30 @@ LOCAL_HOST = '127.0.0.1'
 LOCAL_PORT = 8000
 
 
-def validate_arguments(
-    catalog_path: Path,
-    app_name: Optional[str] = None,
-    xpublish_plugins: Optional[List[xpublish.Plugin]] = None,
-) -> Tuple[Path, str, list]:
-    """Validates the arguments passed to the create_app function."""
-    # check catalog path argument
-    if not isinstance(catalog_path, Path):
-        raise TypeError(
-            f'catalog_path must be a Path object, not {type(catalog_path)}'
-        )
-    if not catalog_path.exists():
-        raise FileNotFoundError(
-            f'catalog_path={catalog_path} does not exist.'
-        )
-
-    # check app name argument
-    if not app_name:
-        app_name = 'Catalog_Xpublish_Server'
-    elif not isinstance(app_name, str):
-        raise TypeError(
-            f'app_name must be a str, not {type(app_name)}'
-        )
-
-    # check plugins list argument
-    if not xpublish_plugins:
-        xpublish_plugins = []
-    if not isinstance(xpublish_plugins, list):
-        raise TypeError(
-            f'xpublish_plugins must be a list of xpublish.Plugin objects, not {type(xpublish_plugins)}'
-        )
-
-    return catalog_path, app_name, xpublish_plugins
-
-
 def create_app(
     catalog_path: Path,
+    catalog_type: str = CATALOG_TYPE,
     app_name: Optional[str] = None,
     xpublish_plugins: Optional[List[xpublish.Plugin]] = None,
 ) -> FastAPI:
     """Creates a FastAPI application from an Intake .yaml file."""
-    # 0. validate arguments
-    catalog_path, app_name, xpublish_plugins = validate_arguments(
+    # 0. validate input arguments
+    app_inputs: AppComponents = validate_arguments(
         catalog_path=catalog_path,
+        catalog_type=catalog_type,
         app_name=app_name,
         xpublish_plugins=xpublish_plugins,
     )
 
     # 1. parse catalog using appropriate catalog search method
-    intake_searcher = IntakeCatalogSearch(
+    catalog_searcher = app_inputs.catalog_implementation.catalog_search(
         catalog_path=catalog_path,
     )
-    catalog_name: str = catalog_path.name.replace('.yaml', '')
-    catalog_endpoints: List[CatalogEndpoint] = intake_searcher.parse_catalog()
+    catalog_endpoints: List[CatalogEndpoint] = catalog_searcher.parse_catalog()
 
     # 2. Start a Xpublish server
     app = FastAPI(
-        title=f'{app_name}: {catalog_name}'
+        title=f'{app_inputs.name}: {app_inputs.catalog_name}'
     )
 
     # 2. Iterate through the endpoints and add them to the server
@@ -102,14 +64,14 @@ def create_app(
             rest_server = xpublish.Rest()
             rest_server.init_app_kwargs(
                 app_kws={
-                    'title': catalog_name + cat_prefix,
+                    'title': app_inputs.catalog_name + cat_prefix,
                 },
             )
 
             # add dataset provider plugin
             provider_plugin = DatasetProviderPlugin(
                 catalog_endpoint=cat_end,
-                io_class=IntakeToXarray,
+                io_class=app_inputs.catalog_implementation.catalog_to_xarray,
             )
             rest_server.register_plugin(
                 plugin=provider_plugin,
@@ -119,7 +81,7 @@ def create_app(
 
             # add all non-dataset provider plugins
             try:
-                for plugin in xpublish_plugins:
+                for plugin in app_inputs.xpublish_plugins:
                     assert issubclass(plugin, xpublish.Plugin)
                     plugin = plugin()
                     rest_server.register_plugin(
@@ -133,7 +95,7 @@ def create_app(
                 continue
 
             # add the base router (for some reason this needs to come after)
-            router = IntakeRouter(
+            router = app_inputs.catalog_implementation.catalog_router(
                 catalog_endpoint_obj=cat_end,
                 prefix='',
             )
@@ -148,7 +110,7 @@ def create_app(
         # 2.2 if the endpoint has no data, add a router to the main application
         else:
             # make a router for each endpoint
-            router = IntakeRouter(
+            router = app_inputs.catalog_implementation.catalog_router(
                 catalog_endpoint_obj=cat_end,
             )
             app.include_router(router=router.router)
@@ -165,7 +127,7 @@ app = create_app(
 def main() -> None:
     """Main function to run the server."""
     uvicorn.run(
-        'intake_server:app',
+        'run_server:app',
         host=LOCAL_HOST,
         port=LOCAL_PORT,
         reload=True,
