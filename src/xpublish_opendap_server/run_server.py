@@ -1,4 +1,4 @@
-"""Main server file"""
+"""Main Intake server file"""
 # NOTE: we are using a local version of xpublish (release is missing features we need)
 import warnings
 import xpublish
