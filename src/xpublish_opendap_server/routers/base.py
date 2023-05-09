@@ -19,6 +19,8 @@ from xpublish_opendap_server.catalog_search.base import (
 class CatalogRouter(abc.ABC):
     """A router for a endpoint catalog (with or without datasets)."""
 
+    catalog_type: str
+
     def __init__(
         self,
         catalog_endpoint_obj: CatalogEndpoint,

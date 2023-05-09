@@ -13,10 +13,16 @@ from xpublish_opendap_server.catalog_search.base import (
 from xpublish_opendap_server.routers.base import (
     CatalogRouter,
 )
+from xpublish_opendap_server.factory import (
+    CatalogRouterClass,
+)
 
 
+@CatalogRouterClass
 class STACRouter(CatalogRouter):
     """A router for a STAC endpoint catalog (with or without datasets)."""
+
+    catalog_type: str = 'stac'
 
     def __init__(
         self,
