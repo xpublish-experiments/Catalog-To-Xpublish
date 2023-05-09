@@ -4,9 +4,15 @@ from pathlib import Path
 from typing import (
     Union,
 )
+from xpublish_opendap_server.factory import (
+    CatalogIOClass,
+)
 
 
+@CatalogIOClass
 class STACToXarray(CatalogToXarray):
+
+    catalog_type: str = 'stac'
 
     def __init__(
         self,

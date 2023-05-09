@@ -7,6 +7,8 @@ class CatalogToXarray(abc.ABC):
     Abstract base class for converting a catalog object to an xarray dataset.
     """
 
+    catalog_type: str
+
     @abc.abstractmethod
     def write_attributes(
         self,

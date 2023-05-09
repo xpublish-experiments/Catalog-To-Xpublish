@@ -10,9 +10,15 @@ from typing import (
     Optional,
     Union,
 )
+from xpublish_opendap_server.factory import (
+    CatalogIOClass,
+)
 
 
+@CatalogIOClass
 class IntakeToXarray(CatalogToXarray):
+
+    catalog_type: str = 'intake'
 
     def __init__(
         self,
