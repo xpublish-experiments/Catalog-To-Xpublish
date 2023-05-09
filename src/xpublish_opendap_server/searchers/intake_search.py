@@ -55,8 +55,9 @@ class IntakeCatalogSearch(CatalogSearcher):
     @property
     def suffixes(self) -> List[str]:
         if self.__suffixes is None:
+            # TODO: test with NetCDF files
             self.__suffixes = [
-                '.nc',
+                # '.nc',
                 '.zarr',
             ]
         return self.__suffixes
