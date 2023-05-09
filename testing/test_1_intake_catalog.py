@@ -21,7 +21,7 @@ else:
         'Please run this test from the root directory of the repository.'
     )
 CATALOG_PATH = home_dir / 'test_catalogs' / \
-    'nested_full_intake_zarr_catalog.yaml'
+    'test_intake_zarr_catalog.yaml'
 
 
 def test_catalog_search_obj() -> None:

@@ -6,7 +6,7 @@ from xpublish_opendap_server.server_functions import create_app
 
 CATALOG_TYPE: str = 'intake'  # or 'stac'
 CATALOG_PATH = Path.cwd() / 'test_catalogs' / \
-    'nested_full_intake_zarr_catalog.yaml'
+    'test_intake_zarr_catalog.yaml'
 APP_NAME = 'Xpublish Server'
 XPUBLISH_PLUGINS = [OpenDapPlugin]
 
