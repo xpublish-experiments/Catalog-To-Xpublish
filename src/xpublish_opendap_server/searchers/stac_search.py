@@ -14,8 +14,6 @@ from typing import (
     Any,
 )
 
-# TODO: Make a test STAC catalog and get this to work
-
 
 @CatalogSearcherClass
 class STACCatalogSearch(CatalogSearcher):
