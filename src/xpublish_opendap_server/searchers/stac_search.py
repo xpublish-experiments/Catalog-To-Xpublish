@@ -89,7 +89,7 @@ class STACCatalogSearch(CatalogSearcher):
 
 if __name__ == '__main__':
     catalog_obj = STACCatalogSearch().build_catalog_object(
-        catalog_path=Path.cwd() / 'test_catalogs' / 'nested_full_intake_zarr_catalog.yaml'
+        catalog_path=Path.cwd() / 'test_catalogs' / 'test_stac_zarr_catalog.yaml'
     )
     list_of_cats = STACCatalogSearch().parse_catalog(
         catalog=catalog_obj,
