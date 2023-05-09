@@ -1,4 +1,4 @@
-from pystac_client import Client
+import pystac
 from xpublish_opendap_server.base import (
     CatalogSearcher,
     CatalogEndpoint,
@@ -55,15 +55,18 @@ class STACCatalogSearch(CatalogSearcher):
     @property
     def suffixes(self) -> List[str]:
         if self.__suffixes is None:
+            # TODO: test with NetCDF files
             self.__suffixes = [
-                '.nc',
+                # '.nc',
                 '.zarr',
             ]
         return self.__suffixes
 
     @property
-    def catalog_object(self) -> object:
-        raise NotImplementedError
+    def catalog_object(self) -> pystac.Catalog:
+        if self.__catalog_obj is None:
+            self.__catalog_obj = pystac.Catalog.from_file(self.catalog_path)
+        return self.__catalog_obj
 
     def parse_catalog(
         self,
@@ -72,26 +75,55 @@ class STACCatalogSearch(CatalogSearcher):
         list_of_catalog_endpoints: Optional[List[CatalogEndpoint]] = None,
     ) -> List[CatalogEndpoint]:
         """Recursively searches a catalog for a search term."""
-        raise NotImplementedError
+        # start things off with the full catalog
+        if catalog is None:
+            catalog = self.catalog_object
+        if parent_path is None:
+            parent_path = ''
 
-# for child in catalog.get_children():
-#    path = parent_path + '/' + child.id
-#
-#    if child.assets:
-#        dataset_router = dataset_router(child.get_self_href())
-#        router.include_router(dataset_router, prefix=path)
-#
-#    else:
-#        subcatalog = catalog.get_catalog(child.get_self_href())
-#        subcatalog_router = stac_catalog_router(
-#            subcatalog.get_self_href(),
+        if list_of_catalog_endpoints is None:
+            list_of_catalog_endpoints = []
 
+        # init some vars to store endpoint data
+        dataset_ids: List[str] = []
+        dataset_info_dicts: Dict[str, Dict[str, Any]] = {}
+        sub_catalogs: List[str] = []
 
-if __name__ == '__main__':
-    catalog_obj = STACCatalogSearch().build_catalog_object(
-        catalog_path=Path.cwd() / 'test_catalogs' / 'test_stac_zarr_catalog.yaml'
-    )
-    list_of_cats = STACCatalogSearch().parse_catalog(
-        catalog=catalog_obj,
-    )
-    print(list_of_cats)
+        # use recursion to drill down into the catalog
+        if isinstance(catalog, pystac.Catalog) or isinstance(catalog, pystac.Collection):
+
+            for child in catalog.get_children():
+                child_name = child.id
+                path: str = parent_path + '/' + child_name
+
+                # if a catalog, drill deeper
+                if isinstance(child, pystac.Catalog) or isinstance(child, pystac.Collection):
+                    list_of_catalog_endpoints = self.parse_catalog(
+                        catalog=child,
+                        parent_path=path,
+                        list_of_catalog_endpoints=list_of_catalog_endpoints,
+                    )
+                    sub_catalogs.append(child_name)
+
+        # if its a collection search for assets too
+        if isinstance(catalog, pystac.Collection):
+            for child_name, child in catalog.get_assets().items():
+                path: str = parent_path + '/' + child_name
+
+                dataset_ids.append(child_name)
+                dataset_info_dicts[child_name] = child.to_dict()
+
+        if parent_path == '':
+            parent_path = '/'
+        list_of_catalog_endpoints.append(
+            CatalogEndpoint(
+                catalog_obj=catalog,
+                catalog_path=parent_path,
+                dataset_ids=dataset_ids,
+                sub_catalogs=sub_catalogs,
+                dataset_info_dicts=dataset_info_dicts,
+                contains_datasets=bool(len(dataset_ids) > 0),
+            )
+        )
+
+        return list_of_catalog_endpoints
