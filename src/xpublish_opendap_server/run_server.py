@@ -2,7 +2,7 @@
 import uvicorn
 from pathlib import Path
 from xpublish_opendap import OpenDapPlugin
-from xpublish_opendap_server.shared import create_app
+from xpublish_opendap_server.server_functions import create_app
 
 CATALOG_TYPE: str = 'intake'  # or 'stac'
 CATALOG_PATH = Path.cwd() / 'test_catalogs' / \
