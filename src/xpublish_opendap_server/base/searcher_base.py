@@ -35,7 +35,7 @@ class CatalogSearcher(abc.ABC):
     catalog_type: str
 
     @abc.abstractproperty
-    def catalog_path(self) -> Path:
+    def catalog_path(self) -> Path | str:
         raise NotImplementedError
 
     @abc.abstractproperty

@@ -22,7 +22,7 @@ class STACToXarray(CatalogToXarray):
 
     def __init__(
         self,
-        catalog_json_path: Optional[Union[Path, str]],
+        catalog_json_path: Optional[Union[Path, str]] = None,
         catalog_obj: Optional[pystac.Collection] = None,
     ) -> None:
         """Initialize the STACToXarray class.

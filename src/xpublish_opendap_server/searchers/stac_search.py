@@ -30,25 +30,27 @@ class STACCatalogSearch(CatalogSearcher):
         self.__catalog_obj = None
 
     @property
-    def catalog_path(self) -> Path:
-        if isinstance(self.__catalog_path, str):
-            self.__catalog_path = Path(self.__catalog_path)
-        if not isinstance(self.__catalog_path, Path):
+    def catalog_path(self) -> str:
+        if isinstance(self.__catalog_path, Path):
+            if not self.__catalog_path.exists():
+                raise FileNotFoundError(
+                    f'Please provide a valid intake catalog .json file path or URL! '
+                    f'Could not find {self.__catalog_path}'
+                )
+            self.__catalog_path = str(self.__catalog_path)
+
+        if not isinstance(self.__catalog_path, str):
             raise TypeError(
                 f'Please provide a valid intake catalog .json file path or URL! '
                 f'Expected a str or Path, got {type(self.__catalog_path)}'
             )
-        if not self.__catalog_path.exists():
-            raise FileNotFoundError(
-                f'Please provide a valid intake catalog .json file path or URL! '
-                f'Could not find {self.__catalog_path}'
-            )
-        if self.__catalog_path.suffix != '.json':
+
+        if Path(self.__catalog_path).suffix != '.json':
             raise ValueError(
                 f'Please provide a valid intake catalog .json file path or URL! '
-                f'File suffix must be .json, not {self.__catalog_path.suffix}'
+                f'File suffix must be .json, not {Path(self.__catalog_path).suffix}'
             )
-        return self.__catalog_path
+        return str(self.__catalog_path)
 
     @property
     def suffixes(self) -> List[str]:
@@ -63,7 +65,8 @@ class STACCatalogSearch(CatalogSearcher):
     @property
     def catalog_object(self) -> pystac.Catalog:
         if self.__catalog_obj is None:
-            self.__catalog_obj = pystac.Catalog.from_file(self.catalog_path)
+            self.__catalog_obj = pystac.Catalog.from_file(
+                str(self.catalog_path))
         return self.__catalog_obj
 
     def parse_catalog(
