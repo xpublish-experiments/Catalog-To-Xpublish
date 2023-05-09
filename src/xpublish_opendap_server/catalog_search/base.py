@@ -32,6 +32,8 @@ class CatalogEndpoint(BaseModel):
 class CatalogSearcher(abc.ABC):
     """A base class for catalog searchers."""
 
+    catalog_type: str
+
     @abc.abstractproperty
     def catalog_path(self) -> Path:
         raise NotImplementedError

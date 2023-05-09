@@ -3,6 +3,9 @@ from xpublish_opendap_server.catalog_search.base import (
     CatalogSearcher,
     CatalogEndpoint,
 )
+from xpublish_opendap_server.factory import (
+    CatalogSearcherClass,
+)
 from pathlib import Path
 from typing import (
     List,
@@ -14,8 +17,10 @@ from typing import (
 # TODO: Make a test STAC catalog and get this to work
 
 
+@CatalogSearcherClass
 class STACCatalogSearch(CatalogSearcher):
     """STAC Catalog searcher."""
+    catalog_type: str = 'stac'
 
     def __init__(
         self,

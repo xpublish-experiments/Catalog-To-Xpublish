@@ -4,6 +4,9 @@ from xpublish_opendap_server.catalog_search.base import (
     CatalogSearcher,
     CatalogEndpoint,
 )
+from xpublish_opendap_server.factory import (
+    CatalogSearcherClass,
+)
 from typing import (
     List,
     Dict,
@@ -12,7 +15,10 @@ from typing import (
 )
 
 
+@CatalogSearcherClass
 class IntakeCatalogSearch(CatalogSearcher):
+    """Intake Catalog searcher."""
+    catalog_type: str = 'intake'
 
     def __init__(
         self,
