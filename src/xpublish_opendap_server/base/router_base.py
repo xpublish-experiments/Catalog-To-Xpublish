@@ -11,7 +11,7 @@ from typing import (
     List,
     Optional,
 )
-from xpublish_opendap_server.catalog_search.base import (
+from xpublish_opendap_server.base.searcher_base import (
     CatalogEndpoint,
 )
 

@@ -2,13 +2,9 @@
 A factory for creating and validating catalog implementations (i.e., STAC, Intake, etc.).
 """
 import dataclasses
-from xpublish_opendap_server.catalog_search.base import (
+from xpublish_opendap_server.base import (
     CatalogSearcher,
-)
-from xpublish_opendap_server.io_classes.base import (
     CatalogToXarray,
-)
-from xpublish_opendap_server.routers.base import (
     CatalogRouter,
 )
 from typing import (
@@ -131,8 +127,9 @@ class CatalogImplementationFactory:
                 if i == 0:
                     all_keys = list(set(catalog_dict.keys()))
                 else:
-                    more_keys = all_keys.extend(list(catalog_dict.keys()))
-                    more_keys = list(set(more_keys))
+                    more_keys = set(
+                        all_keys.copy() + list(catalog_dict.keys())
+                    )
                     if len(more_keys) != len(all_keys):
                         raise ValueError(
                             f'Found a partial implementation of a catalog type! '
@@ -140,7 +137,7 @@ class CatalogImplementationFactory:
                             f'for each catalog type. '
                         )
                     else:
-                        all_keys = more_keys
+                        all_keys = list(more_keys)
             cls.__catalog_type_keys = all_keys
         return cls.__catalog_type_keys
 

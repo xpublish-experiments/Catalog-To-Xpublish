@@ -2,10 +2,8 @@ import xarray as xr
 # NOTE: I had to add a import dask.array line to zarr.py in the xpublish source code.
 # a bit wierd... since I can just get dask.array.Array in my terminal
 
-from xpublish_opendap_server.catalog_search.base import (
+from xpublish_opendap_server.base import (
     CatalogEndpoint,
-)
-from xpublish_opendap_server.io_classes import (
     CatalogToXarray,
 )
 from xpublish import (

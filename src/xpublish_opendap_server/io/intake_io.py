@@ -1,6 +1,6 @@
 import intake
 import xarray as xr
-from xpublish_opendap_server.io_classes.base import (
+from xpublish_opendap_server.base import (
     CatalogToXarray,
 )
 from pathlib import Path

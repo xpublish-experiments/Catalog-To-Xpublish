@@ -1,5 +1,5 @@
 import xarray as xr
-from xpublish_opendap_server.io_classes.base import CatalogToXarray
+from xpublish_opendap_server.base import CatalogToXarray
 from pathlib import Path
 from typing import (
     Union,

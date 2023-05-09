@@ -1,6 +1,6 @@
 import intake
 from pathlib import Path
-from xpublish_opendap_server.catalog_search.base import (
+from xpublish_opendap_server.base import (
     CatalogSearcher,
     CatalogEndpoint,
 )

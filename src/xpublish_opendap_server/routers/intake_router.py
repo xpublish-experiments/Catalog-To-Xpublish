@@ -10,10 +10,10 @@ from typing import (
     List,
     Optional,
 )
-from xpublish_opendap_server.catalog_search.base import (
+from xpublish_opendap_server.base import (
     CatalogEndpoint,
 )
-from xpublish_opendap_server.routers.base import (
+from xpublish_opendap_server.base import (
     CatalogRouter,
 )
 from xpublish_opendap_server.factory import (
