@@ -1,3 +1,5 @@
+import json
+import yaml
 from fastapi.responses import (
     HTMLResponse,
     PlainTextResponse,
@@ -44,23 +46,58 @@ class STACRouter(CatalogRouter):
         raise NotImplementedError
 
     def list_sub_catalogs(self) -> List[str]:
-        """Returns a list of sub-catalogs.
-
-        Will be decorated with @router.get('/catalogs', tags=['catalogs'])
-        """
-        raise NotImplementedError
+        """Returns a list of sub-catalogs."""
+        return self.catalog_endpoint_obj.sub_catalogs
 
     def get_parent_catalog(self) -> str:
-        """Returns the parent catalog.
-
-        Will be decorated with @router.get('/parent_catalog', tags=['parent_catalog'])
-        """
-        raise NotImplementedError
+        """Returns the parent catalog."""
+        if self.catalog_endpoint_obj.catalog_path == '/':
+            return 'This is the root catalog'
+        return self.catalog_endpoint_obj.catalog_path[
+            :int(self.catalog_endpoint_obj.catalog_path.rfind('/')) + 1
+        ]
 
     def get_catalog_as_yaml(self) -> PlainTextResponse:
         """Returns the catalog yaml as plain text."""
-        raise NotImplementedError
+        return PlainTextResponse(
+            content=yaml.dump(self.catalog_endpoint_obj.catalog_obj.to_dict()),
+            media_type='text/plain',
+            status_code=200,
+        )
 
     def get_catalog_as_json(self) -> JSONResponse:
         """Returns the catalog as JSON."""
-        raise NotImplementedError
+        return JSONResponse(
+            content=json.dumps(
+                self.catalog_endpoint_obj.catalog_obj.to_dict()),
+            media_type='application/json',
+            status_code=200,
+        )
+
+    def add_routes(self) -> None:
+        """Adds routes to the router."""
+        self.router.add_api_route(
+            path=f'{self.cat_prefix}/ui',
+            endpoint=self.get_catalog_ui,
+            methods=['GET'],
+        )
+        self.router.add_api_route(
+            path=f'{self.cat_prefix}/catalogs',
+            endpoint=self.list_sub_catalogs,
+            methods=['GET'],
+        )
+        self.router.add_api_route(
+            path=f'{self.cat_prefix}/parent_catalog',
+            endpoint=self.get_parent_catalog,
+            methods=['GET'],
+        )
+        self.router.add_api_route(
+            path=f'{self.cat_prefix}/yaml',
+            endpoint=self.get_catalog_as_yaml,
+            methods=['GET'],
+        )
+        self.router.add_api_route(
+            path=f'{self.cat_prefix}/json',
+            endpoint=self.get_catalog_as_json,
+            methods=['GET'],
+        )
