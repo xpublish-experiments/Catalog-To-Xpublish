@@ -16,7 +16,6 @@ keywords = [
     'server-side',
     'gridded-data',
 ]
-license = { file = "LICENSE.txt" }
 
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -42,4 +41,4 @@ dependencies = [
 ]
 
 [tool.setuptools]
-packages = ["catalog_to_xpublish"]
+packages = ["src/catalog_to_xpublish"]
