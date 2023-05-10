@@ -1,4 +1,4 @@
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/LimnoTech/Catalog-To-Xpublish/main.svg)](https://results.pre-commit.ci/latest/github/LimnoTech/Catalog-To-Xpublish/main)
+[![Pre-Commit Status](https://github.com/LimnoTech/Catalog-To-Xpublish/actions/workflows/pre-commit.yml/main.svg)](https://github.com/LimnoTech/Catalog-To-Xpublish/actions/workflows/pre-commit.yml)
 
 
 # Catalog-To-Xpublish
