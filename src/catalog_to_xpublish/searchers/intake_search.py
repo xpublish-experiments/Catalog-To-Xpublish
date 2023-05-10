@@ -55,9 +55,8 @@ class IntakeCatalogSearch(CatalogSearcher):
     @property
     def suffixes(self) -> List[str]:
         if self.__suffixes is None:
-            # TODO: test with NetCDF files
             self.__suffixes = [
-                # '.nc',
+                '.nc',
                 '.zarr',
             ]
         return self.__suffixes
@@ -105,6 +104,8 @@ class IntakeCatalogSearch(CatalogSearcher):
 
             # if the catalog contains a data source, make it a valid get dataset router
             elif isinstance(child, intake.source.base.DataSource):
+                if not any([child.urlpath.endswith(suffix) for suffix in self.suffixes]):
+                    continue
                 dataset_ids.append(child_name)
                 dataset_info_dicts[child_name] = child.describe()
 
