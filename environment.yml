@@ -3,7 +3,7 @@ channels:
   - conda-forge
   - nodefaults
 
-# a minimal environment for Xpublish-OPeNDAP-Server
+# a minimal environment for Catalog-To-Xpublish
 dependencies:
   - python =3.11
 
@@ -11,13 +11,13 @@ dependencies:
   - xarray
   - dask
 
-  # For API access and data formats
+  # For catalog access
   - intake
   - intake-xarray
-  - xpublish
-  - xpublish_opendap
+  - pystac
+
+  # For API access and data formats
   - fsspec
-  - kerchunk # not sure if necessary yet
   - s3fs
   - h5netcdf
   - zarr
@@ -31,3 +31,7 @@ dependencies:
   - conda-build
   - conda-libmamba-solver
   - pip
+
+  # we get the latest version of xpublish from github
+  - pip:
+    - git+https://github.com/xpublish-community/xpublish.git
