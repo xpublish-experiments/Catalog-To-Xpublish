@@ -25,7 +25,7 @@ class STACCatalogSearch(CatalogSearcher):
         catalog_path: Optional[Path | str] = None,
     ) -> None:
         """Initializes the catalog searcher."""
-        self.__catalog_path = catalog_path
+        self.__catalog_path: Path | str = catalog_path
         self.__suffixes = None
         self.__catalog_obj = None
 

@@ -23,7 +23,7 @@ from typing import (
 @dataclasses.dataclass
 class AppComponents:
     """A class to hold the different inputs for launching our server app."""
-    catalog_path: Path
+    catalog_path: Path | str
     catalog_name: str
     catalog_implementation: CatalogImplementation
     name: str
@@ -31,20 +31,16 @@ class AppComponents:
 
 
 def validate_arguments(
-    catalog_path: Path,
+    catalog_path: Path | str,
     catalog_type: str,
     app_name: Optional[str] = None,
     xpublish_plugins: Optional[List[xpublish.Plugin]] = None,
 ) -> AppComponents:
     """Validates the arguments passed to the create_app function."""
     # check catalog path argument and get name
-    if not isinstance(catalog_path, Path):
+    if not isinstance(catalog_path, Path) and not isinstance(catalog_path, str):
         raise TypeError(
-            f'catalog_path must be a Path object, not {type(catalog_path)}'
-        )
-    if not catalog_path.exists():
-        raise FileNotFoundError(
-            f'catalog_path={catalog_path} does not exist.'
+            f'catalog_path must be a Path or str, not {type(catalog_path)}'
         )
 
     catalog_name: str = catalog_path.name.replace(catalog_path.suffix, '')

@@ -27,7 +27,7 @@ class IntakeCatalogSearch(CatalogSearcher):
     ) -> None:
         """Initializes the catalog searcher."""
 
-        self.__catalog_path: Path = catalog_path
+        self.__catalog_path: Path | str = catalog_path
         self.__suffixes: List[str] = suffixes
         self.__catalog_obj: intake.Catalog = None
 
