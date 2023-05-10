@@ -1,3 +1,4 @@
 **.pyc
+**.tmp
 .vscode/**
-src/xpublish_opendap_server/practice_server.py
+src/catalog_to_xpublish/practice_server.py
