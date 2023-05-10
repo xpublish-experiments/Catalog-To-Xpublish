@@ -1,5 +1,5 @@
-"""A pytest module for testing intake catalog to xarray dataset conversion."""
-import intake
+"""A pytest module for testing STAC catalog to xarray dataset conversion."""
+import pystac
 import pytest
 import xarray as xr
 from pathlib import Path
@@ -17,13 +17,13 @@ from catalog_to_xpublish.base import (
     CatalogEndpoint,
 )
 from catalog_to_xpublish.searchers import (
-    IntakeCatalogSearch,
+    STACCatalogSearch,
 )
 from catalog_to_xpublish.io import (
-    IntakeToXarray,
+    STACToXarray,
 )
 from catalog_to_xpublish.routers import (
-    IntakeRouter,
+    STACRouter,
 )
 
 if Path.cwd().name == 'Xpublish-OPeNDAP-Server':
@@ -36,16 +36,16 @@ else:
         f'CWD={Path.cwd()}',
     )
 CATALOG_PATH = home_dir / 'test_catalogs' / \
-    'test_intake_zarr_catalog.yaml'
+    'test_stac_zarr_catalog.json'
 
 
 def test_factory() -> None:
-    assert isinstance(IntakeCatalogSearch, CatalogSearcherClass)
-    assert isinstance(IntakeToXarray, CatalogIOClass)
-    assert isinstance(IntakeRouter, CatalogRouterClass)
-    assert 'intake' in CatalogImplementationFactory.get_all_implementations().keys()
+    assert isinstance(STACCatalogSearch, CatalogSearcherClass)
+    assert isinstance(STACToXarray, CatalogIOClass)
+    assert isinstance(STACRouter, CatalogRouterClass)
+    assert 'stac' in CatalogImplementationFactory.get_all_implementations().keys()
 
-    obj = CatalogImplementationFactory.get_catalog_implementation('intake')
+    obj = CatalogImplementationFactory.get_catalog_implementation('stac')
     assert isinstance(obj, CatalogImplementation)
 
 
@@ -53,17 +53,17 @@ def test_factory() -> None:
 def test_catalog_classes(
     catalog_path: Path = CATALOG_PATH,
 ) -> None:
-    """Tests parsing of an intake catalog."""
+    """Tests parsing of an STAC catalog."""
 
     # get implementation
-    obj = CatalogImplementationFactory.get_catalog_implementation('intake')
+    obj = CatalogImplementationFactory.get_catalog_implementation('stac')
 
     # check that we can build a catalog object from .yaml
     seacher = obj.catalog_search(catalog_path=catalog_path)
 
-    assert isinstance(seacher.catalog_object, intake.Catalog)
+    assert isinstance(seacher.catalog_object, pystac.Collection)
     assert seacher.suffixes == ['.nc', '.zarr']
-    assert seacher.catalog_object.name == 'test_intake_zarr_catalog'
+    assert seacher.catalog_object.name == 'test_stac_zarr_catalog'
     assert seacher.catalog_object.path == str(catalog_path)
 
     # check that we can parse the catalog

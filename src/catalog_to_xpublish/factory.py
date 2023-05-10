@@ -32,6 +32,8 @@ class CatalogSearcherClass:
                 f'Please provide a valid catalog searcher! '
                 f'Expected a subclass of CatalogSearcher, got {type(args)}',
             )
+        for func in CatalogSearcher.__abstractmethods__:
+            assert hasattr(args, func)
         CatalogImplementationFactory.register_searcher(args)
 
 
@@ -46,6 +48,8 @@ class CatalogIOClass:
                 f'Please provide a valid catalog IO class! '
                 f'Expected a subclass of CatalogToXarray, got {type(args)}',
             )
+        for func in CatalogToXarray.__abstractmethods__:
+            assert hasattr(args, func)
         CatalogImplementationFactory.register_io(args)
 
 
@@ -60,6 +64,8 @@ class CatalogRouterClass:
                 f'Please provide a valid catalog router! '
                 f'Expected a subclass of CatalogRouter, got {type(args)}',
             )
+        for func in CatalogRouter.__abstractmethods__:
+            assert hasattr(args, func)
         CatalogImplementationFactory.register_router(args)
 
 
