@@ -18,7 +18,7 @@ elif Path.cwd().name == 'testing':
     home_dir = Path.cwd().parent
 else:
     raise FileNotFoundError(
-        'Please run this test from the root directory of the repository.'
+        'Please run this test from the root directory of the repository.',
     )
 CATALOG_PATH = home_dir / 'test_catalogs' / \
     'test_intake_zarr_catalog.yaml'

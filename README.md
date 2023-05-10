@@ -70,9 +70,9 @@ This repository enables one to spin-up a `fastapi`/`xpublish` server from either
 
 ## Contributing
 ### General
-We strongly encourage open-source contributions to this repository! I am new to this tech stack, and likely have much to learn from the wider `xpublish` community. 
+We strongly encourage open-source contributions to this repository! I am new to this tech stack, and likely have much to learn from the wider `xpublish` community.
 
-Please note any bugs or feature requests via our GitHub Issues page. 
+Please note any bugs or feature requests via our GitHub Issues page.
 
 Before creating a pull request please use `pytest` to run our `/tests` suite to make sure that no behavior was inadvertently altered. If you create a new feature (i.e., an additional catalog implementation), we encourage you to create a test `tests/test_{#}_{new_feature_name}.py` file for it.
 
@@ -95,7 +95,7 @@ This process is demonstrated below:
         CatalogEndpoint,
     )
     from catalog_to_xpublish.factory import CatalogSearcherClass
-    
+
     @CatalogSearcherClass
     class NewCatalogTypeSearcher(CatalogSearcher):
 
@@ -108,7 +108,7 @@ This process is demonstrated below:
         @property
         def suffixes(self) -> List[str]:
             ...
-        
+
         @property
         def catalog_object(self) -> object:
             ...
@@ -196,6 +196,3 @@ This process is demonstrated below:
 4. Make sure the catalog searcher, io class, and router class are included within their respective module `__init__.py` files.
 5. At this upon spin-up the `factory.CatalogImplementationFactory` will recognize (via the decorators) each component of the catalog implementation and register it as valid.
 6. Use `catalog_to_xpublish.CatalogImplementationFactory.get_all_implementations()` to return a dictionary of all registered catalog implementations.
-
-
-

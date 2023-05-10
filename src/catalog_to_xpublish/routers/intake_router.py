@@ -43,7 +43,7 @@ class IntakeRouter(CatalogRouter):
         # TODO: https://panel.holoviz.org/user_guide/FastAPI.html
         raise NotImplementedError
         gui = intake.interface.gui.GUI(
-            [self.catalog_endpoint_obj.catalog_obj]
+            [self.catalog_endpoint_obj.catalog_obj],
         )
         return HTMLResponse(
             content=gui.servable().embed(),  # .to_html(),
@@ -76,7 +76,7 @@ class IntakeRouter(CatalogRouter):
     def get_catalog_as_json(self) -> JSONResponse:
         """Returns the catalog as JSON.
 
-        Will be decorated with 
+        Will be decorated with
         NOTE: This may return None for some catalog types.
         """
         return JSONResponse(

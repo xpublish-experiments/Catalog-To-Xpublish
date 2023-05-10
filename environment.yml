@@ -7,7 +7,7 @@ channels:
 dependencies:
   - python =3.11
 
-  # For data processing 
+  # For data processing
   - xarray
   - dask
 

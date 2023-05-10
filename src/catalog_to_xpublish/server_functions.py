@@ -39,7 +39,7 @@ def validate_arguments(
     # check catalog path argument and get name
     if not isinstance(catalog_path, Path) and not isinstance(catalog_path, str):
         raise TypeError(
-            f'catalog_path must be a Path or str, not {type(catalog_path)}'
+            f'catalog_path must be a Path or str, not {type(catalog_path)}',
         )
 
     catalog_name: str = catalog_path.name.replace(catalog_path.suffix, '')
@@ -47,13 +47,13 @@ def validate_arguments(
     # check catalog type argument
     if not isinstance(catalog_type, str):
         raise TypeError(
-            f'catalog_type must be a str, not {type(catalog_type)}'
+            f'catalog_type must be a str, not {type(catalog_type)}',
         )
     catalog_type = catalog_type.lower()
     catalog_implementations = CatalogImplementationFactory.get_all_implementations()
     if not catalog_type in catalog_implementations.keys():
         raise KeyError(
-            f'catalog_type={catalog_type} is not in {catalog_implementations.keys()}.'
+            f'catalog_type={catalog_type} is not in {catalog_implementations.keys()}.',
         )
     catalog_implementation = catalog_implementations[catalog_type]
 
@@ -62,7 +62,7 @@ def validate_arguments(
         app_name = 'Catalog_Xpublish_Server'
     elif not isinstance(app_name, str):
         raise TypeError(
-            f'app_name must be a str, not {type(app_name)}'
+            f'app_name must be a str, not {type(app_name)}',
         )
 
     # check plugins list argument
@@ -70,7 +70,7 @@ def validate_arguments(
         xpublish_plugins = []
     if not isinstance(xpublish_plugins, list):
         raise TypeError(
-            f'xpublish_plugins must be a list of xpublish.Plugin objects, not {type(xpublish_plugins)}'
+            f'xpublish_plugins must be a list of xpublish.Plugin objects, not {type(xpublish_plugins)}',
         )
 
     return AppComponents(
@@ -114,7 +114,7 @@ def create_app(
 
     # 2. Start a Xpublish server
     app = FastAPI(
-        title=f'{app_inputs.name}: {app_inputs.catalog_name}'
+        title=f'{app_inputs.name}: {app_inputs.catalog_name}',
     )
 
     # 2. Iterate through the endpoints and add them to the server
@@ -154,7 +154,7 @@ def create_app(
                     assert plugin.name in rest_server.plugins
             except AssertionError:
                 warnings.warn(
-                    f'Could not add plugin={plugin} to the Xpublish server.'
+                    f'Could not add plugin={plugin} to the Xpublish server.',
                 )
                 continue
 

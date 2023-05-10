@@ -37,7 +37,7 @@ class IntakeToXarray(CatalogToXarray):
         else:
             raise ValueError(
                 'Please provide a valid input to create a catalog object! .'
-                'I.e., a path to a yaml file or a yaml string.'
+                'I.e., a path to a yaml file or a yaml string.',
             )
 
     def write_attributes(
@@ -71,7 +71,7 @@ class IntakeToXarray(CatalogToXarray):
         if info_dict['container'] != 'xarray':
             raise ValueError(
                 f'{dataset_id} is not readable by xarray. '
-                f'Container={info_dict["container"]}'
+                f'Container={info_dict["container"]}',
             )
 
         # verify the necessary driver plugin is installed
@@ -79,7 +79,7 @@ class IntakeToXarray(CatalogToXarray):
         if driver not in intake.registry.keys():
             raise ValueError(
                 f'{driver} driver not installed. '
-                f'Please install the necessary intake plugin!'
+                f'Please install the necessary intake plugin!',
             )
 
         # open as a xarray dataset and add attributes

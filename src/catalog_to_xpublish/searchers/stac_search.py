@@ -35,20 +35,20 @@ class STACCatalogSearch(CatalogSearcher):
             if not self.__catalog_path.exists():
                 raise FileNotFoundError(
                     f'Please provide a valid intake catalog .json file path or URL! '
-                    f'Could not find {self.__catalog_path}'
+                    f'Could not find {self.__catalog_path}',
                 )
             self.__catalog_path = str(self.__catalog_path)
 
         if not isinstance(self.__catalog_path, str):
             raise TypeError(
                 f'Please provide a valid intake catalog .json file path or URL! '
-                f'Expected a str or Path, got {type(self.__catalog_path)}'
+                f'Expected a str or Path, got {type(self.__catalog_path)}',
             )
 
         if Path(self.__catalog_path).suffix != '.json':
             raise ValueError(
                 f'Please provide a valid intake catalog .json file path or URL! '
-                f'File suffix must be .json, not {Path(self.__catalog_path).suffix}'
+                f'File suffix must be .json, not {Path(self.__catalog_path).suffix}',
             )
         return str(self.__catalog_path)
 
@@ -66,7 +66,8 @@ class STACCatalogSearch(CatalogSearcher):
     def catalog_object(self) -> pystac.Catalog:
         if self.__catalog_obj is None:
             self.__catalog_obj = pystac.Catalog.from_file(
-                str(self.catalog_path))
+                str(self.catalog_path),
+            )
         return self.__catalog_obj
 
     def parse_catalog(
@@ -124,7 +125,7 @@ class STACCatalogSearch(CatalogSearcher):
                 sub_catalogs=sub_catalogs,
                 dataset_info_dicts=dataset_info_dicts,
                 contains_datasets=bool(len(dataset_ids) > 0),
-            )
+            ),
         )
 
         return list_of_catalog_endpoints

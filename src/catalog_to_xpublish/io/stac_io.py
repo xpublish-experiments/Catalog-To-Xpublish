@@ -41,7 +41,7 @@ class STACToXarray(CatalogToXarray):
         else:
             raise ValueError(
                 'Please provide a valid input to create a catalog object! .'
-                'I.e., a path/URL to a json file.'
+                'I.e., a path/URL to a json file.',
             )
 
     def write_attributes(
@@ -69,7 +69,7 @@ class STACToXarray(CatalogToXarray):
             else:
                 raise ValueError(
                     f'Endpoint type {endpoint_key} not supported. '
-                    f'Please use s3, https, or file.'
+                    f'Please use s3, https, or file.',
                 )
 
         # get storage options
@@ -118,7 +118,7 @@ class STACToXarray(CatalogToXarray):
         ]:
             if not key in info_dict.keys():
                 raise ValueError(
-                    f'{dataset_id} is missing the {key} info. '
+                    f'{dataset_id} is missing the {key} info. ',
                 )
 
         # open as a xarray dataset and add attributes

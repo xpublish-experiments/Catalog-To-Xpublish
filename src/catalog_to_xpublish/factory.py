@@ -30,7 +30,7 @@ class CatalogSearcherClass:
         if not issubclass(args, CatalogSearcher):
             raise TypeError(
                 f'Please provide a valid catalog searcher! '
-                f'Expected a subclass of CatalogSearcher, got {type(args)}'
+                f'Expected a subclass of CatalogSearcher, got {type(args)}',
             )
         CatalogImplementationFactory.register_searcher(args)
 
@@ -44,7 +44,7 @@ class CatalogIOClass:
         if not issubclass(args, CatalogToXarray):
             raise TypeError(
                 f'Please provide a valid catalog IO class! '
-                f'Expected a subclass of CatalogToXarray, got {type(args)}'
+                f'Expected a subclass of CatalogToXarray, got {type(args)}',
             )
         CatalogImplementationFactory.register_io(args)
 
@@ -58,7 +58,7 @@ class CatalogRouterClass:
         if not issubclass(args, CatalogRouter):
             raise TypeError(
                 f'Please provide a valid catalog router! '
-                f'Expected a subclass of CatalogRouter, got {type(args)}'
+                f'Expected a subclass of CatalogRouter, got {type(args)}',
             )
         CatalogImplementationFactory.register_router(args)
 
@@ -117,7 +117,7 @@ class CatalogImplementationFactory:
         catalog_dicts = cls._get_catalog_dicts()
         if catalog_dicts == [{}, {}, {}]:
             raise ValueError(
-                f'No catalog implementations have been registered! '
+                f'No catalog implementations have been registered! ',
             )
 
         # make sure there are no partial implementations
@@ -128,13 +128,13 @@ class CatalogImplementationFactory:
                     all_keys = list(set(catalog_dict.keys()))
                 else:
                     more_keys = set(
-                        all_keys.copy() + list(catalog_dict.keys())
+                        all_keys.copy() + list(catalog_dict.keys()),
                     )
                     if len(more_keys) != len(all_keys):
                         raise ValueError(
                             f'Found a partial implementation of a catalog type! '
                             f'There must a a valid CatalogSearcher, CatalogToXarray, and CatalogRouter '
-                            f'for each catalog type. '
+                            f'for each catalog type. ',
                         )
                     else:
                         all_keys = list(more_keys)

@@ -38,17 +38,17 @@ class IntakeCatalogSearch(CatalogSearcher):
         if not isinstance(self.__catalog_path, Path):
             raise TypeError(
                 f'Please provide a valid intake catalog .yaml file path! '
-                f'Expected a str or Path, got {type(self.__catalog_path)}'
+                f'Expected a str or Path, got {type(self.__catalog_path)}',
             )
         if not self.__catalog_path.exists():
             raise FileNotFoundError(
                 f'Please provide a valid intake catalog .yaml file path! '
-                f'Could not find {self.__catalog_path}'
+                f'Could not find {self.__catalog_path}',
             )
         if self.__catalog_path.suffix != '.yaml':
             raise ValueError(
                 f'Please provide a valid intake catalog .yaml file path! '
-                f'File suffix must be .yaml, not {self.__catalog_path.suffix}'
+                f'File suffix must be .yaml, not {self.__catalog_path.suffix}',
             )
         return self.__catalog_path
 
@@ -118,7 +118,7 @@ class IntakeCatalogSearch(CatalogSearcher):
                 sub_catalogs=sub_catalogs,
                 dataset_info_dicts=dataset_info_dicts,
                 contains_datasets=bool(len(dataset_ids) > 0),
-            )
+            ),
         )
 
         return list_of_catalog_endpoints
