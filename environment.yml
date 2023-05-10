@@ -1,4 +1,4 @@
-name: xpublish_opendap_server
+name: catalog_to_xpublish
 channels:
   - conda-forge
   - nodefaults
