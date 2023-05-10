@@ -29,7 +29,6 @@ dependencies:
   # Dev tools: For testing and pre-commit hooks
   - pytest
   - pre-commit
-  - autopep8 # autopep8 extension for Python (pylsp-autopep8)
 
   # Package management
   - conda
