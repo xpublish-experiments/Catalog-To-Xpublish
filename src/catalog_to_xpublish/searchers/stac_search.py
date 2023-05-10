@@ -57,7 +57,7 @@ class STACCatalogSearch(CatalogSearcher):
         if self.__suffixes is None:
             # TODO: test with NetCDF files
             self.__suffixes = [
-                # '.nc',
+                '.nc',
                 '.zarr',
             ]
         return self.__suffixes
@@ -110,8 +110,14 @@ class STACCatalogSearch(CatalogSearcher):
         # if its a collection search for assets too
         if isinstance(catalog, pystac.Collection):
             for child_name, child in catalog.get_assets().items():
-                path: str = parent_path + '/' + child_name
+                # make sure the item type is supported
+                url_path = child.get_absolute_href()
+                if url_path.endswith('/'):
+                    url_path = url_path[:-1]
+                if not any([url_path.endswith(suffix) for suffix in self.suffixes]):
+                    continue
 
+                # if supported, add it to the list
                 dataset_ids.append(child_name)
                 dataset_info_dicts[child_name] = child.to_dict()
 
