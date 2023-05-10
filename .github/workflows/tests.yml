@@ -1,0 +1,38 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  run:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+        os: [windows-latest, ubuntu-latest, macos-latest]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Micromamba
+        uses: mamba-org/provision-with-micromamba@v15
+        with:
+          environment-file: false
+
+      - name: Python ${{ matrix.python-version }}
+        shell: bash -l {0}
+        run: >
+          micromamba create --name DEV_ENV python=${{ matrix.python-version }} --file dev_environment.yml --channel conda-forge
+          && micromamba activate DEV_ENV
+          && pip install git+https://github.com/xpublish-community/xpublish.git
+          && pip install -e . --no-deps --force-reinstall
+          && micromamba info
+          && micromamba list
+
+      - name: Tests
+        shell: bash -l {0}
+        run: >
+          micromamba activate DEV_ENV
+          && pytest -rxs --cov=catalog_to_xpublish --cov-report=xml tests
