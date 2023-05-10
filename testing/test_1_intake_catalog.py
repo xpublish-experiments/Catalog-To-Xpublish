@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import (
     List,
 )
-from xpublish_opendap_server.catalog_search import (
+from catalog_to_xpublish.catalog_search import (
     CatalogEndpoint,
     IntakeCatalogSearch,
     CatalogSearcher,

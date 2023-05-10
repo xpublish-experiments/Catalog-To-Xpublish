@@ -3,13 +3,13 @@ import warnings
 import xpublish
 # NOTE: we are using a local version of xpublish (release is missing features we need)
 from fastapi import FastAPI
-from xpublish_opendap_server.base import (
+from catalog_to_xpublish.base import (
     CatalogEndpoint,
 )
-from xpublish_opendap_server.provider_plugin import (
+from catalog_to_xpublish.provider_plugin import (
     DatasetProviderPlugin,
 )
-from xpublish_opendap_server.factory import (
+from catalog_to_xpublish.factory import (
     CatalogImplementation,
     CatalogImplementationFactory,
 )

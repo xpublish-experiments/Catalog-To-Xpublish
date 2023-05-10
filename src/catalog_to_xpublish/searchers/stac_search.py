@@ -1,9 +1,9 @@
 import pystac
-from xpublish_opendap_server.base import (
+from catalog_to_xpublish.base import (
     CatalogSearcher,
     CatalogEndpoint,
 )
-from xpublish_opendap_server.factory import (
+from catalog_to_xpublish.factory import (
     CatalogSearcherClass,
 )
 from pathlib import Path

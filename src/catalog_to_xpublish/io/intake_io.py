@@ -1,6 +1,6 @@
 import intake
 import xarray as xr
-from xpublish_opendap_server.base import (
+from catalog_to_xpublish.base import (
     CatalogToXarray,
 )
 from pathlib import Path
@@ -10,7 +10,7 @@ from typing import (
     Optional,
     Union,
 )
-from xpublish_opendap_server.factory import (
+from catalog_to_xpublish.factory import (
     CatalogIOClass,
 )
 

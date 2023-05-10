@@ -1,3 +1,3 @@
 """Init file for io_classes."""
-from xpublish_opendap_server.io.intake_io import IntakeToXarray
-from xpublish_opendap_server.io.stac_io import STACToXarray
+from catalog_to_xpublish.io.intake_io import IntakeToXarray
+from catalog_to_xpublish.io.stac_io import STACToXarray

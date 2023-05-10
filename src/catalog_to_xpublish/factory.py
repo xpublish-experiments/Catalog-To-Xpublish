@@ -2,7 +2,7 @@
 A factory for creating and validating catalog implementations (i.e., STAC, Intake, etc.).
 """
 import dataclasses
-from xpublish_opendap_server.base import (
+from catalog_to_xpublish.base import (
     CatalogSearcher,
     CatalogToXarray,
     CatalogRouter,

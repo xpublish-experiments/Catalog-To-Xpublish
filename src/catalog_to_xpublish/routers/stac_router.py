@@ -9,13 +9,13 @@ from typing import (
     List,
     Optional,
 )
-from xpublish_opendap_server.base import (
+from catalog_to_xpublish.base import (
     CatalogEndpoint,
 )
-from xpublish_opendap_server.base import (
+from catalog_to_xpublish.base import (
     CatalogRouter,
 )
-from xpublish_opendap_server.factory import (
+from catalog_to_xpublish.factory import (
     CatalogRouterClass,
 )
 

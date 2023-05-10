@@ -1,10 +1,10 @@
-from xpublish_opendap_server.factory import (
+from catalog_to_xpublish.factory import (
     CatalogImplementation,
     CatalogImplementationFactory,
 )
-from xpublish_opendap_server import searchers
-from xpublish_opendap_server import io
-from xpublish_opendap_server import routers
-from xpublish_opendap_server.run_server import (
+from catalog_to_xpublish import searchers
+from catalog_to_xpublish import io
+from catalog_to_xpublish import routers
+from catalog_to_xpublish.run_server import (
     create_app,
 )

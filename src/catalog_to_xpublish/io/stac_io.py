@@ -2,7 +2,7 @@ import pystac
 import fsspec
 import string
 import xarray as xr
-from xpublish_opendap_server.base import CatalogToXarray
+from catalog_to_xpublish.base import CatalogToXarray
 from pathlib import Path
 from typing import (
     Dict,
@@ -10,7 +10,7 @@ from typing import (
     Any,
     Optional,
 )
-from xpublish_opendap_server.factory import (
+from catalog_to_xpublish.factory import (
     CatalogIOClass,
 )
 
