@@ -1,56 +1,42 @@
-name: web_geospatial
+name: catalog_to_xpublish_dev
 channels:
   - conda-forge
   - nodefaults
 
+# a minimal environment for Catalog-To-Xpublish
 dependencies:
   - python =3.11
 
-  # For data processing 
-  - pandas
+  # For data processing
   - xarray
-  - cf_xarray
-  - rioxarray
   - dask
-  - geopandas
-  - gdptools
 
-
-  # For API access and data formats
+  # For catalog access
   - intake
   - intake-xarray
-  - pydap
-  - xpublish
-  - xpublish_opendap
-  - odc-stac
-  - kerchunk
+  - pystac
+
+  # For API access and data formats
   - fsspec
   - s3fs
   - h5netcdf
-  - pyarrow
   - zarr
 
-    # Interactivity & Visualization (optional, but required for viz)
-  - jupyterlab
-  - ipympl
-  - nodejs
-  - hvplot
-  - holoviews
-  - geoviews
-  - cartopy
-
-# Dev tools: Language Server Protocol (LSP) (Optional), for:
+  # Dev tools: Language Server Protocol (LSP)
   - python-lsp-server # LSP extension for Python (pylsp), including:
   - pylsp-mypy  # MyPy type checking for Python >=3.7.
-  - jupyterlab-lsp # Provides both server extension and lab extension
+
+  # Dev tools: For testing and pre-commit hooks
   - pytest
+  - pre-commit
+  - autopep8 # autopep8 extension for Python (pylsp-autopep8)
 
   # Package management
   - conda
   - conda-build
-  - mamba
-  - conda-libmamba-solver  # Faster env solver, https://conda.github.io/conda-libmamba-solver/
+  - conda-libmamba-solver
   - pip
 
-pip:
-  - pystac-client
+  # we get the latest version of xpublish from github
+  - pip:
+    - git+https://github.com/xpublish-community/xpublish.git
