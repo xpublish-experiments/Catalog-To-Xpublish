@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61", "wheel", "setuptools_scm[toml]>=3.4"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "catalog_to_xpublish"
+description = "This repository enables one to spin-up a FastAPI/Xpublish server from an Intake or STAC catalog."
+readme = "README.md"
+requires-python = ">=3.11"
+keywords = [
+    'xarray',
+    'fastapi',
+    'zarr',
+    'server-side',
+    'gridded-data',
+]
+license = { file = "LICENSE.txt" }
+
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering",
+]
+
+dependencies = [
+    'xpublish',
+    'xarray',
+    'intake',
+    'intake-xarray',
+    'pystac',
+    'fsspec',
+    's3fs',
+    'h5netcdf',
+    'zarr',
+]
+
+[tool.setuptools]
+packages = ["catalog_to_xpublish"]
+
+
