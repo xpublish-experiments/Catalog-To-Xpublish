@@ -76,12 +76,18 @@ Please note any bugs or feature requests via our GitHub Issues page.
 
 Before creating a pull request please use `pytest` to run our `/tests` suite to make sure that no behavior was inadvertently altered. If you create a new feature (i.e., an additional catalog implementation), we encourage you to create a test `tests/test_{#}_{new_feature_name}.py` file for it.
 
-### Adding a new catalog implementation
+### Creating a new catalog implementation
 As environmental science progresses, we expect additional catalog schemas beyond Intake and STAC to become relevant. Alternatively, STAC supports extensions, and one may need to build an adjusted STAC implementation for specific needs/desires.
 
-To do so, one needs to create a concrete implementation of three abstract base classes, and decorate them as "products" for `factory.py` to register the new implementation. 
+A catalog implementation consists of three core components/classes. To create a new catalog implementation one must define a concrete implementation of each of the following abstract base classes.
+* `base.CatalogSearcher` - Responsible for parsing catalog hierarchy.
+* `base.CatalogToXarray` - Responsible for reading catalog items into `xarray.Dataset` objects and writing attributes.
+* `base.CatalogRouter` - Responsible for defining our core [endpoints](#endpoints) behavior and attaching it to a `fastapi.APIRouter`.
 
-This process is explained below:
+The concrete versions of the above classes then need to be decorated as "products" so that `catalog_to_xpublish.CatalogImplementationFactory` can identify, validate, and register the new catalog implementation.
+
+
+This process is demonstrated below:
 1. Create a concrete implementation of `base/searcher_base.CatalogSearcher` and decorate it as a `factory.CatalogSearcherClass`. See `CatalogSearcher` docstring information for more detail. Note that one must create a function for all abstract methods, even if it returns a `NotImplementedError`.
     ```python
     from catalog_to_xpublish.base import (
@@ -186,7 +192,7 @@ This process is explained below:
         def get_catalog_as_json(self) -> JSONResponse:
             """Returns the catalog as JSON."""
             ...
-        ```
+    ```
 4. Make sure the catalog searcher, io class, and router class are included within their respective module `__init__.py` files.
 5. At this upon spin-up the `factory.CatalogImplementationFactory` will recognize (via the decorators) each component of the catalog implementation and register it as valid.
 6. Use `catalog_to_xpublish.CatalogImplementationFactory.get_all_implementations()` to return a dictionary of all registered catalog implementations.
