@@ -1,5 +1,5 @@
 # Xpublish-OPeNDAP-Server
-This repository enables one to spin up a `xpublish` sever from either an Intake `.yaml` or STAC `.json` file.
+This repository enables one to spin-up a `fastapi`/`xpublish` server from either an Intake or STAC catalog.
 
 ![repo_schematic](imgs/repo_schematic.png)
 
