@@ -1,7 +1,6 @@
 import dataclasses
 import warnings
 import xpublish
-# NOTE: we are using a local version of xpublish (release is missing features we need)
 from fastapi import FastAPI
 from catalog_to_xpublish.base import (
     CatalogEndpoint,

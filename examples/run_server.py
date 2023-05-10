@@ -1,7 +1,6 @@
 """Main server file"""
 import uvicorn
 from pathlib import Path
-from xpublish_opendap import OpenDapPlugin
 from catalog_to_xpublish.server_functions import create_app
 
 # CATALOG_TYPE: str = 'intake'  # or 'stac'
@@ -11,7 +10,15 @@ CATALOG_TYPE: str = 'stac'
 CATALOG_PATH = Path.cwd() / 'test_catalogs' / 'test_stac_zarr_catalog.json'
 
 APP_NAME = 'Xpublish Server'
-XPUBLISH_PLUGINS = [OpenDapPlugin]
+
+# add plugins here
+XPUBLISH_PLUGINS = []
+try:
+    from xpublish_opendap import OpenDapPlugin
+    XPUBLISH_PLUGINS.append(OpenDapPlugin)
+except ImportError:
+    print('xpublish_opendap not installed. Skipping OpenDAP plugin.')
+
 
 LOCAL_HOST = '127.0.0.1'
 LOCAL_PORT = 8000
