@@ -26,3 +26,11 @@ sources:
       consolidated: true
       storage_options:
         requester_pays: true
+
+  era5-2019-may-precip-s3:
+    driver: netcdf
+    description: "May 2018 ERA5 Precipitation data for testing NetCDF access"
+    args:
+      urlpath: 's3://era5-pds/2019/05/data/precipitation_amount_1hour_Accumulation.nc'
+      storage_options:
+        requester_pays: false
