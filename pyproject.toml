@@ -6,12 +6,6 @@ build-backend = "setuptools.build_meta"
 name = "catalog_to_xpublish"
 version = "0.1.0"
 description = "This repository enables one to spin-up a FastAPI/Xpublish server from an Intake or STAC catalog."
-authors = [
-    "Xavier R Nogueira <xavier.rojas.nogueira@gmail.com>",
-]
-maintainers = [
-    "Xavier R Nogueira <xavier.rojas.nogueira@gmail.com>",
-]
 
 readme = "README.md"
 requires-python = ">=3.11"
