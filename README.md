@@ -76,6 +76,14 @@ Please note any bugs or feature requests via our GitHub Issues page.
 
 Before creating a pull request please use `pytest` to run our `/tests` suite to make sure that no behavior was inadvertently altered. If you create a new feature (i.e., an additional catalog implementation), we encourage you to create a test `tests/test_{#}_{new_feature_name}.py` file for it.
 
+Additionally, before making a pull request please run our pre-commit hooks locally:
+```
+(base) cd {PATH}/{TO}/{REPO}
+
+(base) conda activate catalog_to_xpublish_dev
+(catalog_to_xpublish_dev) pre-commit run --all-files
+```
+
 ### Creating a new catalog implementation
 As environmental science progresses, we expect additional catalog schemas beyond Intake and STAC to become relevant. Alternatively, STAC supports extensions, and one may need to build an adjusted STAC implementation for specific needs/desires.
 
