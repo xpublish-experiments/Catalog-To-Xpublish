@@ -26,7 +26,7 @@ dependencies:
   - python-lsp-server # LSP extension for Python (pylsp), including:
   - pylsp-mypy  # MyPy type checking for Python >=3.7.
   - pydantic
-  
+
   # Package management
   - conda
   - conda-build
