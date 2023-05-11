@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "catalog_to_xpublish"
 description = "This repository enables one to spin-up a FastAPI/Xpublish server from an Intake or STAC catalog."
 author = "Xavier Nogueira"
-author_email. = "xavier.rojas.nogueira@gmail.com"
+author_email = "xavier.rojas.nogueira@gmail.com"
 dynamic = ["version", "readme"]
 
 url = "https://github.com/LimnoTech/Catalog-To-Xpublish"
