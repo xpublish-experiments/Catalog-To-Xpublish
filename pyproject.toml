@@ -2,14 +2,15 @@
 requires = ["setuptools>=61", "wheel", "setuptools_scm[toml]>=3.4"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
+[project]
 name = "catalog_to_xpublish"
-description = "This repository enables one to spin-up a FastAPI/Xpublish server from an Intake or STAC catalog."
-author = "Xavier Nogueira"
-author_email = "xavier.rojas.nogueira@gmail.com"
 dynamic = ["version", "readme"]
 
-url = "https://github.com/LimnoTech/Catalog-To-Xpublish"
+description = "This repository enables one to spin-up a FastAPI/Xpublish server from an Intake or STAC catalog."
+authors = [
+    {name = "Xavier Nogueira", email = "xavier.rojas.nogueira@gmail.com"},
+]
+
 requires-python = ">=3.11"
 keywords = [
     'xarray',
@@ -40,12 +41,13 @@ dependencies = [
     's3fs',
     'h5netcdf',
     'zarr',
+    'pydantic',
 ]
 
-[tool.setuptools.find]
+[tool.setuptools.packages.find]
 where = ["src"]
 include = ["catalog_to_xpublish.*"]
 
 [tool.setuptools.dynamic]
-version = {attr = "my_package.VERSION"}
+version = {attr = "catalog_to_xpublish.VERSION"}
 readme = {file = "README.md"}
