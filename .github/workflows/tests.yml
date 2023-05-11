@@ -1,4 +1,4 @@
-name: Tests
+name: tests
 
 on:
   pull_request:
@@ -31,8 +31,8 @@ jobs:
           && micromamba info
           && micromamba list
 
-      - name: Tests
+      - name: tests
         shell: bash -l {0}
         run: >
           micromamba activate DEV_ENV
-          && pytest -rxs --cov=catalog_to_xpublish --cov-report=xml tests
+          && pytest tests/
