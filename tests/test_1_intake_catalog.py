@@ -26,7 +26,7 @@ from catalog_to_xpublish.routers import (
     IntakeRouter,
 )
 
-if Path.cwd().name == 'Xpublish-OPeNDAP-Server':
+if Path.cwd().name == 'Catalog-To-Xpublish':
     home_dir = Path.cwd()
 elif Path.cwd().name == 'tests':
     home_dir = Path.cwd().parent
