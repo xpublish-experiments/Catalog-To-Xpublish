@@ -46,8 +46,8 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["catalog_to_xpublish.*"]
+include = ["catalog_to_xpublish*"]
 
 [tool.setuptools.dynamic]
-version = {attr = "catalog_to_xpublish.VERSION"}
+version = {attr = "catalog_to_xpublish.__version__"}
 readme = {file = "README.md"}
