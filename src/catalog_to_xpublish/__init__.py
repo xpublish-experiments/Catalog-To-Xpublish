@@ -1,3 +1,4 @@
+__version__ = '0.0.1'
 from catalog_to_xpublish.factory import (
     CatalogImplementation,
     CatalogImplementationFactory,
