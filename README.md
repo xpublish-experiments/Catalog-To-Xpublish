@@ -1,6 +1,7 @@
+[![Pre-Commit Status](https://github.com/LimnoTech/Catalog-To-Xpublish/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/LimnoTech/Catalog-To-Xpublish/actions/workflows/pre-commit.yml)
+[![Tests Status](https://github.com/LimnoTech/Catalog-To-Xpublish/actions/workflows/tests.yml/badge.svg)](https://github.com/LimnoTech/Catalog-To-Xpublish/actions/workflows/tests.yml)
+
 # Catalog-To-Xpublish
-[![Pre-Commit Status](https://github.com/LimnoTech/Catalog-To-Xpublish/actions/workflows/pre-commit.yml/main.svg)](https://github.com/LimnoTech/Catalog-To-Xpublish/actions/workflows/pre-commit.yml)
-[![Tests Status](https://github.com/LimnoTech/Catalog-To-Xpublish/actions/workflows/tests.yml/main.svg)](https://github.com/LimnoTech/Catalog-To-Xpublish/actions/workflows/tests.yml)
 
 This repository enables one to spin-up a `fastapi`/`xpublish` server from either an Intake or STAC catalog.
 
