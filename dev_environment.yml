@@ -8,6 +8,7 @@ dependencies:
   - python =3.11
 
   # For data processing
+  - xpublish
   - xarray
   - dask
 
@@ -21,6 +22,10 @@ dependencies:
   - s3fs
   - h5netcdf
   - zarr
+
+  # xpublish plugins
+  - xpublish-opendap
+  - xpublish-edr
 
   # Dev tools: Language Server Protocol (LSP)
   - python-lsp-server # LSP extension for Python (pylsp), including:
@@ -37,6 +42,3 @@ dependencies:
   - conda-libmamba-solver
   - pip
 
-  # we get the latest version of xpublish from github
-  - pip:
-    - git+https://github.com/xpublish-community/xpublish.git
