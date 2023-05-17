@@ -144,19 +144,20 @@ def create_app(
             assert cat_prefix in rest_server.plugins
 
             # add all non-dataset provider plugins
-            try:
-                for plugin in app_inputs.xpublish_plugins:
-                    assert issubclass(plugin, xpublish.Plugin)
-                    plugin = plugin()
-                    rest_server.register_plugin(
-                        plugin=plugin,
-                    )
-                    assert plugin.name in rest_server.plugins
-            except AssertionError:
-                warnings.warn(
-                    f'Could not add plugin={plugin} to the Xpublish server.',
-                )
-                continue
+            for plugin in app_inputs.xpublish_plugins:
+                assert issubclass(plugin, xpublish.Plugin)
+                plugin = plugin()
+                if plugin.name not in rest_server.plugins:
+                    try:
+                        rest_server.register_plugin(
+                            plugin=plugin,
+                        )
+                        assert plugin.name in rest_server.plugins
+                    except AssertionError:
+                        warnings.warn(
+                            f'Could not add plugin={plugin} to the Xpublish server.',
+                        )
+                        continue
 
             # add the base router (for some reason this needs to come after)
             router = app_inputs.catalog_implementation.catalog_router(
