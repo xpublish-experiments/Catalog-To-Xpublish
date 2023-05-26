@@ -1,9 +1,14 @@
+import logging
 import dataclasses
 import warnings
 import xpublish
 from fastapi import FastAPI
 from catalog_to_xpublish.base import (
     CatalogEndpoint,
+)
+from catalog_to_xpublish.log import (
+    LoggingConfigDict,
+    config_logger,
 )
 from catalog_to_xpublish.provider_plugin import (
     DatasetProviderPlugin,
@@ -87,6 +92,7 @@ def create_app(
     catalog_type: str,
     app_name: Optional[str] = None,
     xpublish_plugins: Optional[List[xpublish.Plugin]] = None,
+    config_logging_dict: Optional[LoggingConfigDict] = None,
 ) -> FastAPI:
     """Main function to create the server app.
 
@@ -97,7 +103,12 @@ def create_app(
         xpublish_plugins: A list of external xpublish plugin classes to use.
     Returns:
         A FastAPI app object.
-    ."""
+    """
+    # config logging
+    config_logger(
+        config_dict=config_logging_dict,
+    )
+
     # 0. validate input arguments
     app_inputs: AppComponents = validate_arguments(
         catalog_path=catalog_path,

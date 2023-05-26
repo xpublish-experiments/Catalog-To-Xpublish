@@ -1,3 +1,4 @@
+import logging
 import json
 import yaml
 from fastapi.responses import (
@@ -19,6 +20,10 @@ from catalog_to_xpublish.factory import (
     CatalogRouterClass,
 )
 
+LOGGER = logging.getLogger(__name__)
+
+def logger():
+    return logging.getLogger('catalog_to_xpublish')
 
 @CatalogRouterClass
 class STACRouter(CatalogRouter):
@@ -47,6 +52,7 @@ class STACRouter(CatalogRouter):
 
     def list_sub_catalogs(self) -> List[str]:
         """Returns a list of sub-catalogs."""
+        LOGGER.info('Testing 1 2 3')
         return self.catalog_endpoint_obj.sub_catalogs
 
     def get_parent_catalog(self) -> str:
