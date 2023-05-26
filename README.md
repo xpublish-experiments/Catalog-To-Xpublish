@@ -71,6 +71,39 @@ This repository enables one to spin-up a `fastapi`/`xpublish` server from either
     * FastAPI documentation via `/docs` (for Swagger) or `/redoc` for Redoc. Note that `xpublish` endpoints will only appear at a catalog level containing servable datasets.
 * After a `datasets/{dataset_id}` is selected, one can also use any additional endpoints added via `xpublish` plugins. These endpoints will appear in the API documentation endpoint `/docs`.
 
+## Logging
+By default, `catalog_to_xpublish` will log to the console at the "INFO" level.
+
+One can change logging behaviors by passing in a `config_logging_dict` argument to `catalog_to_xpublish.create_app()` which contains any of following keys:
+* `log_level`: The logging level. Default is "INFO".
+* `log_file_path`: The path to a log file. Default is `None`.
+* `date_format`: The date format for log messages. Default is `'%Y-%m-%dT%H:%M:%S'`.
+* `log_format`: The log message format. Default is `'[%(asctime)s] %(levelname)s - %(message)s'`.
+* `stream_handlers`: Stream handler(s) to use (can be a list). Default is is console.
+
+For example, here is how one can log at the DEBUG level to an existing `logging.StreamHandler` and log file:
+```python
+import catalog_to_xpublish
+import logging
+
+# identify a catalog
+CATALOG_URL = 'https://code.usgs.gov/wma/nhgf/stac/-/raw/main/catalog2/catalog.json'
+
+# set logging config
+existing_stream_handler: logging.StreamHandler = ...
+LOGGING_CONFIG = {
+    'log_level': 'DEBUG',
+    'log_file_path': 'my_log_file.log',
+    'stream_handlers': [existing_stream_handler],
+}
+
+# create FastAPI app instance
+app = catalog_to_xpublish.create_app(
+    catalog_path=CATALOG_URL,
+    catalog_type='stac',
+    config_logging_dict=LOGGING_CONFIG,
+)
+```
 
 ## Contributing
 ### General

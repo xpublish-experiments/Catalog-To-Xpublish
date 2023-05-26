@@ -1,7 +1,9 @@
 """Main server file"""
 import uvicorn
+import warnings
 from pathlib import Path
 from catalog_to_xpublish.server_functions import create_app
+from catalog_to_xpublish.log import LoggingConfigDict
 
 # CATALOG_TYPE: str = 'intake'  # or 'stac'
 # CATALOG_PATH = Path.cwd() / 'test_catalogs' / 'test_intake_zarr_catalog.yaml'
@@ -17,18 +19,24 @@ try:
     from xpublish_opendap import OpenDapPlugin
     XPUBLISH_PLUGINS.append(OpenDapPlugin)
 except ImportError:
-    print('xpublish_opendap not installed. Skipping OpenDAP plugin.')
+    warnings.warn('xpublish_opendap not installed. Skipping OpenDAP plugin.')
 
 
 LOCAL_HOST = '127.0.0.1'
 LOCAL_PORT = 8000
 
+# config logging
+CONFIG_LOGGING_DICT: LoggingConfigDict = {
+    'level': 'INFO',
+    'log_file': 'xpublish_server.log',
+}
 
 app = create_app(
     catalog_path=CATALOG_PATH,
     catalog_type=CATALOG_TYPE,
     app_name=APP_NAME,
     xpublish_plugins=XPUBLISH_PLUGINS,
+    config_logging_dict=CONFIG_LOGGING_DICT,
 )
 
 

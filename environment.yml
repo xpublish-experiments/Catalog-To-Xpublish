@@ -33,4 +33,3 @@ dependencies:
   - conda-build
   - conda-libmamba-solver
   - pip
-

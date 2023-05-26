@@ -13,6 +13,9 @@ from typing import (
 from catalog_to_xpublish.factory import (
     CatalogIOClass,
 )
+from catalog_to_xpublish.log import (
+    APILogging,
+)
 
 
 @CatalogIOClass
@@ -59,7 +62,11 @@ class IntakeToXarray(CatalogToXarray):
         self,
         dataset_id: str,
     ) -> xr.Dataset:
+        """Get a dataset from the catalog."""
 
+        APILogging.logger().info(
+            f'Getting dataset {dataset_id} from STAC {self.catalog.name}.',
+        )
         # find the object in the catalog (sub-catalog)
         try:
             intake_catalog_obj: intake.source.base.DataSource = self.catalog[dataset_id]

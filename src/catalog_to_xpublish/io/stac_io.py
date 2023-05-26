@@ -13,6 +13,9 @@ from typing import (
 from catalog_to_xpublish.factory import (
     CatalogIOClass,
 )
+from catalog_to_xpublish.log import (
+    APILogging,
+)
 
 
 @CatalogIOClass
@@ -105,6 +108,9 @@ class STACToXarray(CatalogToXarray):
         dataset_id: str,
     ) -> xr.Dataset:
         # find the object in the catalog/collection (sub-catalog)
+        APILogging.logger().info(
+            f'Getting dataset {dataset_id} from STAC {self.catalog.STAC_OBJECT_TYPE}.',
+        )
         try:
             stac_asset: pystac.Asset = self.catalog.get_assets()[dataset_id]
             info_dict: Dict[str, Any] = stac_asset.to_dict()

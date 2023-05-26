@@ -1,6 +1,4 @@
-import logging
 import dataclasses
-import warnings
 import xpublish
 from fastapi import FastAPI
 from catalog_to_xpublish.base import (
@@ -8,7 +6,7 @@ from catalog_to_xpublish.base import (
 )
 from catalog_to_xpublish.log import (
     LoggingConfigDict,
-    config_logger,
+    APILogging,
 )
 from catalog_to_xpublish.provider_plugin import (
     DatasetProviderPlugin,
@@ -105,7 +103,7 @@ def create_app(
         A FastAPI app object.
     """
     # config logging
-    config_logger(
+    APILogging.config_logger(
         config_dict=config_logging_dict,
     )
 
@@ -118,6 +116,9 @@ def create_app(
     )
 
     # 1. parse catalog using appropriate catalog search method
+    APILogging.logger().info(
+        f'Spinning up server from {catalog_type} catalog at {catalog_path}.',
+    )
     catalog_searcher = app_inputs.catalog_implementation.catalog_search(
         catalog_path=catalog_path,
     )
@@ -164,9 +165,12 @@ def create_app(
                             plugin=plugin,
                         )
                         assert plugin.name in rest_server.plugins
+                        APILogging.logger().info(
+                            f'Added Xpublish plugin={plugin.name} to the server.',
+                        )
                     except AssertionError:
-                        warnings.warn(
-                            f'Could not add plugin={plugin} to the Xpublish server.',
+                        APILogging.logger().warn(
+                            f'Could not add Xpublish plugin={plugin} to the server.',
                         )
                         continue
 
@@ -178,6 +182,9 @@ def create_app(
             rest_server.app.include_router(router=router.router)
 
             # mount to the main application
+            APILogging.logger().info(
+                f'Mounting a Xpublish server @ {cat_prefix} to the main application.',
+            )
             app.mount(
                 path=cat_prefix,
                 app=rest_server.app,
@@ -190,4 +197,7 @@ def create_app(
                 catalog_endpoint_obj=cat_end,
             )
             app.include_router(router=router.router)
+    APILogging.logger().info(
+        f'Returning successfully created server application!',
+    )
     return app
