@@ -9,7 +9,11 @@ from catalog_to_xpublish.log import LoggingConfigDict
 # CATALOG_PATH = Path.cwd() / 'test_catalogs' / 'test_intake_zarr_catalog.yaml'
 
 CATALOG_TYPE: str = 'stac'
-CATALOG_PATH = Path.cwd() / 'test_catalogs' / 'test_stac_zarr_catalog.json'
+if Path.cwd().name == 'examples':
+    root_path = Path.cwd().parent
+elif Path.cwd().name == 'Catalog-To-Xpublish':
+    root_path = Path.cwd()
+CATALOG_PATH = root_path / 'test_catalogs' / 'test_stac_zarr_catalog.json'
 
 APP_NAME = 'Xpublish Server'
 
