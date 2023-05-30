@@ -1,3 +1,4 @@
+import logging
 import dataclasses
 import xpublish
 from fastapi import FastAPI
@@ -20,6 +21,8 @@ from typing import (
     List,
     Optional,
 )
+
+logger = logging.getLogger(__name__)
 
 
 @dataclasses.dataclass
@@ -116,7 +119,7 @@ def create_app(
     )
 
     # 1. parse catalog using appropriate catalog search method
-    APILogging.logger().info(
+    logger.info(
         f'Spinning up server from {catalog_type} catalog at {catalog_path}.',
     )
     catalog_searcher = app_inputs.catalog_implementation.catalog_search(
@@ -165,11 +168,11 @@ def create_app(
                             plugin=plugin,
                         )
                         assert plugin.name in rest_server.plugins
-                        APILogging.logger().info(
+                        logger.info(
                             f'Added Xpublish plugin={plugin.name} to the server.',
                         )
                     except AssertionError:
-                        APILogging.logger().warn(
+                        logger.warn(
                             f'Could not add Xpublish plugin={plugin} to the server.',
                         )
                         continue
@@ -182,7 +185,7 @@ def create_app(
             rest_server.app.include_router(router=router.router)
 
             # mount to the main application
-            APILogging.logger().info(
+            logger.info(
                 f'Mounting a Xpublish server @ {cat_prefix} to the main application.',
             )
             app.mount(
@@ -197,7 +200,7 @@ def create_app(
                 catalog_endpoint_obj=cat_end,
             )
             app.include_router(router=router.router)
-    APILogging.logger().info(
+    logger.info(
         f'Returning successfully created server application!',
     )
     return app

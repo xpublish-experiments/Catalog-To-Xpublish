@@ -153,10 +153,3 @@ class APILogging:
         # set the logger as a class attribute
         cls.LOGGER = logging.getLogger()
         cls.LOGGER.name = cls.LOG_NAME
-
-    @classmethod
-    def logger(cls) -> logging.Logger:
-        """Get the logger."""
-        if not cls.LOGGER:
-            cls.config_logger()
-        return cls.LOGGER

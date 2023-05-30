@@ -1,3 +1,4 @@
+import logging
 import intake
 import xarray as xr
 from catalog_to_xpublish.base import (
@@ -13,9 +14,8 @@ from typing import (
 from catalog_to_xpublish.factory import (
     CatalogIOClass,
 )
-from catalog_to_xpublish.log import (
-    APILogging,
-)
+
+logger = logging.getLogger(__name__)
 
 
 @CatalogIOClass
@@ -64,7 +64,7 @@ class IntakeToXarray(CatalogToXarray):
     ) -> xr.Dataset:
         """Get a dataset from the catalog."""
 
-        APILogging.logger().info(
+        logger.info(
             f'Getting dataset {dataset_id} from STAC {self.catalog.name}.',
         )
         # find the object in the catalog (sub-catalog)

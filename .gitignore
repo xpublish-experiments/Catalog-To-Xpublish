@@ -1,5 +1,6 @@
 **.pyc
 **.tmp
+**.log
 dist/**
 src/catalog_to_xpublish.egg-info/**
 .vscode/**

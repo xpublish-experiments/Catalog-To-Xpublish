@@ -1,3 +1,4 @@
+import logging
 import pystac
 import fsspec
 import string
@@ -13,9 +14,8 @@ from typing import (
 from catalog_to_xpublish.factory import (
     CatalogIOClass,
 )
-from catalog_to_xpublish.log import (
-    APILogging,
-)
+
+logger = logging.getLogger(__name__)
 
 
 @CatalogIOClass
@@ -108,7 +108,7 @@ class STACToXarray(CatalogToXarray):
         dataset_id: str,
     ) -> xr.Dataset:
         # find the object in the catalog/collection (sub-catalog)
-        APILogging.logger().info(
+        logger.info(
             f'Getting dataset {dataset_id} from STAC {self.catalog.STAC_OBJECT_TYPE}.',
         )
         try:
