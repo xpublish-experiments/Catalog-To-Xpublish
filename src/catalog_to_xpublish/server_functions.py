@@ -47,6 +47,8 @@ def validate_arguments(
         raise TypeError(
             f'catalog_path must be a Path or str, not {type(catalog_path)}',
         )
+    if isinstance(catalog_path, str):
+        catalog_path = Path(catalog_path)
 
     catalog_name: str = catalog_path.name.replace(catalog_path.suffix, '')
 
