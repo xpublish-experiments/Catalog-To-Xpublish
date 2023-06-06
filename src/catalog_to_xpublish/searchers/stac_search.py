@@ -1,3 +1,4 @@
+import logging
 import pystac
 from catalog_to_xpublish.base import (
     CatalogSearcher,
@@ -10,9 +11,39 @@ from pathlib import Path
 from typing import (
     List,
     Dict,
+    Iterator,
     Optional,
     Any,
 )
+
+logger = logging.getLogger(__name__)
+
+
+class IteratorHandler:
+    """Used to log errors when iterating over a catalog.
+
+    This allows catalog typos to be skipped.
+    """
+
+    def __init__(self, original_iterator: Iterator[Any]):
+        self.original_iterator = original_iterator
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        while True:
+            try:
+                value = next(self.original_iterator)
+                return value
+            except Exception as e:
+                if isinstance(e, StopIteration):
+                    raise StopIteration
+                else:
+                    logger.warning(
+                        f'Error while iterating over catalog. Skipping item. '
+                        f'Original error: {logging.exception(e)}',
+                    )
 
 
 @CatalogSearcherClass
@@ -70,6 +101,27 @@ class STACCatalogSearch(CatalogSearcher):
             )
         return self.__catalog_obj
 
+    def _parse_assets(
+        self,
+        pystac_obj: pystac.Collection | pystac.Item,
+        dataset_ids: List[str],
+        dataset_info_dicts: Dict[str, Dict[str, Any]],
+    ) -> None:
+        """Adds all assets to the list + dict of datasets."""
+        for child_name, child in pystac_obj.get_assets().items():
+            # make sure the item type is supported
+            url_path = child.get_absolute_href()
+            if url_path.endswith('/'):
+                url_path = url_path[:-1]
+            if not any([url_path.endswith(suffix) for suffix in self.suffixes]):
+                continue
+
+            # if supported, add it to the list
+            if isinstance(pystac_obj, pystac.Item):
+                child_name = pystac_obj.id
+            dataset_ids.append(child_name)
+            dataset_info_dicts[child_name] = child.to_dict()
+
     def parse_catalog(
         self,
         catalog: Optional[object] = None,
@@ -94,7 +146,7 @@ class STACCatalogSearch(CatalogSearcher):
         # use recursion to drill down into the catalog
         if isinstance(catalog, pystac.Catalog) or isinstance(catalog, pystac.Collection):
 
-            for child in catalog.get_children():
+            for child in IteratorHandler(catalog.get_children()):
                 child_name = child.id
                 path: str = parent_path + '/' + child_name
 
@@ -109,17 +161,19 @@ class STACCatalogSearch(CatalogSearcher):
 
         # if its a collection search for assets too
         if isinstance(catalog, pystac.Collection):
-            for child_name, child in catalog.get_assets().items():
-                # make sure the item type is supported
-                url_path = child.get_absolute_href()
-                if url_path.endswith('/'):
-                    url_path = url_path[:-1]
-                if not any([url_path.endswith(suffix) for suffix in self.suffixes]):
-                    continue
+            self._parse_assets(
+                pystac_obj=catalog,
+                dataset_ids=dataset_ids,
+                dataset_info_dicts=dataset_info_dicts,
+            )
+        elif isinstance(catalog, pystac.Catalog):
+            for item in IteratorHandler(catalog.get_items()):
 
-                # if supported, add it to the list
-                dataset_ids.append(child_name)
-                dataset_info_dicts[child_name] = child.to_dict()
+                self._parse_assets(
+                    pystac_obj=item,
+                    dataset_ids=dataset_ids,
+                    dataset_info_dicts=dataset_info_dicts,
+                )
 
         if parent_path == '':
             parent_path = '/'
