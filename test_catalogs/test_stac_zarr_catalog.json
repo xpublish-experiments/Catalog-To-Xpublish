@@ -6,18 +6,19 @@
     "links": [
         {
             "rel": "root",
-            "href": "https://code.usgs.gov/wma/nhgf/stac/raw/main/catalog/catalog.json",
-            "type": "application/json"
-        },
-        {
-            "rel": "self",
-            "href": "https://code.usgs.gov/wma/nhgf/stac/raw/main/catalog/catalog.json",
+            "href": "./catalog.json",
             "type": "application/json"
         },
         {
             "rel": "child",
-            "href": "https://code.usgs.gov/wma/nhgf/stac/raw/main/catalog/conus404-daily/collection.json",
+            "href": "./conus404-daily/collection.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "child",
+            "href": "./GDP_catalog/catalog.json",
             "type": "application/json"
         }
-    ]
+    ],
+    "stac_extensions": []
 }
