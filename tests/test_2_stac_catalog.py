@@ -26,17 +26,7 @@ from catalog_to_xpublish.routers import (
     STACRouter,
 )
 
-if Path.cwd().name == 'Catalog-To-Xpublish':
-    home_dir = Path.cwd()
-elif Path.cwd().name == 'tests':
-    home_dir = Path.cwd().parent
-else:
-    raise FileNotFoundError(
-        f'Please run this test from the root directory of the repository.',
-        f'CWD={Path.cwd()}',
-    )
-CATALOG_PATH = home_dir / 'test_catalogs' / \
-    'test_stac_zarr_catalog.json'
+CATALOG_PATH = r'https://code.usgs.gov/wma/nhgf/stac/-/raw/main/xpublish_sample_stac/catalog/catalog.json'
 
 
 def test_factory() -> None:
