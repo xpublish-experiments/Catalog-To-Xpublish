@@ -7,6 +7,7 @@ from catalog_to_xpublish.base import CatalogToXarray
 from pathlib import Path
 from typing import (
     Dict,
+    Tuple,
     Union,
     Any,
     Optional,
@@ -26,7 +27,7 @@ class STACToXarray(CatalogToXarray):
     def __init__(
         self,
         catalog_json_path: Optional[Union[Path, str]] = None,
-        catalog_obj: Optional[pystac.Collection] = None,
+        catalog_obj: Optional[pystac.Collection | pystac.Catalog] = None,
     ) -> None:
         """Initialize the STACToXarray class.
 
@@ -41,6 +42,8 @@ class STACToXarray(CatalogToXarray):
             )
         elif isinstance(catalog_obj, pystac.Collection):
             self.catalog: pystac.Collection = catalog_obj
+        elif isinstance(catalog_obj, pystac.Catalog):
+            self.catalog: pystac.Catalog = catalog_obj
         else:
             raise ValueError(
                 'Please provide a valid input to create a catalog object! .'
@@ -59,6 +62,57 @@ class STACToXarray(CatalogToXarray):
         ds.attrs['stac_collection'] = self.catalog.self_href
 
         return ds
+
+    def _get_asset(
+        self,
+        dataset_id: str,
+    ) -> Tuple[pystac.Asset, Dict[str, Any]]:
+        """Return an asset and its info dictionary."""
+
+        # set a key error string
+        key_error_str: str = (
+            f'{dataset_id} not found in collection/catalog. '
+            f'Please check the dataset name and try again.',
+        )
+        # if out data is in a collection, get it my name
+        if isinstance(self.catalog, pystac.Collection):
+            try:
+                stac_asset: pystac.Asset = self.catalog.get_assets()[
+                    dataset_id
+                ]
+            except KeyError:
+                logger.error(key_error_str)
+                raise KeyError(key_error_str)
+
+        # if the asset level is an item, get the first asset
+        elif isinstance(self.catalog, pystac.Catalog):
+            asset_level: pystac.Item = self.catalog.get_item(dataset_id)
+
+            # raise error is empty return
+            if not asset_level:
+                logger.error(key_error_str)
+                raise KeyError(key_error_str)
+
+            # get the first asset
+            assets = asset_level.assets.items()
+            if len(assets) > 1:
+                logger.warning(
+                    f'More than one asset found in {dataset_id}. '
+                    f'Using the first asset named {list(assets)[0][0]}.',
+                )
+            elif len(assets) == 0:
+                raise ValueError(
+                    f'No assets found in {dataset_id}.',
+                )
+            stac_asset: pystac.Asset = list(assets)[0][1]
+        else:
+            raise TypeError(
+                'The catalog must be a pystac.Collection or pystac.Catalog.',
+            )
+
+        # get the info dictionary and return
+        info_dict: Dict[str, Any] = stac_asset.to_dict()
+        return stac_asset, info_dict
 
     @staticmethod
     def _read_zarr(
@@ -111,11 +165,7 @@ class STACToXarray(CatalogToXarray):
         logger.info(
             f'Getting dataset {dataset_id} from STAC {self.catalog.STAC_OBJECT_TYPE}.',
         )
-        try:
-            stac_asset: pystac.Asset = self.catalog.get_assets()[dataset_id]
-            info_dict: Dict[str, Any] = stac_asset.to_dict()
-        except KeyError:
-            raise KeyError(f'{dataset_id} not found in collection.')
+        stac_asset, info_dict = self._get_asset(dataset_id)
 
         # verify the object is readable by xarray
         for key in [
