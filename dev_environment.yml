@@ -47,6 +47,7 @@ dependencies:
 
   # Dev tools: For testing and pre-commit hooks
   - pytest
+  - pytest-cov
   - pre-commit
 
   # Package management
