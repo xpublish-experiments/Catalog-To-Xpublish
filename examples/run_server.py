@@ -13,7 +13,7 @@ if Path.cwd().name == 'examples':
     root_path = Path.cwd().parent
 elif Path.cwd().name == 'Catalog-To-Xpublish':
     root_path = Path.cwd()
-CATALOG_PATH = root_path / 'test_catalogs' / 'test_stac_zarr_catalog.json'
+
 CATALOG_PATH = r'https://code.usgs.gov/wma/nhgf/stac/-/raw/main/xpublish_sample_stac/catalog/catalog.json'
 APP_NAME = 'Xpublish Server'
 
