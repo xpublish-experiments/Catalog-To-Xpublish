@@ -86,7 +86,6 @@ class STACCatalogSearch(CatalogSearcher):
     @property
     def suffixes(self) -> List[str]:
         if self.__suffixes is None:
-            # TODO: test with NetCDF files
             self.__suffixes = [
                 '.nc',
                 '.zarr',

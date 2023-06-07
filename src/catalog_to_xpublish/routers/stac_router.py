@@ -37,14 +37,6 @@ class STACRouter(CatalogRouter):
             prefix=prefix,
         )
 
-    def get_catalog_ui(self) -> HTMLResponse:
-        """Returns the catalog ui.
-
-        Will be decorated with @router.get('/')
-        """
-        # TODO: https://panel.holoviz.org/user_guide/FastAPI.html
-        raise NotImplementedError
-
     def list_sub_catalogs(self) -> List[str]:
         """Returns a list of sub-catalogs."""
         return self.catalog_endpoint_obj.sub_catalogs
@@ -77,11 +69,7 @@ class STACRouter(CatalogRouter):
 
     def add_routes(self) -> None:
         """Adds routes to the router."""
-        self.router.add_api_route(
-            path=f'{self.cat_prefix}/ui',
-            endpoint=self.get_catalog_ui,
-            methods=['GET'],
-        )
+
         self.router.add_api_route(
             path=f'{self.cat_prefix}/catalogs',
             endpoint=self.list_sub_catalogs,

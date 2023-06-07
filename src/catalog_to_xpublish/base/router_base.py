@@ -43,14 +43,6 @@ class CatalogRouter(abc.ABC):
         self.add_routes()
 
     @abc.abstractmethod
-    def get_catalog_ui(self) -> HTMLResponse:
-        """Returns the catalog ui.
-
-        Will be decorated with @router.get('/')
-        """
-        raise NotImplementedError
-
-    @abc.abstractmethod
     def list_sub_catalogs(self) -> List[str]:
         """Returns a list of sub-catalogs.
 
