@@ -1,9 +1,13 @@
+import logging
 import dataclasses
-import warnings
 import xpublish
 from fastapi import FastAPI
 from catalog_to_xpublish.base import (
     CatalogEndpoint,
+)
+from catalog_to_xpublish.log import (
+    LoggingConfigDict,
+    APILogging,
 )
 from catalog_to_xpublish.provider_plugin import (
     DatasetProviderPlugin,
@@ -17,6 +21,8 @@ from typing import (
     List,
     Optional,
 )
+
+logger = logging.getLogger(__name__)
 
 
 @dataclasses.dataclass
@@ -41,6 +47,8 @@ def validate_arguments(
         raise TypeError(
             f'catalog_path must be a Path or str, not {type(catalog_path)}',
         )
+    if isinstance(catalog_path, str):
+        catalog_path = Path(catalog_path)
 
     catalog_name: str = catalog_path.name.replace(catalog_path.suffix, '')
 
@@ -87,6 +95,7 @@ def create_app(
     catalog_type: str,
     app_name: Optional[str] = None,
     xpublish_plugins: Optional[List[xpublish.Plugin]] = None,
+    config_logging_dict: Optional[LoggingConfigDict] = None,
 ) -> FastAPI:
     """Main function to create the server app.
 
@@ -97,7 +106,12 @@ def create_app(
         xpublish_plugins: A list of external xpublish plugin classes to use.
     Returns:
         A FastAPI app object.
-    ."""
+    """
+    # config logging
+    APILogging.config_logger(
+        config_dict=config_logging_dict,
+    )
+
     # 0. validate input arguments
     app_inputs: AppComponents = validate_arguments(
         catalog_path=catalog_path,
@@ -107,6 +121,9 @@ def create_app(
     )
 
     # 1. parse catalog using appropriate catalog search method
+    logger.info(
+        f'Spinning up server from {catalog_type} catalog at {catalog_path}.',
+    )
     catalog_searcher = app_inputs.catalog_implementation.catalog_search(
         catalog_path=catalog_path,
     )
@@ -153,9 +170,12 @@ def create_app(
                             plugin=plugin,
                         )
                         assert plugin.name in rest_server.plugins
+                        logger.info(
+                            f'Added Xpublish plugin={plugin.name} to the server.',
+                        )
                     except AssertionError:
-                        warnings.warn(
-                            f'Could not add plugin={plugin} to the Xpublish server.',
+                        logger.warn(
+                            f'Could not add Xpublish plugin={plugin} to the server.',
                         )
                         continue
 
@@ -167,6 +187,9 @@ def create_app(
             rest_server.app.include_router(router=router.router)
 
             # mount to the main application
+            logger.info(
+                f'Mounting a Xpublish server @ {cat_prefix} to the main application.',
+            )
             app.mount(
                 path=cat_prefix,
                 app=rest_server.app,
@@ -179,4 +202,7 @@ def create_app(
                 catalog_endpoint_obj=cat_end,
             )
             app.include_router(router=router.router)
+    logger.info(
+        f'Returning successfully created server application!',
+    )
     return app

@@ -9,6 +9,7 @@ dependencies:
 
   # For data processing
   - xarray
+  - xpublish
   - dask
 
   # For catalog access
@@ -32,7 +33,3 @@ dependencies:
   - conda-build
   - conda-libmamba-solver
   - pip
-
-  # we get the latest version of xpublish from github
-  - pip:
-    - git+https://github.com/xpublish-community/xpublish.git

@@ -38,18 +38,6 @@ class IntakeRouter(CatalogRouter):
             prefix=prefix,
         )
 
-    def get_catalog_ui(self) -> HTMLResponse:
-        """Returns the catalog ui."""
-        # TODO: https://panel.holoviz.org/user_guide/FastAPI.html
-        raise NotImplementedError
-        gui = intake.interface.gui.GUI(
-            [self.catalog_endpoint_obj.catalog_obj],
-        )
-        return HTMLResponse(
-            content=gui.servable().embed(),  # .to_html(),
-            status_code=200,
-        )
-
     def list_sub_catalogs(self) -> List[str]:
         """Returns a list of sub-catalogs."""
         return self.catalog_endpoint_obj.sub_catalogs
@@ -91,11 +79,7 @@ class IntakeRouter(CatalogRouter):
 
     def add_routes(self) -> None:
         """Adds routes to the router."""
-        self.router.add_api_route(
-            path=f'{self.cat_prefix}/ui',
-            endpoint=self.get_catalog_ui,
-            methods=['GET'],
-        )
+
         self.router.add_api_route(
             path=f'{self.cat_prefix}/catalogs',
             endpoint=self.list_sub_catalogs,
