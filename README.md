@@ -215,11 +215,10 @@ This process is demonstrated below:
         ) -> None:
             """An init that contains a call to server_functions.add_base_routes(self)"""
             # add routes for all base CatalogRouter endpoints/class functions
-            add_base_routes(self)
-            ...
-
-        def get_catalog_ui(self) -> HTMLResponse:
-            """Returns the catalog ui."""
+            super().__init__(
+                catalog_endpoint_obj=catalog_endpoint_obj,
+                prefix=prefix,
+            )
             ...
 
         def list_sub_catalogs(self) -> List[str]:
