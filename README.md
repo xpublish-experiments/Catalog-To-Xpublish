@@ -15,14 +15,12 @@ This repository enables one to spin-up a `fastapi`/`xpublish` server from either
 * Thanks to `FastAPI`, interactive [Swagger](https://github.com/swagger-api/swagger-ui) and [Redoc](https://github.com/Redocly/redoc) API documentation endpoints are automatically generated on spin-up.
 
 ## Getting Started
-
-1. Make a conda environment by cloning `environment.yml`.
-2. Use the following conda-build command to install this `catalog_to_xpublish` into your new environment.
+1. Pip install `catalog_to_xpublish` into your Python >=3.11 environment.
+    ```bash
+    pip install catalog_to_xpublish
     ```
-    conda develop {YOUR_PATH}/Xpublish-OPeNDAP-Server/src
-    ```
-3. Select a Intake `.yaml` or STAC `.json` file path or URL to serve data from.
-4. Use the `catalog_to_xpublish.create_app()` function to spin-up a `FastAPI()` application. See example below:
+2. Select a Intake `.yaml` or STAC `.json` file path or URL to serve data from.
+3. Use the `catalog_to_xpublish.create_app()` function to spin-up a `FastAPI()` application. See example below:
     ```python
     import catalog_to_xpublish
     from fastapi import FastAPI
@@ -39,7 +37,7 @@ This repository enables one to spin-up a `fastapi`/`xpublish` server from either
         xpublish_plugins=[OpenDapPlugin],
     )
     ```
-5. Use `uvicorn` to deploy the server. For example, assuming the previous code snippet was called in `run_server.py`:
+4. Use `uvicorn` to deploy the server. For example, assuming the previous code snippet was called in `run_server.py`:
     ```python
     # define server hosting location
     LOCAL_HOST = '127.0.0.1'
@@ -113,12 +111,20 @@ Please note any bugs or feature requests via our GitHub Issues page.
 
 Before creating a pull request please use `pytest` to run our `/tests` suite to make sure that no behavior was inadvertently altered. If you create a new feature (i.e., an additional catalog implementation), we encourage you to create a test `tests/test_{#}_{new_feature_name}.py` file for it.
 
-Additionally, before making a pull request please run our pre-commit hooks locally:
+Additionally, before making a pull request please run our pre-commit hooks + tests locally:
 ```
 (base) cd {PATH}/{TO}/{REPO}
 
+# create and activate the development conda environment
+(base) conda env create -f dev_environment.yml
 (base) conda activate catalog_to_xpublish_dev
+
+# run pre-commit hooks
 (catalog_to_xpublish_dev) pre-commit run --all-files
+
+# run tests
+(catalog_to_xpublish_dev) pytest
+```
 ```
 
 ### Creating a new catalog implementation
