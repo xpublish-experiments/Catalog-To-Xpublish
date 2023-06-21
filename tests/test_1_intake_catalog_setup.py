@@ -1,4 +1,4 @@
-"""A pytest module for testing intake catalog to xarray dataset conversion."""
+"""A pytest module for testing whether Intake catalog setup functions are working properly."""
 import intake
 import pytest
 import xarray as xr
@@ -26,17 +26,21 @@ from catalog_to_xpublish.routers import (
     IntakeRouter,
 )
 
-if Path.cwd().name == 'Catalog-To-Xpublish':
-    home_dir = Path.cwd()
-elif Path.cwd().name == 'tests':
-    home_dir = Path.cwd().parent
-else:
-    raise FileNotFoundError(
-        f'Please run this test from the root directory of the repository.',
-        f'CWD={Path.cwd()}',
-    )
-CATALOG_PATH = home_dir / 'test_catalogs' / \
-    'test_intake_zarr_catalog.yaml'
+
+@pytest.fixture(scope='session')
+def catalog_path() -> Path:
+    """Returns the path to the test catalog."""
+    if Path.cwd().name == 'Catalog-To-Xpublish':
+        home_dir = Path.cwd()
+    elif Path.cwd().name == 'tests':
+        home_dir = Path.cwd().parent
+    else:
+        raise FileNotFoundError(
+            f'Please run this test from the root directory of the repository.',
+            f'CWD={Path.cwd()}',
+        )
+    return home_dir / 'test_catalogs' / \
+        'test_intake_zarr_catalog.yaml'
 
 
 def test_factory() -> None:
@@ -49,9 +53,9 @@ def test_factory() -> None:
     assert isinstance(obj, CatalogImplementation)
 
 
-@pytest.fixture(scope='session')
+# @pytest.fixture(scope='session')
 def test_catalog_classes(
-    catalog_path: Path = CATALOG_PATH,
+    catalog_path: Path,
 ) -> None:
     """Tests parsing of an intake catalog."""
 

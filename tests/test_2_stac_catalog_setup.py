@@ -1,4 +1,4 @@
-"""A pytest module for testing STAC catalog to xarray dataset conversion."""
+"""A pytest module for testing whether STAC catalog setup functions are working properly."""
 import pystac
 import pytest
 import xarray as xr
@@ -26,7 +26,10 @@ from catalog_to_xpublish.routers import (
     STACRouter,
 )
 
-CATALOG_PATH = r'https://code.usgs.gov/wma/nhgf/stac/-/raw/main/xpublish_sample_stac/catalog/catalog.json'
+
+@pytest.fixture(scope='session')
+def catalog_path() -> str:
+    return r'https://code.usgs.gov/wma/nhgf/stac/-/raw/main/xpublish_sample_stac/catalog/catalog.json'
 
 
 def test_factory() -> None:
@@ -39,9 +42,8 @@ def test_factory() -> None:
     assert isinstance(obj, CatalogImplementation)
 
 
-@pytest.fixture(scope='session')
 def test_catalog_classes(
-    catalog_path: Path = CATALOG_PATH,
+    catalog_path: str,
 ) -> None:
     """Tests parsing of an STAC catalog."""
 
@@ -49,15 +51,15 @@ def test_catalog_classes(
     obj = CatalogImplementationFactory.get_catalog_implementation('stac')
 
     # check that we can build a catalog object from .yaml
-    seacher = obj.catalog_search(catalog_path=catalog_path)
+    searcher = obj.catalog_search(catalog_path=catalog_path)
 
-    assert isinstance(seacher.catalog_object, pystac.Collection)
-    assert seacher.suffixes == ['.nc', '.zarr']
-    assert seacher.catalog_object.name == 'test_stac_zarr_catalog'
-    assert seacher.catalog_object.path == str(catalog_path)
+    assert type(searcher.catalog_object) in [pystac.Collection, pystac.Catalog]
+    assert searcher.suffixes == ['.nc', '.zarr']
+    assert searcher.catalog_object.id == 'nhgf-stac-catalog'
+    assert searcher.catalog_object.self_href == str(catalog_path)
 
     # check that we can parse the catalog
-    catalog_endpoints: List[CatalogEndpoint] = seacher.parse_catalog()
+    catalog_endpoints: List[CatalogEndpoint] = searcher.parse_catalog()
 
     assert isinstance(catalog_endpoints, list)
     assert len(catalog_endpoints) >= 1
@@ -78,4 +80,4 @@ def test_catalog_classes(
                     )
                     ds = io_class.get_dataset_from_catalog(dataset_id=ds_name)
                     assert isinstance(ds, xr.Dataset)
-                    assert ds_name == ds.attrs['name']
+                    assert f'{cat_end.catalog_obj.id}: {ds_name}' == ds.attrs['name']
