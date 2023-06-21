@@ -18,7 +18,7 @@ elif CATALOG_TYPE == 'stac':
     CATALOG_PATH = r'https://code.usgs.gov/wma/nhgf/stac/-/raw/main/xpublish_sample_stac/catalog/catalog.json'
 else:
     raise ValueError(
-        f'Invalid catalog type: {CATALOG_TYPE}. Must be "intake" or "stac".'
+        f'Invalid catalog type: {CATALOG_TYPE}. Must be "intake" or "stac".',
     )
 
 APP_NAME: str = f'Xpublish Server (from {CATALOG_TYPE})'

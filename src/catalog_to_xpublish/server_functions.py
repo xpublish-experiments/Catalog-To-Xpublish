@@ -130,9 +130,7 @@ def create_app(
     catalog_endpoints: List[CatalogEndpoint] = catalog_searcher.parse_catalog()
 
     # 2. Start a Xpublish server
-    app = FastAPI(
-        title=f'{app_inputs.name}: {app_inputs.catalog_name}',
-    )
+    app = FastAPI(title=app_inputs.name)
 
     # 2. Iterate through the endpoints and add them to the server
     for cat_end in catalog_endpoints:
