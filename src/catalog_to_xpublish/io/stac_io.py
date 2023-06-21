@@ -178,9 +178,16 @@ class STACToXarray(CatalogToXarray):
                 )
 
         # open as a xarray dataset and add attributes
-        ds: xr.Dataset = self._read_zarr(stac_asset)
         info_dict: Dict[str, Any] = self.catalog.to_dict()
         info_dict['dataset_id'] = dataset_id
+        if isinstance(stac_asset, pystac.Asset):
+            info_dict['description'] = getattr(
+                stac_asset,
+                'description',
+                '',
+            )
+
+        ds: xr.Dataset = self._read_zarr(stac_asset)
         ds = self.write_attributes(ds, info_dict)
         ds.attrs['url_path'] = stac_asset.href
 
