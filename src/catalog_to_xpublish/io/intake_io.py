@@ -46,10 +46,10 @@ class IntakeToXarray(CatalogToXarray):
     def write_attributes(
         self,
         ds: xr.Dataset,
+        info_dict: Dict[str, Any],
     ) -> xr.Dataset:
         """Write attributes from the catalog object to the dataset."""
 
-        info_dict = self.catalog.describe()
         if 'name' in info_dict.keys():
             ds.attrs['name'] = info_dict['name']
         if 'description' in info_dict.keys():
@@ -91,7 +91,7 @@ class IntakeToXarray(CatalogToXarray):
 
         # open as a xarray dataset and add attributes
         ds: xr.Dataset = intake_catalog_obj.to_dask()
-        ds = self.write_attributes(ds)
+        ds = self.write_attributes(ds, info_dict)
 
         # return the dataset
         return ds

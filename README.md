@@ -181,6 +181,7 @@ This process is demonstrated below:
         def write_attributes(
             self,
             ds: xr.Dataset,
+            info_dict: Dict[str, Any],
         ) -> xr.Dataset:
             """Write attributes from the catalog object to the dataset.attrs."""
             ...
