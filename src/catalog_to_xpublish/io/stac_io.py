@@ -56,7 +56,7 @@ class STACToXarray(CatalogToXarray):
         info_dict: Dict[str, Any],
     ) -> xr.Dataset:
         if 'id' in info_dict.keys():
-            ds.attrs['name'] = info_dict['id']
+            ds.attrs['name'] = f'{info_dict["id"]}: {info_dict["dataset_id"]}'
         if 'description' in info_dict.keys():
             ds.attrs['description'] = info_dict['description']
         ds.attrs['stac_collection'] = self.catalog.self_href
@@ -179,7 +179,9 @@ class STACToXarray(CatalogToXarray):
 
         # open as a xarray dataset and add attributes
         ds: xr.Dataset = self._read_zarr(stac_asset)
-        ds = self.write_attributes(ds, self.catalog.to_dict())
+        info_dict: Dict[str, Any] = self.catalog.to_dict()
+        info_dict['dataset_id'] = dataset_id
+        ds = self.write_attributes(ds, info_dict)
         ds.attrs['url_path'] = stac_asset.href
 
         # return the dataset
