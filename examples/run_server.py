@@ -5,17 +5,23 @@ from pathlib import Path
 from catalog_to_xpublish.server_functions import create_app
 from catalog_to_xpublish.log import LoggingConfigDict
 
-# CATALOG_TYPE: str = 'intake'  # or 'stac'
-# CATALOG_PATH = Path.cwd() / 'test_catalogs' / 'test_intake_zarr_catalog.yaml'
+CATALOG_TYPE: str = 'stac'  # or 'stac'
 
-CATALOG_TYPE: str = 'stac'
-if Path.cwd().name == 'examples':
-    root_path = Path.cwd().parent
-elif Path.cwd().name == 'Catalog-To-Xpublish':
-    root_path = Path.cwd()
+if CATALOG_TYPE == 'intake':
+    if Path.cwd().name == 'examples':
+        root_path = Path.cwd().parent
+    elif Path.cwd().name == 'Catalog-To-Xpublish':
+        root_path = Path.cwd()
 
-CATALOG_PATH = r'https://code.usgs.gov/wma/nhgf/stac/-/raw/main/xpublish_sample_stac/catalog/catalog.json'
-APP_NAME = 'Xpublish Server'
+    CATALOG_PATH = Path.cwd() / 'test_catalogs' / 'test_intake_zarr_catalog.yaml'
+elif CATALOG_TYPE == 'stac':
+    CATALOG_PATH = r'https://code.usgs.gov/wma/nhgf/stac/-/raw/main/xpublish_sample_stac/catalog/catalog.json'
+else:
+    raise ValueError(
+        f'Invalid catalog type: {CATALOG_TYPE}. Must be "intake" or "stac".'
+    )
+
+APP_NAME: str = f'Xpublish Server (from {CATALOG_TYPE})'
 
 # add plugins here
 XPUBLISH_PLUGINS = []
