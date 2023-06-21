@@ -125,7 +125,8 @@ Additionally, before making a pull request please run our pre-commit hooks + tes
 # run tests
 (catalog_to_xpublish_dev) pytest
 ```
-```
+
+**Note:** Some of our test datasets are hosted on AWS, and require AWS credentials to run locally.
 
 ### Creating a new catalog implementation
 As environmental science progresses, we expect additional catalog schemas beyond Intake and STAC to become relevant. Alternatively, STAC supports extensions, and one may need to build an adjusted STAC implementation for specific needs/desires.
