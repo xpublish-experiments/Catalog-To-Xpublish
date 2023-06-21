@@ -34,7 +34,7 @@ class STACToXarray(CatalogToXarray):
         NOTE: The language is confusing here. The catalog_obj is a pystac.Collection,
             not a pystac.Catalog. This is because we need the get_assets() method.
         """
-        # create an intake catalog object
+        # create an STAC catalog object
         if catalog_json_path:
             catalog_json_path = Path(catalog_json_path)
             self.catalog: pystac.Collection = pystac.Collection.from_file(

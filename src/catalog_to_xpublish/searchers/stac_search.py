@@ -65,20 +65,20 @@ class STACCatalogSearch(CatalogSearcher):
         if isinstance(self.__catalog_path, Path):
             if not self.__catalog_path.exists():
                 raise FileNotFoundError(
-                    f'Please provide a valid intake catalog .json file path or URL! '
+                    f'Please provide a valid STAC catalog .json file path or URL! '
                     f'Could not find {self.__catalog_path}',
                 )
             self.__catalog_path = str(self.__catalog_path)
 
         if not isinstance(self.__catalog_path, str):
             raise TypeError(
-                f'Please provide a valid intake catalog .json file path or URL! '
+                f'Please provide a valid STAC catalog .json file path or URL! '
                 f'Expected a str or Path, got {type(self.__catalog_path)}',
             )
 
         if Path(self.__catalog_path).suffix != '.json':
             raise ValueError(
-                f'Please provide a valid intake catalog .json file path or URL! '
+                f'Please provide a valid STAC catalog .json file path or URL! '
                 f'File suffix must be .json, not {Path(self.__catalog_path).suffix}',
             )
         return str(self.__catalog_path)
