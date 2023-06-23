@@ -37,6 +37,7 @@ dependencies:
   - pytest
   - pytest-cov
   - httpx
+  - boto3
   - pre-commit
 
   # Package management
