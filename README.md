@@ -109,24 +109,28 @@ We strongly encourage open-source contributions to this repository! I am new to 
 
 Please note any bugs or feature requests via our GitHub Issues page.
 
-Before creating a pull request please use `pytest` to run our `/tests` suite to make sure that no behavior was inadvertently altered. If you create a new feature (i.e., an additional catalog implementation), we encourage you to create a test `tests/test_{#}_{new_feature_name}.py` file for it.
+To contribute code, please follow the below steps:
+1. Create a conda/mamba environment by cloning our developer environment (`dev_environment.yml`).'
+    ```bash
+    (base) cd {PATH}/{TO}/{REPO}
+    (base) conda env create -f dev_environment.yml
+    ```
 
-Additionally, before making a pull request please run our pre-commit hooks + tests locally:
-```
-(base) cd {PATH}/{TO}/{REPO}
+2. Fork this repository and create a new branch off of `main` with a descriptive name.
+3. Make your changes and commit them to your new branch.
+4. When finished run our pre-commit hooks and tests locally (see below).
+    ```bash
+    (base) conda activate catalog_to_xpublish_dev
+    (catalog_to_xpublish_dev) pre-commit run --all-files
+    ```
+6. Make new tests for any new features you add. This code will be pip installed by users to run servers, and we want to make sure it is robust. The file must be named following `pytest` conventions, we encourage `tests/test_{#}_{new_feature_name}.py` format.
+7. Run (and pass) the our full test suite locally. **Note:** Some of our test datasets are hosted on AWS, and require AWS credentials to run locally. These tests are currently not-apart of the automated GitHub Actions test suite, however we aim to add them soon. The test only accesses public OSN data, so you can use any AWS credentials.
 
-# create and activate the development conda environment
-(base) conda env create -f dev_environment.yml
-(base) conda activate catalog_to_xpublish_dev
-
-# run pre-commit hooks
-(catalog_to_xpublish_dev) pre-commit run --all-files
-
-# run tests
+```bash
 (catalog_to_xpublish_dev) pytest
 ```
+8. Make a pull request to merge your branch into `main`. We will review the pull request and merge it if it is deemed appropriate.
 
-**Note:** Some of our test datasets are hosted on AWS, and require AWS credentials to run locally.
 
 ### Creating a new catalog implementation
 As environmental science progresses, we expect additional catalog schemas beyond Intake and STAC to become relevant. Alternatively, STAC supports extensions, and one may need to build an adjusted STAC implementation for specific needs/desires.
