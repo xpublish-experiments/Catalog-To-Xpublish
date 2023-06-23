@@ -30,12 +30,6 @@ jobs:
           && pip install -e . --no-deps --force-reinstall
           && micromamba info
           && micromamba list
-          
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          role-to-assume: arn:aws:iam::123456789100:role/my-github-actions-role
-          aws-region: us-east-2
         
       - name: tests
         shell: bash -l {0}
