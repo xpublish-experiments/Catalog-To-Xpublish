@@ -1,6 +1,7 @@
 """A pytest module for testing a live server using an Intake catalog."""
 import catalog_to_xpublish
 import pytest
+import boto3
 import fastapi
 import json
 import yaml
@@ -50,7 +51,7 @@ def client(app: fastapi.FastAPI) -> fastapi.testclient.TestClient:
 @pytest.fixture(scope='session')
 def test_dataset_url() -> str:
     """Return the URL of a dataset."""
-    return '/s3_catalog/datasets/alaska-et-2020-subset-s3'
+    return '/osn_catalog/datasets/alaska-et-2020-subset-osn'
 
 
 def test_docs(client: fastapi.testclient.TestClient) -> None:
@@ -102,13 +103,14 @@ def test_datasets_endpoints(
     test_dataset_url: str,
 ) -> None:
     """Test the datasets endpoints."""
-    response = client.get('/s3_catalog/datasets')
+    response = client.get('/osn_catalog/datasets')
     assert response.status_code == 200
     assert response.json() == [
-        'alaska-et-2020-subset-s3',
-        'red-river-subset-s3',
-        'conus404-hourly-s3',
-        'era5-2019-may-precip-s3',
+        'conus404-hourly-osn',
+        'nwis-streamflow-usgs-gages-osn',
+        'red-river-subset-osn',
+        'alaska-et-2020-subset-osn',
+        'prism-v2-osn',
     ]
 
     # test the xpublish endpoints

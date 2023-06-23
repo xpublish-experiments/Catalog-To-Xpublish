@@ -95,15 +95,15 @@ def test_catalog_classes(
     obj = CatalogImplementationFactory.get_catalog_implementation('intake')
 
     # check that we can build a catalog object from .yaml
-    seacher = obj.catalog_search(catalog_path=catalog_path)
+    searcher = obj.catalog_search(catalog_path=catalog_path)
 
-    assert isinstance(seacher.catalog_object, intake.Catalog)
-    assert seacher.suffixes == ['.nc', '.zarr']
-    assert seacher.catalog_object.name == 'test_intake_zarr_catalog'
-    assert seacher.catalog_object.path == str(catalog_path)
+    assert isinstance(searcher.catalog_object, intake.Catalog)
+    assert searcher.suffixes == ['.nc', '.zarr']
+    assert searcher.catalog_object.name == 'test_intake_zarr_catalog'
+    assert searcher.catalog_object.path == str(catalog_path)
 
     # check that we can parse the catalog
-    catalog_endpoints: List[CatalogEndpoint] = seacher.parse_catalog()
+    catalog_endpoints: List[CatalogEndpoint] = searcher.parse_catalog()
 
     assert isinstance(catalog_endpoints, list)
     assert len(catalog_endpoints) >= 1
