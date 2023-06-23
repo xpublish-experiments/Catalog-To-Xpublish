@@ -46,7 +46,6 @@ def test_factory() -> None:
 
 def test_catalog_classes(
     catalog_path: str,
-    aws_credentials: bool,
 ) -> None:
     """Tests parsing of an STAC catalog."""
 
