@@ -98,7 +98,7 @@ def test_read_from_intake(
                 warnings.warn(
                     f'Could not find a non-requester pays dataset that can be '
                     f'read for catalog {cat_end.catalog_obj.name}. '
-                    f'Test coverage is not complete.'
+                    f'Test coverage is not complete.',
                 )
                 break
             ds_name = cat_end.dataset_ids[i]
