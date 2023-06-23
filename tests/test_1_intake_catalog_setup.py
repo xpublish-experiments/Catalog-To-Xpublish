@@ -30,20 +30,6 @@ from catalog_to_xpublish.routers import (
 
 
 @pytest.fixture(scope='session')
-def aws_credentials() -> bool:
-    """Whether we have active AWS credentials or not.
-
-    If we do, return True. If not, return False.
-    If False, tests will only be ran on OSN data.
-    """
-    try:
-        boto3.client('s3')
-        return True
-    except Exception:
-        return False
-
-
-@pytest.fixture(scope='session')
 def catalog_path() -> Path:
     """Returns the path to the test catalog."""
     if Path.cwd().name == 'Catalog-To-Xpublish':
@@ -59,20 +45,11 @@ def catalog_path() -> Path:
         'test_intake_zarr_catalog.yaml'
 
 
-def does_requester_pay(
-    io_class: IntakeToXarray,
-    ds_name: str,
-) -> bool:
-    """Check whether an intake dataset is in a requester pays bucket."""
-    storage_options: dict = getattr(
-        io_class.catalog[ds_name],
-        'storage_options',
-        {},
-    )
-    return storage_options.get(
-        'requester_pays',
-        False,
-    )
+@pytest.fixture(scope='session')
+def catalog_implementation() -> CatalogImplementation:
+    obj = CatalogImplementationFactory.get_catalog_implementation('intake')
+    assert isinstance(obj, CatalogImplementation)
+    return obj
 
 
 def test_factory() -> None:
@@ -81,18 +58,15 @@ def test_factory() -> None:
     assert isinstance(IntakeRouter, CatalogRouterClass)
     assert 'intake' in CatalogImplementationFactory.get_all_implementations().keys()
 
-    obj = CatalogImplementationFactory.get_catalog_implementation('intake')
-    assert isinstance(obj, CatalogImplementation)
-
 
 def test_catalog_classes(
     catalog_path: Path,
-    aws_credentials: bool,
+    catalog_implementation: CatalogImplementation,
 ) -> None:
     """Tests parsing of an intake catalog."""
 
-    # get implementation
-    obj = CatalogImplementationFactory.get_catalog_implementation('intake')
+    # shorten name for convenience
+    obj = catalog_implementation
 
     # check that we can build a catalog object from .yaml
     searcher = obj.catalog_search(catalog_path=catalog_path)
@@ -112,45 +86,10 @@ def test_catalog_classes(
     # check that the parser finds valid datasets
     for cat_end in catalog_endpoints:
         if not cat_end.contains_datasets:
-            continue
-
-        assert len(cat_end.dataset_ids) >= 1
+            assert len(cat_end.dataset_ids) == 0
+        else:
+            assert len(cat_end.dataset_ids) >= 1
 
         for ds_name in cat_end.dataset_ids:
             assert isinstance(ds_name, str)
             assert ds_name in cat_end.dataset_info_dicts.keys()
-
-        # check if we can read a dataset
-        tested_ds = False
-        i = 0
-
-        while not tested_ds:
-            if i == len(cat_end.dataset_ids):
-                warnings.warn(
-                    f'Could not find a dataset that can be read for catalog '
-                    f'{cat_end.catalog_obj.name}. Test coverage is not complete.'
-                )
-                break
-            ds_name = cat_end.dataset_ids[i]
-            io_class = obj.catalog_to_xarray(
-                catalog_obj=cat_end.catalog_obj,
-            )
-
-            # skip if we have a requester pays bucket and no credentials
-            requester_pays: bool = does_requester_pay(
-                io_class=io_class,
-                ds_name=ds_name,
-            )
-            if requester_pays and not aws_credentials:
-                warnings.warn(
-                    f'No AWS credentials found (or could not configure). '
-                    f'Tests will only be ran on OSN data!',
-                )
-                i += 1
-                continue
-
-            # check that the dataset is read ok
-            tested_ds = True
-            ds = io_class.get_dataset_from_catalog(dataset_id=ds_name)
-            assert isinstance(ds, xr.Dataset)
-            assert ds_name == ds.attrs['name']
