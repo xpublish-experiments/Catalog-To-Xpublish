@@ -6,3 +6,4 @@ src/catalog_to_xpublish.egg-info/**
 .vscode/**
 src/catalog_to_xpublish/practice_server.py
 DEV_NOTES.md
+.coverage
