@@ -1,5 +1,5 @@
-[![Pre-Commit Status](https://github.com/LimnoTech/Catalog-To-Xpublish/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/LimnoTech/Catalog-To-Xpublish/actions/workflows/pre-commit.yml)
-[![Tests Status](https://github.com/LimnoTech/Catalog-To-Xpublish/actions/workflows/tests.yml/badge.svg)](https://github.com/LimnoTech/Catalog-To-Xpublish/actions/workflows/tests.yml)
+[![Pre-Commit Status](https://github.com/xpublish-experiments/Catalog-To-Xpublish/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/xpublish-experiments/Catalog-To-Xpublish/actions/workflows/pre-commit.yml)
+[![Tests Status](https://github.com/xpublish-experiments/Catalog-To-Xpublish/actions/workflows/tests.yml/badge.svg)](https://github.com/xpublish-experiments/Catalog-To-Xpublish/actions/workflows/tests.yml)
 
 # Catalog-To-Xpublish
 
