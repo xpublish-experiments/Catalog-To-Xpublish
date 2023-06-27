@@ -6,7 +6,7 @@ from catalog_to_xpublish.server_functions import create_app
 from catalog_to_xpublish.log import LoggingConfigDict
 
 # DEFINE INPUTS BELOW
-CATALOG_TYPE: str = 'stac'  # 'stac' or 'intake'
+CATALOG_TYPE: str = 'intake'  # 'stac' or 'intake'
 APP_NAME: str = f'Xpublish Server (from {CATALOG_TYPE})'
 LOCAL_HOST = '127.0.0.1'
 LOCAL_PORT = 8000
