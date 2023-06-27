@@ -17,7 +17,7 @@ This repository enables one to spin-up a `fastapi`/`xpublish` server from either
 ## Getting Started
 1. Pip install `catalog_to_xpublish` into your Python >=3.11 environment.
     ```bash
-    pip install catalog_to_xpublish
+    pip install git+https://github.com/xpublish-experiments/Catalog-To-Xpublish.git
     ```
 2. Install any `xpublish` plugins you wish to use. For example, to install [`xpublish-opendap`](https://github.com/xpublish-community/xpublish-opendap):
     ```bash
