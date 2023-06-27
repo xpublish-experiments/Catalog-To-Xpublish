@@ -1,5 +1,6 @@
 [![Pre-Commit Status](https://github.com/xpublish-experiments/Catalog-To-Xpublish/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/xpublish-experiments/Catalog-To-Xpublish/actions/workflows/pre-commit.yml)
 [![Tests Status](https://github.com/xpublish-experiments/Catalog-To-Xpublish/actions/workflows/tests.yml/badge.svg)](https://github.com/xpublish-experiments/Catalog-To-Xpublish/actions/workflows/tests.yml)
+[![Coverage](https://codecov.io/gh/xpublish-experiments/Catalog-To-Xpublish/graph/badge.svg)](https://codecov.io/gh/xpublish-experiments/Catalog-To-Xpublish)
 
 # Catalog-To-Xpublish
 
