@@ -11,7 +11,16 @@ from pathlib import Path
 @pytest.fixture(scope='session')
 def catalog_path() -> Path:
     """Returns the path to the test catalog."""
-    return r'https://code.usgs.gov/wma/nhgf/stac/-/raw/main/xpublish_sample_stac/catalog/catalog.json'
+    if Path.cwd().name == 'Catalog-To-Xpublish':
+        home_dir = Path.cwd()
+    elif Path.cwd().name == 'tests':
+        home_dir = Path.cwd().parent
+    else:
+        raise FileNotFoundError(
+            f'Please run this test from the root directory of the repository.',
+            f'CWD={Path.cwd()}',
+        )
+    return home_dir / 'test_catalogs' / 'sample_stac_catalog' / 'catalog.json'
 
 
 @pytest.fixture(scope='session')
