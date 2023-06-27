@@ -1,0 +1,150 @@
+{
+    "type": "Feature",
+    "stac_version": "1.0.0",
+    "id": "GMO",
+    "properties": {
+        "start_datetime": "1950-01-01T00:00:00Z",
+        "end_datetime": "1999-12-31T00:00:00Z",
+        "cube:dimensions": {
+            "time": {
+                "type": "temporal",
+                "description": "Time axis",
+                "extent": [
+                    "1950-01-01T00:00:00Z",
+                    "1999-12-31T00:00:00Z"
+                ],
+                "step": "P1DT0H0M0S"
+            },
+            "x": {
+                "type": "spatial",
+                "axis": "x",
+                "description": "Longitude",
+                "extent": [
+                    -124.6875,
+                    -67.0625
+                ],
+                "step": 0.125
+            },
+            "y": {
+                "type": "spatial",
+                "axis": "y",
+                "description": "Latitude",
+                "extent": [
+                    -124.6875,
+                    -67.0625
+                ],
+                "step": 0.125
+            }
+        },
+        "datetime": null,
+        "cube:variables": {
+            "Prcp": {
+                "dimensions": [
+                    "time",
+                    "latitude",
+                    "longitude"
+                ],
+                "type": "data",
+                "description": "daily_avg_precipitation",
+                "unit": "mm/d"
+            },
+            "Tavg": {
+                "dimensions": [
+                    "time",
+                    "latitude",
+                    "longitude"
+                ],
+                "type": "data",
+                "description": "daily_avg_air_temp",
+                "unit": "C"
+            },
+            "Tmax": {
+                "dimensions": [
+                    "time",
+                    "latitude",
+                    "longitude"
+                ],
+                "type": "data",
+                "description": "daily_max_air_temp",
+                "unit": "C"
+            },
+            "Tmin": {
+                "dimensions": [
+                    "time",
+                    "latitude",
+                    "longitude"
+                ],
+                "type": "data",
+                "description": "daily_min_air_temp",
+                "unit": "C"
+            },
+            "Wind": {
+                "dimensions": [
+                    "time",
+                    "latitude",
+                    "longitude"
+                ],
+                "type": "data",
+                "description": "daily_avg_wind_speed",
+                "unit": "m/s"
+            }
+        }
+    },
+    "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+            [
+                [
+                    -124.6875,
+                    25.1875
+                ],
+                [
+                    -124.6875,
+                    52.8125
+                ],
+                [
+                    -67.0625,
+                    52.8125
+                ],
+                [
+                    -67.0625,
+                    25.1875
+                ],
+                [
+                    -124.6875,
+                    25.1875
+                ]
+            ]
+        ]
+    },
+    "links": [],
+    "assets": {
+        "zarr-s3": {
+            "href": "s3://nhgf-development/workspace/DataConversion/GMO.zarr",
+            "type": "application/vnd+zarr",
+            "description": "Gridded Observed Meteorological Data, 1950-1999",
+            "xarray:open_kwargs": {
+                "chunks": {},
+                "engine": "zarr",
+                "consolidated": true
+            },
+            "xarray:storage_options": {
+                "requester_pays": true
+            },
+            "roles": [
+                "data",
+                "zarr",
+                "s3"
+            ]
+        }
+    },
+    "bbox": [
+        -124.6875,
+        25.1875,
+        -67.0625,
+        52.8125
+    ],
+    "stac_extensions": [
+        "https://stac-extensions.github.io/datacube/v2.0.0/schema.json"
+    ]
+}

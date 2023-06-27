@@ -2,6 +2,7 @@ import pytest
 import boto3
 import xarray as xr
 import warnings
+from pathlib import Path
 from catalog_to_xpublish.factory import (
     CatalogImplementationFactory,
 )
@@ -17,8 +18,18 @@ from typing import (
 
 
 @pytest.fixture(scope='session')
-def catalog_path() -> str:
-    return r'https://code.usgs.gov/wma/nhgf/stac/-/raw/main/xpublish_sample_stac/catalog/catalog.json'
+def catalog_path() -> Path:
+    """Returns the path to the test catalog."""
+    if Path.cwd().name == 'Catalog-To-Xpublish':
+        home_dir = Path.cwd()
+    elif Path.cwd().name == 'tests':
+        home_dir = Path.cwd().parent
+    else:
+        raise FileNotFoundError(
+            f'Please run this test from the root directory of the repository.',
+            f'CWD={Path.cwd()}',
+        )
+    return home_dir / 'test_catalogs' / 'sample_stac_catalog' / 'catalog.json'
 
 
 @pytest.fixture(scope='session')
