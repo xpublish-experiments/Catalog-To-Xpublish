@@ -35,5 +35,6 @@ jobs:
         shell: bash -l {0}
         run: >
           micromamba activate DEV_ENV
+          && pytest tests/test_0_osn_temporary.py
           && pytest tests/test_1_intake_catalog_setup.py
           && pytest tests/test_2_stac_catalog_setup.py
