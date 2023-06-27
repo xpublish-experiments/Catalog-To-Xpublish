@@ -123,4 +123,4 @@ def test_read_from_stac(
             tested_ds = True
             ds = io_class.get_dataset_from_catalog(dataset_id=ds_name)
             assert isinstance(ds, xr.Dataset)
-            assert ds_name == ds.attrs['name']
+            assert f'{io_class.catalog.id}: {ds_name}' == ds.attrs['name']

@@ -1,6 +1,6 @@
 {
     "type": "Collection",
-    "id": "hourly-osn",
+    "id": "conus-404-hourly",
     "stac_version": "1.0.0",
     "stac_extensions": [
         "https://stac-extensions.github.io/eo/v1.0.0/schema.json",
@@ -25,7 +25,7 @@
         }
     ],
     "assets": {
-        "zarr-s3": {
+        "zarr-osn": {
             "href": "s3://rsignellbucket2/hytest/conus404/conus404_hourly_202302.zarr",
             "type": "application/vnd+zarr",
             "description": "OSN access to collection zarr group",

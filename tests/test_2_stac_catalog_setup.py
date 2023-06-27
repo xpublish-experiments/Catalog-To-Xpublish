@@ -67,7 +67,7 @@ def test_catalog_classes(
 
     assert type(searcher.catalog_object) in [pystac.Collection, pystac.Catalog]
     assert searcher.suffixes == ['.nc', '.zarr']
-    assert searcher.catalog_object.id == 'nhgf-stac-catalog'
+    assert searcher.catalog_object.id == 'osn-stac-catalog'
     assert searcher.catalog_object.self_href == str(catalog_path)
 
     # check that we can parse the catalog

@@ -11,7 +11,7 @@
         },
         {
             "rel": "child",
-            "href": "./conus404/collection.json",
+            "href": "./conus-404/collection.json",
             "type": "application/json"
         },
         {
