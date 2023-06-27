@@ -19,8 +19,12 @@ This repository enables one to spin-up a `fastapi`/`xpublish` server from either
     ```bash
     pip install catalog_to_xpublish
     ```
-2. Select a Intake `.yaml` or STAC `.json` file path or URL to serve data from.
-3. Use the `catalog_to_xpublish.create_app()` function to spin-up a `FastAPI()` application. See example below:
+2. Install any `xpublish` plugins you wish to use. For example, to install [`xpublish-opendap`](https://github.com/xpublish-community/xpublish-opendap):
+    ```bash
+    pip install xpublish_opendap
+    ```
+3. Select a Intake `.yaml` or STAC `.json` file path or URL to serve data from.
+4. Use the `catalog_to_xpublish.create_app()` function to spin-up a `FastAPI()` application. Note that the plugin objects (i.e., `xpublish_opendap.OpenDapPlugin`) should be passed in via a list to `param:xpublish_plugins`. See example below:
     ```python
     import catalog_to_xpublish
     from fastapi import FastAPI
@@ -37,7 +41,7 @@ This repository enables one to spin-up a `fastapi`/`xpublish` server from either
         xpublish_plugins=[OpenDapPlugin],
     )
     ```
-4. Use `uvicorn` to deploy the server. For example, assuming the previous code snippet was called in `run_server.py`:
+5. Use `uvicorn` to deploy the server. For example, assuming the previous code snippet was called in `run_server.py`:
     ```python
     # define server hosting location
     LOCAL_HOST = '127.0.0.1'
