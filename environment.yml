@@ -11,6 +11,7 @@ dependencies:
   - xarray
   - xpublish
   - dask
+  - pydantic >=2.0
 
   # For catalog access
   - intake
@@ -26,7 +27,6 @@ dependencies:
   # Dev tools: Language Server Protocol (LSP) (Optional), for:
   - python-lsp-server # LSP extension for Python (pylsp), including:
   - pylsp-mypy  # MyPy type checking for Python >=3.7.
-  - pydantic
 
   # Package management
   - conda

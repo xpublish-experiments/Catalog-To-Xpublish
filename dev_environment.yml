@@ -11,6 +11,7 @@ dependencies:
   - xpublish
   - xarray
   - dask
+  - pydantic >=2.0
 
   # For catalog access
   - intake
@@ -31,7 +32,6 @@ dependencies:
   - python-lsp-server # LSP extension for Python (pylsp), including:
   - pylsp-mypy  # MyPy type checking for Python >=3.7.
   - jupyterlab-lsp
-  - pydantic
 
   # Dev tools: For testing and pre-commit hooks
   - pytest
