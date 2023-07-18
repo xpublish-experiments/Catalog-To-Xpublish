@@ -34,7 +34,7 @@ class STACToXarray(CatalogToXarray):
         NOTE: The language is confusing here. The catalog_obj is a pystac.Collection,
             not a pystac.Catalog. This is because we need the get_assets() method.
         """
-        # create an intake catalog object
+        # create an STAC catalog object
         if catalog_json_path:
             catalog_json_path = Path(catalog_json_path)
             self.catalog: pystac.Collection = pystac.Collection.from_file(
@@ -53,10 +53,10 @@ class STACToXarray(CatalogToXarray):
     def write_attributes(
         self,
         ds: xr.Dataset,
+        info_dict: Dict[str, Any],
     ) -> xr.Dataset:
-        info_dict = self.catalog.to_dict()
         if 'id' in info_dict.keys():
-            ds.attrs['name'] = info_dict['id']
+            ds.attrs['name'] = f'{info_dict["id"]}: {info_dict["dataset_id"]}'
         if 'description' in info_dict.keys():
             ds.attrs['description'] = info_dict['description']
         ds.attrs['stac_collection'] = self.catalog.self_href
@@ -178,8 +178,17 @@ class STACToXarray(CatalogToXarray):
                 )
 
         # open as a xarray dataset and add attributes
+        info_dict: Dict[str, Any] = self.catalog.to_dict()
+        info_dict['dataset_id'] = dataset_id
+        if isinstance(stac_asset, pystac.Asset):
+            info_dict['description'] = getattr(
+                stac_asset,
+                'description',
+                '',
+            )
+
         ds: xr.Dataset = self._read_zarr(stac_asset)
-        ds = self.write_attributes(ds)
+        ds = self.write_attributes(ds, info_dict)
         ds.attrs['url_path'] = stac_asset.href
 
         # return the dataset

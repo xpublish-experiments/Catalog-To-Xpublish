@@ -33,4 +33,4 @@ sources:
     args:
       urlpath: 's3://era5-pds/2019/05/data/precipitation_amount_1hour_Accumulation.nc'
       storage_options:
-        requester_pays: false
+        requester_pays: true

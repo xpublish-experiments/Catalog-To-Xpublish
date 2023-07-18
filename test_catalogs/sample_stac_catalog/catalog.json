@@ -1,0 +1,24 @@
+{
+    "type": "Catalog",
+    "id": "osn-stac-catalog",
+    "stac_version": "1.0.0",
+    "description": "Sample STAC catalog of OSN data.",
+    "links": [
+        {
+            "rel": "root",
+            "href": "./catalog.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "child",
+            "href": "./conus-404/collection.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "child",
+            "href": "./sub-catalog/catalog.json",
+            "type": "application/json"
+        }
+    ],
+    "stac_extensions": []
+}

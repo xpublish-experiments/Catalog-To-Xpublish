@@ -52,7 +52,13 @@ class STACRouter(CatalogRouter):
     def get_catalog_as_yaml(self) -> PlainTextResponse:
         """Returns the catalog yaml as plain text."""
         return PlainTextResponse(
-            content=yaml.dump(self.catalog_endpoint_obj.catalog_obj.to_dict()),
+            content=yaml.dump(
+                json.loads(
+                    json.dumps(
+                        self.catalog_endpoint_obj.catalog_obj.to_dict(),
+                    ),
+                ),
+            ),
             media_type='text/plain',
             status_code=200,
         )

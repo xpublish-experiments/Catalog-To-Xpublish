@@ -1,4 +1,5 @@
 import abc
+import typing
 import xarray as xr
 
 
@@ -13,6 +14,7 @@ class CatalogToXarray(abc.ABC):
     def write_attributes(
         self,
         ds: xr.Dataset,
+        info_dict: typing.Dict[str, typing.Any],
     ) -> xr.Dataset:
         """Write attributes from the catalog object to the dataset.attrs."""
         raise NotImplementedError

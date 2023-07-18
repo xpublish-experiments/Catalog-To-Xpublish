@@ -5,17 +5,11 @@ from pathlib import Path
 from catalog_to_xpublish.server_functions import create_app
 from catalog_to_xpublish.log import LoggingConfigDict
 
-# CATALOG_TYPE: str = 'intake'  # or 'stac'
-# CATALOG_PATH = Path.cwd() / 'test_catalogs' / 'test_intake_zarr_catalog.yaml'
-
-CATALOG_TYPE: str = 'stac'
-if Path.cwd().name == 'examples':
-    root_path = Path.cwd().parent
-elif Path.cwd().name == 'Catalog-To-Xpublish':
-    root_path = Path.cwd()
-
-CATALOG_PATH = r'https://code.usgs.gov/wma/nhgf/stac/-/raw/main/xpublish_sample_stac/catalog/catalog.json'
-APP_NAME = 'Xpublish Server'
+# DEFINE INPUTS BELOW
+CATALOG_TYPE: str = 'stac'  # 'stac' or 'intake'
+APP_NAME: str = f'Xpublish Server (from {CATALOG_TYPE})'
+LOCAL_HOST = '127.0.0.1'
+LOCAL_PORT = 8000
 
 # add plugins here
 XPUBLISH_PLUGINS = []
@@ -25,18 +19,36 @@ try:
 except ImportError:
     warnings.warn('xpublish_opendap not installed. Skipping OpenDAP plugin.')
 
-
-LOCAL_HOST = '127.0.0.1'
-LOCAL_PORT = 8000
-
 # config logging
 CONFIG_LOGGING_DICT: LoggingConfigDict = {
     'level': 'INFO',
     'log_file': 'xpublish_server.log',
 }
 
+
+# find example catalog
+if Path.cwd().name == 'examples':
+    root_path = Path.cwd().parent
+elif Path.cwd().name == 'Catalog-To-Xpublish':
+    root_path = Path.cwd()
+else:
+    raise FileNotFoundError(
+        f'Please run this script from the root directory of the repository '
+        f'or /examples. CWD={Path.cwd()}',
+    )
+
+if CATALOG_TYPE == 'intake':
+    catalog_path = root_path / 'test_catalogs' / 'test_intake_zarr_catalog.yaml'
+elif CATALOG_TYPE == 'stac':
+    catalog_path = r'https://code.usgs.gov/wma/nhgf/stac/-/raw/main/xpublish_sample_stac/catalog/catalog.json'
+else:
+    raise ValueError(
+        f'Invalid catalog type: {CATALOG_TYPE}. Must be "intake" or "stac".',
+    )
+
+# create app
 app = create_app(
-    catalog_path=CATALOG_PATH,
+    catalog_path=catalog_path,
     catalog_type=CATALOG_TYPE,
     app_name=APP_NAME,
     xpublish_plugins=XPUBLISH_PLUGINS,

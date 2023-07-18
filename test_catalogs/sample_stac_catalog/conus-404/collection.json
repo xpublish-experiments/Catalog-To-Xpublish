@@ -1,0 +1,72 @@
+{
+    "type": "Collection",
+    "id": "conus-404-hourly",
+    "stac_version": "1.0.0",
+    "stac_extensions": [
+        "https://stac-extensions.github.io/eo/v1.0.0/schema.json",
+        "https://stac-extensions.github.io/xarray-assets/v1.0.0/schema.json"
+    ],
+    "description": "CONUS404 40 years of hourly values on cloud storage",
+    "links": [
+        {
+            "rel": "root",
+            "href": "../catalog.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "parent",
+            "href": "../catalog.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "self",
+            "href": "./collection.json",
+            "type": "application/json"
+        }
+    ],
+    "assets": {
+        "zarr-osn": {
+            "href": "s3://rsignellbucket2/hytest/conus404/conus404_hourly_202302.zarr",
+            "type": "application/vnd+zarr",
+            "description": "OSN access to collection zarr group",
+            "xarray:open_kwargs": {
+                "chunks": {},
+                "engine": "zarr",
+                "consolidated": true
+            },
+            "xarray:storage_options": {
+                "anon": true,
+                "requester_pays": false,
+                "client_kwargs": {
+                    "endpoint_url": "https://renc.osn.xsede.org"
+                }
+            },
+            "roles": [
+                "data",
+                "zarr",
+                "s3"
+            ]
+        }
+    },
+    "extent": {
+        "spatial": {
+            "bbox": [
+                [
+                    -138.73135375976562,
+                    17.647308349609375,
+                    -57.068634033203125,
+                    57.34341812133789
+                ]
+            ]
+        },
+        "temporal": {
+            "interval": [
+                [
+                    "1979-10-01T00:00:00Z",
+                    "2021-09-25T00:00:00Z"
+                ]
+            ]
+        }
+    },
+    "license": "CC0-1.0"
+}

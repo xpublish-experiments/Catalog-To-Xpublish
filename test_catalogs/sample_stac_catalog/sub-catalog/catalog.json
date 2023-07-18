@@ -1,0 +1,24 @@
+{
+    "type": "Catalog",
+    "id": "sub-catalog",
+    "stac_version": "1.0.0",
+    "description": "Sample sub-STAC catalog with Items.",
+    "links": [
+        {
+            "rel": "root",
+            "href": "../catalog.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "parent",
+            "href": "../catalog.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "item",
+            "href": "./PRISM_v2/item.json",
+            "type": "application/json"
+        }
+    ],
+    "stac_extensions": []
+}

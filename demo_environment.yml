@@ -1,0 +1,57 @@
+name: catalog_to_xpublish_demo
+channels:
+  - conda-forge
+  - pyviz
+  - nodefaults
+
+# a larger environment for Catalog-To-Xpublish to support development and demos
+dependencies:
+  - python =3.11
+
+  # For data processing
+  - xpublish
+  - xarray
+  - dask
+
+  # For catalog access
+  - intake
+  - intake-xarray
+  - pystac
+
+  # For API access and data formats
+  - fsspec
+  - s3fs
+  - h5netcdf
+  - h5pyd
+  - zarr
+
+  # xpublish plugins
+  - xpublish-opendap
+  - xpublish-edr
+
+  # for demo
+  - jupyterlab
+  - ipympl
+  - nodejs
+
+  # get holoviews libs from pyviz
+  - holoviews >=1.12.0
+  - hvplot
+  - geoviews >=1.6.2 # pinned to avoid this issue: https://github.com/holoviz/geoviews/issues/334
+
+  # Dev tools: Language Server Protocol (LSP)
+  - python-lsp-server # LSP extension for Python (pylsp), including:
+  - pylsp-mypy  # MyPy type checking for Python >=3.7.
+  - jupyterlab-lsp
+  - pydantic
+
+  # Dev tools: For testing and pre-commit hooks
+  - pytest
+  - pytest-cov
+  - pre-commit
+
+  # Package management
+  - conda
+  - conda-build
+  - conda-libmamba-solver
+  - pip

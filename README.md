@@ -1,5 +1,6 @@
-[![Pre-Commit Status](https://github.com/LimnoTech/Catalog-To-Xpublish/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/LimnoTech/Catalog-To-Xpublish/actions/workflows/pre-commit.yml)
-[![Tests Status](https://github.com/LimnoTech/Catalog-To-Xpublish/actions/workflows/tests.yml/badge.svg)](https://github.com/LimnoTech/Catalog-To-Xpublish/actions/workflows/tests.yml)
+[![Pre-Commit Status](https://github.com/xpublish-experiments/Catalog-To-Xpublish/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/xpublish-experiments/Catalog-To-Xpublish/actions/workflows/pre-commit.yml)
+[![Tests Status](https://github.com/xpublish-experiments/Catalog-To-Xpublish/actions/workflows/tests.yml/badge.svg)](https://github.com/xpublish-experiments/Catalog-To-Xpublish/actions/workflows/tests.yml)
+[![Coverage](https://codecov.io/gh/xpublish-experiments/Catalog-To-Xpublish/graph/badge.svg)](https://codecov.io/gh/xpublish-experiments/Catalog-To-Xpublish)
 
 # Catalog-To-Xpublish
 
@@ -15,14 +16,16 @@ This repository enables one to spin-up a `fastapi`/`xpublish` server from either
 * Thanks to `FastAPI`, interactive [Swagger](https://github.com/swagger-api/swagger-ui) and [Redoc](https://github.com/Redocly/redoc) API documentation endpoints are automatically generated on spin-up.
 
 ## Getting Started
-
-1. Make a conda environment by cloning `environment.yml`.
-2. Use the following conda-build command to install this `catalog_to_xpublish` into your new environment.
+1. Pip install `catalog_to_xpublish` into your Python >=3.11 environment.
+    ```bash
+    pip install git+https://github.com/xpublish-experiments/Catalog-To-Xpublish.git
     ```
-    conda develop {YOUR_PATH}/Xpublish-OPeNDAP-Server/src
+2. Install any `xpublish` plugins you wish to use. For example, to install [`xpublish-opendap`](https://github.com/xpublish-community/xpublish-opendap):
+    ```bash
+    pip install xpublish-opendap
     ```
 3. Select a Intake `.yaml` or STAC `.json` file path or URL to serve data from.
-4. Use the `catalog_to_xpublish.create_app()` function to spin-up a `FastAPI()` application. See example below:
+4. Use the `catalog_to_xpublish.create_app()` function to spin-up a `FastAPI()` application. Note that the plugin objects (i.e., `xpublish_opendap.OpenDapPlugin`) should be passed in via a list to `param:xpublish_plugins`. See example below:
     ```python
     import catalog_to_xpublish
     from fastapi import FastAPI
@@ -111,15 +114,28 @@ We strongly encourage open-source contributions to this repository! I am new to 
 
 Please note any bugs or feature requests via our GitHub Issues page.
 
-Before creating a pull request please use `pytest` to run our `/tests` suite to make sure that no behavior was inadvertently altered. If you create a new feature (i.e., an additional catalog implementation), we encourage you to create a test `tests/test_{#}_{new_feature_name}.py` file for it.
+To contribute code, please follow the below steps:
+1. Create a conda/mamba environment by cloning our developer environment (`dev_environment.yml`).'
+    ```bash
+    (base) cd {PATH}/{TO}/{REPO}
+    (base) conda env create -f dev_environment.yml
+    ```
 
-Additionally, before making a pull request please run our pre-commit hooks locally:
-```
-(base) cd {PATH}/{TO}/{REPO}
+2. Fork this repository and create a new branch off of `main` with a descriptive name.
+3. Make your changes and commit them to your new branch.
+4. When finished run our pre-commit hooks and tests locally (see below).
+    ```bash
+    (base) conda activate catalog_to_xpublish_dev
+    (catalog_to_xpublish_dev) pre-commit run --all-files
+    ```
+6. Make new tests for any new features you add. This code will be pip installed by users to run servers, and we want to make sure it is robust. The file must be named following `pytest` conventions, we encourage `tests/test_{#}_{new_feature_name}.py` format.
+7. Run (and pass) the our full test suite locally. **Note:** Some of our test datasets are hosted on AWS, and require AWS credentials to run locally. These tests are currently not-apart of the automated GitHub Actions test suite, however we aim to add them soon. The test only accesses public OSN data, so you can use any AWS credentials.
 
-(base) conda activate catalog_to_xpublish_dev
-(catalog_to_xpublish_dev) pre-commit run --all-files
+```bash
+(catalog_to_xpublish_dev) pytest
 ```
+8. Make a pull request to merge your branch into `main`. We will review the pull request and merge it if it is deemed appropriate.
+
 
 ### Creating a new catalog implementation
 As environmental science progresses, we expect additional catalog schemas beyond Intake and STAC to become relevant. Alternatively, STAC supports extensions, and one may need to build an adjusted STAC implementation for specific needs/desires.
@@ -181,6 +197,7 @@ This process is demonstrated below:
         def write_attributes(
             self,
             ds: xr.Dataset,
+            info_dict: Dict[str, Any],
         ) -> xr.Dataset:
             """Write attributes from the catalog object to the dataset.attrs."""
             ...
