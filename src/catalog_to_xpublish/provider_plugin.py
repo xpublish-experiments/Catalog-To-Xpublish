@@ -15,7 +15,6 @@ from typing import (
 )
 from pydantic import (
     BaseConfig,
-    Field,
 )
 
 
@@ -24,10 +23,7 @@ class DatasetProviderPlugin(Plugin):
 
     This should be instantiated for each CatalogEndpoint object.
     """
-    name: str = Field(
-        'catalog-endpoint-provider',
-        description='Plugin name',
-    )
+    name: str = 'catalog-endpoint-provider'
     catalog_endpoint_obj: CatalogEndpoint = None
     io_class: CatalogToXarray = None
 
