@@ -11,10 +11,9 @@ from xpublish import (
     hookimpl,
 )
 from typing import (
+    Any,
     List,
-)
-from pydantic import (
-    BaseConfig,
+    Dict,
 )
 
 
@@ -26,9 +25,7 @@ class DatasetProviderPlugin(Plugin):
     name: str = 'catalog-endpoint-provider'
     catalog_endpoint_obj: CatalogEndpoint = None
     io_class: CatalogToXarray = None
-
-    class Config(BaseConfig):
-        arbitrary_types_allowed = True
+    model_config: Dict[str, Any] = {'arbitrary_types_allowed': True}
 
     def __init__(
         self,
