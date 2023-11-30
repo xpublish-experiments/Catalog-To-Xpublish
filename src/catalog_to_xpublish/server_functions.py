@@ -156,7 +156,7 @@ def create_app(
                 plugin=provider_plugin,
                 plugin_name=cat_prefix,
             )
-            
+
             if not cat_prefix in rest_server.plugins:
                 logger.warn(
                     f'Could not add dataset provider plugin for {cat_prefix} to the server!',
