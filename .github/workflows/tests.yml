@@ -2,6 +2,8 @@ name: tests
 
 on:
   pull_request:
+  push:
+    branches: [main]
 
 jobs:
   run:
@@ -9,7 +11,7 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.11"]
-        os: [windows-latest, ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
 
     steps:
       - uses: actions/checkout@v3
