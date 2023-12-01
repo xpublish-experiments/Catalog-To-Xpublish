@@ -40,7 +40,11 @@ else:
 if CATALOG_TYPE == 'intake':
     catalog_path = root_path / 'test_catalogs' / 'test_intake_zarr_catalog.yaml'
 elif CATALOG_TYPE == 'stac':
-    catalog_path = r'https://code.usgs.gov/wma/nhgf/stac/-/raw/main/xpublish_sample_stac/catalog/catalog.json'
+    # catalog_path = r'https://code.usgs.gov/wma/nhgf/stac/-/raw/main/xpublish_sample_stac/catalog/catalog.json'
+    # catalog_path = r'https://code.usgs.gov/wma/nhgf/stac/-/raw/main/catalog2/catalog.json'
+    catalog_path = root_path / 'test_catalogs' / \
+        'sample_stac_catalog' / 'catalog.json'
+
 else:
     raise ValueError(
         f'Invalid catalog type: {CATALOG_TYPE}. Must be "intake" or "stac".',
