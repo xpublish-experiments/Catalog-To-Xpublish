@@ -32,12 +32,14 @@ def app(catalog_path: Path) -> fastapi.FastAPI:
         catalog_path=catalog_path,
         catalog_type='intake',
         app_name='intake_test_app',
+        fastapi_kwargs={'description': 'testing fastapi_kwargs'},
         config_logging_dict={'log_file': 'intake_test_app.log'},
     )
 
     # check that things are in place
     assert isinstance(app, fastapi.FastAPI)
     assert app.title == 'intake_test_app'
+    assert app.description == 'testing fastapi_kwargs'
     assert Path(Path.cwd() / 'intake_test_app.log').exists()
     return app
 

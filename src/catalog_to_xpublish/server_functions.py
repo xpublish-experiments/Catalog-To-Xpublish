@@ -95,6 +95,7 @@ def create_app(
     catalog_type: str,
     app_name: Optional[str] = None,
     xpublish_plugins: Optional[List[xpublish.Plugin]] = None,
+    fastapi_kwargs: Optional[dict] = None,
     config_logging_dict: Optional[LoggingConfigDict] = None,
 ) -> FastAPI:
     """Main function to create the server app.
@@ -104,6 +105,8 @@ def create_app(
         catalog_type: The type of catalog to parse.
         app_name: The name of the app.
         xpublish_plugins: A list of external xpublish plugin classes to use.
+        fastapi_kwargs: A dictionary of kwargs passed into fastapi.FastAPI().
+        config_logging_dict: A dictionary of logging configuration parameters.
     Returns:
         A FastAPI app object.
     """
@@ -130,7 +133,15 @@ def create_app(
     catalog_endpoints: List[CatalogEndpoint] = catalog_searcher.parse_catalog()
 
     # 2. Start a Xpublish server
-    app = FastAPI(title=app_inputs.name)
+    if not isinstance(fastapi_kwargs, dict):
+        fastapi_kwargs = {}
+    if 'title' in fastapi_kwargs:
+        logger.warn(
+            f'Overwriting title={fastapi_kwargs["title"]} with title={app_inputs.name}! '
+            'Use param:app_name to set the title of the app, not param:faskapi_kwargs.',
+        )
+        del fastapi_kwargs['title']
+    app = FastAPI(title=app_inputs.name, **fastapi_kwargs)
 
     # 2. Iterate through the endpoints and add them to the server
     for cat_end in catalog_endpoints:
