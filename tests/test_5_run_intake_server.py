@@ -108,7 +108,6 @@ def test_datasets_endpoints(
     response = client.get('/osn_catalog/datasets')
     assert response.status_code == 200
     assert response.json() == [
-        'conus404-hourly-osn',
         'nwis-streamflow-usgs-gages-osn',
         'red-river-subset-osn',
         'alaska-et-2020-subset-osn',

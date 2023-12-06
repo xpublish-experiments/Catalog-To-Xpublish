@@ -1,17 +1,5 @@
 sources:
 
-  conus404-hourly-osn:
-    driver: zarr
-    description: "CONUS404 - OSN pod storage, 70 TB, 40 years of hourly data, CONUS extent with 4 km gridded spatial resolution, 157 variables"
-    args:
-      urlpath: 's3://rsignellbucket2/hytest/conus404/conus404_hourly_202302.zarr'
-      consolidated: true
-      storage_options:
-        anon: true
-        requester_pays: false
-        client_kwargs:
-          endpoint_url: https://renc.osn.xsede.org
-
   nwis-streamflow-usgs-gages-osn:
     driver: zarr
     description: "subset of NWIS streamflow - OSN pod storage, 275 MB, 40 years of daily data, CONUS extent point data, 1 real variable (streamflow)"
