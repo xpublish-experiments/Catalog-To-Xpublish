@@ -155,11 +155,15 @@ def create_app(
             xpublish_title_kwarg = {
                 'title': app_inputs.catalog_name + cat_prefix,
             }
+            app_kws = {
+                **xpublish_title_kwarg,
+                **fastapi_kwargs,               
+            }
+            logger.info(
+                f'Adding FastAPI kwargs {app_kws}'
+            )
             rest_server.init_app_kwargs(
-                app_kws={
-                    **xpublish_title_kwarg,
-                    **fastapi_kwargs,
-                },
+                app_kws=app_kws
             )
 
             # add dataset provider plugin
