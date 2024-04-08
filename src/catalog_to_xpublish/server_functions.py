@@ -152,9 +152,13 @@ def create_app(
         # 2.1 if the endpoint has data, mount a Xpublish server
         if cat_end.contains_datasets:
             rest_server = xpublish.Rest()
+            xpublish_title_kwarg = {
+                'title': app_inputs.catalog_name + cat_prefix,
+            }
             rest_server.init_app_kwargs(
                 app_kws={
-                    'title': app_inputs.catalog_name + cat_prefix,
+                    **xpublish_title_kwarg,
+                    **fastapi_kwargs,
                 },
             )
 
