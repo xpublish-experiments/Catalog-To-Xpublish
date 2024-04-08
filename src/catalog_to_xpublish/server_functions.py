@@ -205,7 +205,7 @@ def create_app(
             # add the base router (for some reason this needs to come after)
             router = app_inputs.catalog_implementation.catalog_router(
                 catalog_endpoint_obj=cat_end,
-                prefix='',
+                prefix=fastapi_kwargs['root_path'],
             )
             rest_server.app.include_router(router=router.router)
 

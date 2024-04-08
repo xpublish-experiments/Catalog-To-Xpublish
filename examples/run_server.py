@@ -41,14 +41,18 @@ if CATALOG_TYPE == 'intake':
     catalog_path = root_path / 'test_catalogs' / 'test_intake_zarr_catalog.yaml'
 elif CATALOG_TYPE == 'stac':
     # catalog_path = r'https://code.usgs.gov/wma/nhgf/stac/-/raw/main/xpublish_sample_stac/catalog/catalog.json'
-    # catalog_path = r'https://code.usgs.gov/wma/nhgf/stac/-/raw/main/catalog2/catalog.json'
-    catalog_path = root_path / 'test_catalogs' / \
-        'sample_stac_catalog' / 'catalog.json'
+    catalog_path = r'https://code.usgs.gov/wma/nhgf/stac/-/raw/main/catalog/catalog.json'
+    # catalog_path = root_path / 'test_catalogs' / \
+    #     'sample_stac_catalog' / 'catalog.json'
 
 else:
     raise ValueError(
         f'Invalid catalog type: {CATALOG_TYPE}. Must be "intake" or "stac".',
     )
+
+FASTAPI_KWARGS = {
+    'root_path':'/api/xpublish'
+}
 
 # create app
 app = create_app(
@@ -56,6 +60,7 @@ app = create_app(
     catalog_type=CATALOG_TYPE,
     app_name=APP_NAME,
     xpublish_plugins=XPUBLISH_PLUGINS,
+    fastapi_kwargs=FASTAPI_KWARGS,
     config_logging_dict=CONFIG_LOGGING_DICT,
 )
 
