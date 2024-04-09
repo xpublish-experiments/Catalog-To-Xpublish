@@ -28,7 +28,7 @@ class CatalogRouter(abc.ABC):
     ) -> None:
         """Init is the same for all subclasses."""
         # init router
-        self.router = APIRouter()
+        self.router = APIRouter(prefix=prefix)
 
         # get catalog info
         self.catalog_endpoint_obj = catalog_endpoint_obj

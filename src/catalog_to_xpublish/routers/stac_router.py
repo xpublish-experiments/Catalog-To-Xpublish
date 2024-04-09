@@ -77,22 +77,22 @@ class STACRouter(CatalogRouter):
         """Adds routes to the router."""
 
         self.router.add_api_route(
-            path=f'{self.cat_prefix}/catalogs',
+            path="/catalogs",
             endpoint=self.list_sub_catalogs,
             methods=['GET'],
         )
         self.router.add_api_route(
-            path=f'{self.cat_prefix}/parent_catalog',
+            path="/parent_catalog",
             endpoint=self.get_parent_catalog,
             methods=['GET'],
         )
         self.router.add_api_route(
-            path=f'{self.cat_prefix}/yaml',
+            path="/yaml",
             endpoint=self.get_catalog_as_yaml,
             methods=['GET'],
         )
         self.router.add_api_route(
-            path=f'{self.cat_prefix}/json',
+            path="/json",
             endpoint=self.get_catalog_as_json,
             methods=['GET'],
         )

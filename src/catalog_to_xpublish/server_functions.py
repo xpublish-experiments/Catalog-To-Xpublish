@@ -215,6 +215,7 @@ def create_app(
             # make a router for each endpoint
             router = app_inputs.catalog_implementation.catalog_router(
                 catalog_endpoint_obj=cat_end,
+                prefix="",
             )
             app.include_router(router=router.router)
     logger.info(
