@@ -1,6 +1,6 @@
 sources:
 
-nwis-streamflow-usgs-gages-osn:
+  nwis-streamflow-usgs-gages-osn:
     driver: zarr
     description: "Streamflow from NWIS, extracted and rechunked into time series (NWM2.1 time period)"
     args:
