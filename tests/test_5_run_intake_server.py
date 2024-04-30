@@ -109,7 +109,6 @@ def test_datasets_endpoints(
     assert response.status_code == 200
     assert response.json() == [
         'nwis-streamflow-usgs-gages-osn',
-        'red-river-subset-osn',
         'alaska-et-2020-subset-osn',
         'prism-v2-osn',
     ]

@@ -13,8 +13,8 @@ dependencies:
   - dask
 
   # For catalog access
-  - intake
-  - intake-xarray
+  - intake=0.7.0
+  - intake-xarray=0.7.0
   - pystac
 
   # For API access and data formats

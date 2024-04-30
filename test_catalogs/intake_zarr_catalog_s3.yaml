@@ -4,25 +4,16 @@ sources:
     driver: zarr
     description: "Sample subset - s3 storage, 863M, Gridded 20km Daily Reference Evapotranspiration for the State of Alaska from 1979 to 2017/CCSM4 historical simulation"
     args:
-      urlpath: 's3://nhgf-development/workspace/testing/sample-zarr/ccsm4.zarr'
+      urlpath: 's3://nhgf-development/workspace/DataConversion/alaska_et_2020_ccsm4_historical_simulation.zarr'
       consolidated: true
       storage_options:
         requester_pays: true
 
-  red-river-subset-s3:
-    driver: zarr
-    description: "Sample subset - s3 storage, 470M, Very High-Resolution Dynamic Downscaling of Regional Climate for Use in Long-term Hydrologic Planning along the Red River Valley System"
-    args:
-      urlpath: 's3://nhgf-development/workspace/testing/sample-zarr/red_river_2020.zarr'
-      consolidated: true
-      storage_options:
-        requester_pays: true
-
-  conus404-hourly-s3:
+  conus404-daily-s3:
     driver: zarr
     description: "CONUS404 - s3 storage, 70 TB, 40 years of hourly data, CONUS extent with 4 km gridded spatial resolution, 157 variables"
     args:
-      urlpath: 's3://nhgf-development/conus404/conus404_hourly_202209.zarr'
+      urlpath: 's3://nhgf-development/conus404/conus404_daily_202210.zarr'
       consolidated: true
       storage_options:
         requester_pays: true

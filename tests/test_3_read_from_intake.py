@@ -38,7 +38,7 @@ def aws_credentials() -> bool:
     """Whether we have active AWS credentials or not.
 
     If we do, return True. If not, return False.
-    If False, tests will only be ran on OSN data.
+    If False, tests will only be run on OSN data.
     """
     try:
         boto3.client('s3')
@@ -72,7 +72,7 @@ def test_read_from_intake(
     # check for AWS credentials
     if not aws_credentials:
         raise ValueError(
-            'No AWS credentials found! This test cannot be ran.',
+            'No AWS credentials found! This test cannot be run.',
         )
 
     # shorten name for convenience

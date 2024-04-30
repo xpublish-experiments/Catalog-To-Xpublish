@@ -36,34 +36,62 @@
     },
     "links": [],
     "assets": {
-        "zarr-s3": {
-            "href": "s3://rsignellbucket2/nhgf/sample_data/prism_v2.zarr",
+        "zarr-s3-osn": {
+            "href": "s3://mdmf/gdp/PRISM_v2.zarr/",
             "type": "application/vnd+zarr",
-            "description": "USGS THREDDS Holdings/Parameter-elevation Regressions on Independent Slopes Model Monthly Climate Data for the Continental United States",
+            "title": "Requester pays access to zarr via S3 API",
+            "description": "Free, public access to zarr data store via the S3 API. This data is stored on an Open Storage Network Pod.",
             "xarray:open_kwargs": {
-                "chunks": {},
-                "engine": "zarr",
-                "consolidated": true
+              "chunks": {},
+              "engine": "zarr",
+              "consolidated": true
             },
             "xarray:storage_options": {
-                "requester_pays": false,
-                "anon": true,
-                "client_kwargs": {
-                    "endpoint_url": "https://renc.osn.xsede.org"
-                }
+              "anon": true,
+              "client_kwargs": {
+                "endpoint_url": "https://usgs.osn.mghpcc.org/"
+              }
             },
             "roles": [
-                "data",
-                "zarr",
-                "s3"
+              "data",
+              "zarr",
+              "s3",
+              "osn"
             ]
+          },
+          "zarr-s3-aws": {
+            "href": "s3://nhgf-development/workspace/DataConversion/PRISM_v2.zarr/",
+            "type": "application/vnd+zarr",
+            "title": "Free access to zarr via S3 API",
+            "description": "Requester pays, public access to zarr data store via the S3 API. This data is stored in an AWS S3 bucket.",
+            "xarray:open_kwargs": {
+              "chunks": {},
+              "engine": "zarr",
+              "consolidated": true
+            },
+            "xarray:storage_options": {
+              "requester_pays": true
+            },
+            "roles": [
+              "data",
+              "zarr",
+              "s3",
+              "aws",
+              "requester-pays"
+            ]
+          },
+          "legacy-s3-aws": {
+            "href": "s3://nhgf-development/thredds/prism_v2/",
+            "title": "Requester pays access to archival legacy files via S3 API",
+            "description": "Requester pays, public access (via the S3 API) to archival legacy files from WMA THREDDS server that were used to create this zarr store. This data is stored in an AWS S3 bucket.",
+            "roles": [
+              "data",
+              "directory",
+              "s3",
+              "aws",
+              "requester-pays"
+            ]
+          }
         }
-    },
-    "bbox": [
-        -125.02083587646484,
-        24.10416603088379,
-        -66.52083587646484,
-        49.9375
-    ],
-    "stac_extensions": []
-}
+      }
+      
