@@ -65,7 +65,7 @@ def test_json_endpoint(client: fastapi.testclient.TestClient) -> None:
     response = client.get('/json')
     assert response.status_code == 200
 
-    json_dict = json.loads(response.json())
+    json_dict = response.json()
     assert json_dict['type'] == 'Catalog'
     assert json_dict['id'] == 'osn-stac-catalog'
     assert type(json_dict['links']) == list
@@ -99,11 +99,11 @@ def test_datasets_from_collection_endpoints(
     client: fastapi.testclient.TestClient,
 ) -> None:
     """Test the datasets endpoints using the STAC Collection pattern"""
-    response = client.get('/conus-404-hourly/datasets')
+    response = client.get('/conus404-daily/datasets')
     assert response.status_code == 200
-    assert response.json() == ['zarr-osn']
+    assert response.json() == ['zarr-s3-osn', 'zarr-s3-aws']
 
-    test_dataset_url = '/conus-404-hourly/datasets/zarr-osn'
+    test_dataset_url = '/conus404-daily/datasets/zarr-s3-osn'
     response = client.get(test_dataset_url)
     assert response.status_code == 200
 

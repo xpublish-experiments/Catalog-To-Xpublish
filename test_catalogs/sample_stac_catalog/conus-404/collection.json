@@ -1,72 +1,1611 @@
 {
-    "type": "Collection",
-    "id": "conus-404-hourly",
-    "stac_version": "1.0.0",
-    "stac_extensions": [
-        "https://stac-extensions.github.io/eo/v1.0.0/schema.json",
-        "https://stac-extensions.github.io/xarray-assets/v1.0.0/schema.json"
-    ],
-    "description": "CONUS404 40 years of hourly values on cloud storage",
-    "links": [
-        {
-            "rel": "root",
-            "href": "../catalog.json",
-            "type": "application/json"
-        },
-        {
-            "rel": "parent",
-            "href": "../catalog.json",
-            "type": "application/json"
-        },
-        {
-            "rel": "self",
-            "href": "./collection.json",
-            "type": "application/json"
-        }
-    ],
-    "assets": {
-        "zarr-osn": {
-            "href": "s3://rsignellbucket2/hytest/nwm/nwis_chanobs.zarr",
-            "type": "application/vnd+zarr",
-            "description": "OSN access to collection zarr group",
-            "xarray:open_kwargs": {
-                "chunks": {},
-                "engine": "zarr",
-                "consolidated": true
-            },
-            "xarray:storage_options": {
-                "anon": true,
-                "requester_pays": false,
-                "client_kwargs": {
-                    "endpoint_url": "https://renc.osn.xsede.org"
-                }
-            },
-            "roles": [
-                "data",
-                "zarr",
-                "s3"
-            ]
-        }
+  "type": "Collection",
+  "id": "conus404-daily",
+  "stac_version": "1.0.0",
+  "description": "CONUS404 40 years of daily values for subset of model output variables derived from hourly values on cloud storage",
+  "links": [
+    {
+      "rel": "root",
+      "href": "../catalog.json",
+      "type": "application/json"
     },
-    "extent": {
-        "spatial": {
-            "bbox": [
-                [
-                    -138.73135375976562,
-                    17.647308349609375,
-                    -57.068634033203125,
-                    57.34341812133789
-                ]
-            ]
-        },
-        "temporal": {
-            "interval": [
-                [
-                    "1979-10-01T00:00:00Z",
-                    "2021-09-25T00:00:00Z"
-                ]
-            ]
-        }
+    {
+      "rel": "parent",
+      "href": "../catalog.json",
+      "type": "application/json"
+    }
+  ],
+  "stac_extensions": [
+    "https://stac-extensions.github.io/eo/v1.0.0/schema.json",
+    "https://stac-extensions.github.io/xarray-assets/v1.0.0/schema.json",
+    "https://stac-extensions.github.io/datacube/v2.2.0/schema.json"
+  ],
+  "cube:dimensions": {
+    "time": {
+      "type": "temporal",
+      "description": null,
+      "extent": [
+        "1979-10-01T00:00:00Z",
+        "2022-10-01T00:00:00Z"
+      ],
+      "step": "P1DT0H0M0S"
     },
-    "license": "CC0-1.0"
+    "x": {
+      "type": "spatial",
+      "axis": "x",
+      "description": "x coordinate of projection",
+      "extent": [
+        -2732000.0,
+        2732000.0
+      ],
+      "step": 4000.0,
+      "reference_system": "{\"$schema\":\"https://proj.org/schemas/v0.5/projjson.schema.json\",\"type\":\"ProjectedCRS\",\"name\":\"unknown\",\"base_crs\":{\"name\":\"unknown\",\"datum\":{\"type\":\"GeodeticReferenceFrame\",\"name\":\"unknown\",\"ellipsoid\":{\"name\":\"unknown\",\"radius\":6370000}},\"coordinate_system\":{\"subtype\":\"ellipsoidal\",\"axis\":[{\"name\":\"Latitude\",\"abbreviation\":\"lat\",\"direction\":\"north\",\"unit\":\"degree\"},{\"name\":\"Longitude\",\"abbreviation\":\"lon\",\"direction\":\"east\",\"unit\":\"degree\"}]}},\"conversion\":{\"name\":\"unknown\",\"method\":{\"name\":\"Lambert Conic Conformal (2SP)\",\"id\":{\"authority\":\"EPSG\",\"code\":9802}},\"parameters\":[{\"name\":\"Latitude of false origin\",\"value\":39.1000061035156,\"unit\":\"degree\",\"id\":{\"authority\":\"EPSG\",\"code\":8821}},{\"name\":\"Longitude of false origin\",\"value\":-97.9000015258789,\"unit\":\"degree\",\"id\":{\"authority\":\"EPSG\",\"code\":8822}},{\"name\":\"Latitude of 1st standard parallel\",\"value\":30,\"unit\":\"degree\",\"id\":{\"authority\":\"EPSG\",\"code\":8823}},{\"name\":\"Latitude of 2nd standard parallel\",\"value\":50,\"unit\":\"degree\",\"id\":{\"authority\":\"EPSG\",\"code\":8824}},{\"name\":\"Easting at false origin\",\"value\":0,\"unit\":\"metre\",\"id\":{\"authority\":\"EPSG\",\"code\":8826}},{\"name\":\"Northing at false origin\",\"value\":0,\"unit\":\"metre\",\"id\":{\"authority\":\"EPSG\",\"code\":8827}}]},\"coordinate_system\":{\"subtype\":\"Cartesian\",\"axis\":[{\"name\":\"Easting\",\"abbreviation\":\"E\",\"direction\":\"east\",\"unit\":\"metre\"},{\"name\":\"Northing\",\"abbreviation\":\"N\",\"direction\":\"north\",\"unit\":\"metre\"}]}}"
+    },
+    "y": {
+      "type": "spatial",
+      "axis": "y",
+      "description": "y coordinate of projection",
+      "extent": [
+        -2027999.9999999958,
+        2028000.0000000042
+      ],
+      "step": 4000.0,
+      "reference_system": "{\"$schema\":\"https://proj.org/schemas/v0.5/projjson.schema.json\",\"type\":\"ProjectedCRS\",\"name\":\"unknown\",\"base_crs\":{\"name\":\"unknown\",\"datum\":{\"type\":\"GeodeticReferenceFrame\",\"name\":\"unknown\",\"ellipsoid\":{\"name\":\"unknown\",\"radius\":6370000}},\"coordinate_system\":{\"subtype\":\"ellipsoidal\",\"axis\":[{\"name\":\"Latitude\",\"abbreviation\":\"lat\",\"direction\":\"north\",\"unit\":\"degree\"},{\"name\":\"Longitude\",\"abbreviation\":\"lon\",\"direction\":\"east\",\"unit\":\"degree\"}]}},\"conversion\":{\"name\":\"unknown\",\"method\":{\"name\":\"Lambert Conic Conformal (2SP)\",\"id\":{\"authority\":\"EPSG\",\"code\":9802}},\"parameters\":[{\"name\":\"Latitude of false origin\",\"value\":39.1000061035156,\"unit\":\"degree\",\"id\":{\"authority\":\"EPSG\",\"code\":8821}},{\"name\":\"Longitude of false origin\",\"value\":-97.9000015258789,\"unit\":\"degree\",\"id\":{\"authority\":\"EPSG\",\"code\":8822}},{\"name\":\"Latitude of 1st standard parallel\",\"value\":30,\"unit\":\"degree\",\"id\":{\"authority\":\"EPSG\",\"code\":8823}},{\"name\":\"Latitude of 2nd standard parallel\",\"value\":50,\"unit\":\"degree\",\"id\":{\"authority\":\"EPSG\",\"code\":8824}},{\"name\":\"Easting at false origin\",\"value\":0,\"unit\":\"metre\",\"id\":{\"authority\":\"EPSG\",\"code\":8826}},{\"name\":\"Northing at false origin\",\"value\":0,\"unit\":\"metre\",\"id\":{\"authority\":\"EPSG\",\"code\":8827}}]},\"coordinate_system\":{\"subtype\":\"Cartesian\",\"axis\":[{\"name\":\"Easting\",\"abbreviation\":\"E\",\"direction\":\"east\",\"unit\":\"metre\"},{\"name\":\"Northing\",\"abbreviation\":\"N\",\"direction\":\"north\",\"unit\":\"metre\"}]}}"
+    },
+    "bottom_top_stag": {
+      "type": "spatial",
+      "axis": "z",
+      "description": null
+    },
+    "bottom_top": {
+      "type": "spatial",
+      "axis": "z",
+      "description": null
+    },
+    "soil_layers_stag": {
+      "type": "spatial",
+      "axis": "z",
+      "description": null
+    },
+    "x_stag": {
+      "type": "spatial",
+      "axis": "x",
+      "description": null
+    },
+    "y_stag": {
+      "type": "spatial",
+      "axis": "y",
+      "description": null
+    },
+    "snow_layers_stag": {
+      "type": "spatial",
+      "axis": "z",
+      "description": null
+    },
+    "snso_layers_stag": {
+      "type": "spatial",
+      "axis": "z",
+      "description": null
+    }
+  },
+  "cube:variables": {
+    "ACDEWC": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated canopy dew rate",
+      "unit": "mm"
+    },
+    "ACDRIPR": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated canopy precipitation drip rate",
+      "unit": "mm"
+    },
+    "ACDRIPS": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated canopy snow drip rate",
+      "unit": "mm"
+    },
+    "ACECAN": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated net evaporation of canopy water (evap + sublim - dew - frost)",
+      "unit": "mm"
+    },
+    "ACEDIR": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated net soil evaporation or snowpack sublimation (evap or sublim - dew or frost)",
+      "unit": "mm"
+    },
+    "ACETLSM": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated total evaporation",
+      "unit": "mm"
+    },
+    "ACETRAN": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated plant transpiration",
+      "unit": "mm"
+    },
+    "ACEVAC": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated canopy evaporation",
+      "unit": "mm"
+    },
+    "ACEVB": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated latent heat flux over bare ground",
+      "unit": "kJ m-2"
+    },
+    "ACEVC": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated latent heat flux for canopy layer",
+      "unit": "kJ m-2"
+    },
+    "ACEVG": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated ground latent heat flux below canopy",
+      "unit": "kJ m-2"
+    },
+    "ACFROC": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated canopy frost",
+      "unit": "mm"
+    },
+    "ACFRZC": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated refreezing of canopy liquid water",
+      "unit": "mm"
+    },
+    "ACGHB": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated heat flux into soil or snowpack for bare ground",
+      "unit": "kJ m-2"
+    },
+    "ACGHFLSM": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated total ground heat flux into soil or snowpack",
+      "unit": "kJ m-2"
+    },
+    "ACGHV": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated heat flux into soil or snowpack under canopy",
+      "unit": "kJ m-2"
+    },
+    "ACINTR": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated canopy rain interception rate",
+      "unit": "mm"
+    },
+    "ACINTS": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated canopy snow interception rate",
+      "unit": "mm"
+    },
+    "ACLHFLSM": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated total latent heat flux",
+      "unit": "kJ m-2"
+    },
+    "ACLWDNB": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated downwelling longwave radiation flux at bottom",
+      "unit": "J m-2"
+    },
+    "ACLWUPB": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated upwelling longwave radiation flux at bottom",
+      "unit": "J m-2"
+    },
+    "ACMELTC": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated canopy snow melt",
+      "unit": "mm"
+    },
+    "ACPONDING": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated surface ponding from complete pack melt",
+      "unit": "mm"
+    },
+    "ACQLAT": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated groundwater lateral flow",
+      "unit": "mm"
+    },
+    "ACQRF": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated groundwater baseflow",
+      "unit": "mm"
+    },
+    "ACRAINLSM": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated liquid precipitation into land surface model",
+      "unit": "mm"
+    },
+    "ACRAINSNOW": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated rain on snow pack",
+      "unit": "mm"
+    },
+    "ACRUNSB": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated subsurface runoff",
+      "unit": "mm"
+    },
+    "ACRUNSF": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated surface runoff",
+      "unit": "mm"
+    },
+    "ACSHFLSM": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated total sensible heat flux",
+      "unit": "kJ m-2"
+    },
+    "ACSNBOT": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated liquid water flux out of bottom of snowpack",
+      "unit": "mm"
+    },
+    "ACSNFRO": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated snowpack frost",
+      "unit": "mm"
+    },
+    "ACSNOM": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated total liquid water out of the snowpack",
+      "unit": "kg m-2"
+    },
+    "ACSNOWLSM": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated frozen precipitation into land surface model",
+      "unit": "mm"
+    },
+    "ACSNSUB": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated snowpack sublimation",
+      "unit": "mm"
+    },
+    "ACSUBC": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated canopy snow sublimation",
+      "unit": "mm"
+    },
+    "ACSWDNB": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated downwelling shortwave radiation flux at bottom",
+      "unit": "J m-2"
+    },
+    "ACSWDNLSM": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated shortwave radiation down at land surface model",
+      "unit": "kJ m-2"
+    },
+    "ACSWDNT": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated downwelling shortwave radiation flux at top",
+      "unit": "J m-2"
+    },
+    "ACSWUPB": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated upwelling shortwave radiation flux at bottom",
+      "unit": "J m-2"
+    },
+    "ACSWUPLSM": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated shortwave radiation up at land surface model",
+      "unit": "kJ m-2"
+    },
+    "ACTHROR": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated canopy rain throughfall",
+      "unit": "mm"
+    },
+    "ACTHROS": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated canopy snow throughfall",
+      "unit": "mm"
+    },
+    "ACTR": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated transpiration",
+      "unit": "kJ m-2"
+    },
+    "ALBEDO": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Surface albedo including snow effects",
+      "unit": "1"
+    },
+    "BF": {
+      "dimensions": [
+        "bottom_top_stag"
+      ],
+      "type": "data",
+      "description": "Full levels, bf=0 => isobaric; bf=znw => sigma",
+      "unit": "Dimensionless"
+    },
+    "BH": {
+      "dimensions": [
+        "bottom_top"
+      ],
+      "type": "data",
+      "description": "Half levels, bh=0 => isobaric; bh=znu => sigma",
+      "unit": "Dimensionless"
+    },
+    "C1F": {
+      "dimensions": [
+        "bottom_top_stag"
+      ],
+      "type": "data",
+      "description": "Full levels, c1f = d bf / d eta, using znu",
+      "unit": "Dimensionless"
+    },
+    "C1H": {
+      "dimensions": [
+        "bottom_top"
+      ],
+      "type": "data",
+      "description": "Half levels, c1h = d bf / d eta, using znw",
+      "unit": "Dimensionless"
+    },
+    "C2F": {
+      "dimensions": [
+        "bottom_top_stag"
+      ],
+      "type": "data",
+      "description": "Full levels, c2f = (1-c1f)*(p0-pt)",
+      "unit": "Pa"
+    },
+    "C2H": {
+      "dimensions": [
+        "bottom_top"
+      ],
+      "type": "data",
+      "description": "Half levels, c2h = (1-c1h)*(p0-pt)",
+      "unit": "Pa"
+    },
+    "C3F": {
+      "dimensions": [
+        "bottom_top_stag"
+      ],
+      "type": "data",
+      "description": "Full levels, c3f = bf",
+      "unit": "Dimensionless"
+    },
+    "C3H": {
+      "dimensions": [
+        "bottom_top"
+      ],
+      "type": "data",
+      "description": "Half levels, c3h = bh",
+      "unit": "Dimensionless"
+    },
+    "C4F": {
+      "dimensions": [
+        "bottom_top_stag"
+      ],
+      "type": "data",
+      "description": "Full levels, c4f = (eta-bf)*(p0-pt)+pt, using znw",
+      "unit": "Pa"
+    },
+    "C4H": {
+      "dimensions": [
+        "bottom_top"
+      ],
+      "type": "data",
+      "description": "Half levels, c4h = (eta-bh)*(p0-pt)+pt, using znu",
+      "unit": "Pa"
+    },
+    "CANWAT": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Canopy intercepted water",
+      "unit": "kg m-2"
+    },
+    "CF1": {
+      "dimensions": [],
+      "type": "data",
+      "description": "2nd order extrapolation constant",
+      "unit": ""
+    },
+    "CF2": {
+      "dimensions": [],
+      "type": "data",
+      "description": "2nd order extrapolation constant",
+      "unit": ""
+    },
+    "CF3": {
+      "dimensions": [],
+      "type": "data",
+      "description": "2nd order extrapolation constant",
+      "unit": ""
+    },
+    "CFN": {
+      "dimensions": [],
+      "type": "data",
+      "description": "Extrapolation constant",
+      "unit": ""
+    },
+    "CFN1": {
+      "dimensions": [],
+      "type": "data",
+      "description": "Extrapolation constant",
+      "unit": ""
+    },
+    "CLAT": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Computational grid latitude, south is negative",
+      "unit": "degree_north"
+    },
+    "COSALPHA": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Local cosine of map rotation",
+      "unit": ""
+    },
+    "DN": {
+      "dimensions": [
+        "bottom_top"
+      ],
+      "type": "data",
+      "description": "D(eta) values between half (mass) levels",
+      "unit": ""
+    },
+    "DNW": {
+      "dimensions": [
+        "bottom_top"
+      ],
+      "type": "data",
+      "description": "D(eta) values between full (w) levels",
+      "unit": ""
+    },
+    "DZS": {
+      "dimensions": [
+        "soil_layers_stag"
+      ],
+      "type": "data",
+      "description": "Thickness of soil layers",
+      "unit": "m"
+    },
+    "E": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Coriolis cosine latitude term",
+      "unit": "s-1"
+    },
+    "F": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Coriolis sine latitude term",
+      "unit": "s-1"
+    },
+    "FNM": {
+      "dimensions": [
+        "bottom_top"
+      ],
+      "type": "data",
+      "description": "Upper weight for vertical stretching",
+      "unit": ""
+    },
+    "FNP": {
+      "dimensions": [
+        "bottom_top"
+      ],
+      "type": "data",
+      "description": "Lower weight for vertical stretching",
+      "unit": ""
+    },
+    "GRAUPEL_ACC_NC": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated graupel water equivalent",
+      "unit": "mm"
+    },
+    "HGT": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Terrain Height",
+      "unit": "m"
+    },
+    "ISLTYP": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Dominant soil category",
+      "unit": ""
+    },
+    "IVGTYP": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Dominant vegetation category",
+      "unit": ""
+    },
+    "LAKEMASK": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Lake mask (1 for lake, 0 for non-lake)",
+      "unit": ""
+    },
+    "LANDMASK": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Land mask (1 for land, 0 for water)",
+      "unit": ""
+    },
+    "LU_INDEX": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Land use category",
+      "unit": ""
+    },
+    "MAPFAC_M": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Map scale factor on mass grid",
+      "unit": ""
+    },
+    "MAPFAC_MX": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Map scale factor on mass grid, x direction",
+      "unit": ""
+    },
+    "MAPFAC_MY": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Map scale factor on mass grid, y direction",
+      "unit": ""
+    },
+    "MAPFAC_U": {
+      "dimensions": [
+        "y",
+        "x_stag"
+      ],
+      "type": "data",
+      "description": "Map scale factor on u-grid",
+      "unit": ""
+    },
+    "MAPFAC_UX": {
+      "dimensions": [
+        "y",
+        "x_stag"
+      ],
+      "type": "data",
+      "description": "Map scale factor on u-grid, x direction",
+      "unit": ""
+    },
+    "MAPFAC_UY": {
+      "dimensions": [
+        "y",
+        "x_stag"
+      ],
+      "type": "data",
+      "description": "Map scale factor on u-grid, y direction",
+      "unit": ""
+    },
+    "MAPFAC_V": {
+      "dimensions": [
+        "y_stag",
+        "x"
+      ],
+      "type": "data",
+      "description": "Map scale factor on v-grid",
+      "unit": ""
+    },
+    "MAPFAC_VX": {
+      "dimensions": [
+        "y_stag",
+        "x"
+      ],
+      "type": "data",
+      "description": "Map scale factor on v-grid, x direction",
+      "unit": ""
+    },
+    "MAPFAC_VY": {
+      "dimensions": [
+        "y_stag",
+        "x"
+      ],
+      "type": "data",
+      "description": "Map scale factor on v-grid, y direction",
+      "unit": ""
+    },
+    "MAX_MSTFX": {
+      "dimensions": [],
+      "type": "data",
+      "description": "Maximum map factor in domain",
+      "unit": ""
+    },
+    "MAX_MSTFY": {
+      "dimensions": [],
+      "type": "data",
+      "description": "Maximum map factor in domain",
+      "unit": ""
+    },
+    "MF_VX_INV": {
+      "dimensions": [
+        "y_stag",
+        "x"
+      ],
+      "type": "data",
+      "description": "Inverse map scale factor on v-grid, x direction",
+      "unit": ""
+    },
+    "MLCAPE": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Mixed-layer convective available potential energy (CAPE)",
+      "unit": "J kg-1"
+    },
+    "MUB": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Base state dry air mass in column",
+      "unit": "Pa"
+    },
+    "P00": {
+      "dimensions": [],
+      "type": "data",
+      "description": "Base state pressure",
+      "unit": "Pa"
+    },
+    "PB": {
+      "dimensions": [
+        "bottom_top",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Base state pressure",
+      "unit": "Pa"
+    },
+    "PBLH": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Planetary boundary layer height",
+      "unit": "m"
+    },
+    "PHB": {
+      "dimensions": [
+        "bottom_top_stag",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Base-state geopotential",
+      "unit": "m2 s-2"
+    },
+    "PREC_ACC_NC": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated grid scale precipitation",
+      "unit": "mm"
+    },
+    "PSFC": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Surface pressure",
+      "unit": "Pa"
+    },
+    "PWAT": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": null,
+      "unit": "meters"
+    },
+    "P_STRAT": {
+      "dimensions": [],
+      "type": "data",
+      "description": "Base state pressure at bottom of stratosphere",
+      "unit": "Pa"
+    },
+    "P_TOP": {
+      "dimensions": [],
+      "type": "data",
+      "description": "Pressure top of the model",
+      "unit": "Pa"
+    },
+    "Q2": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Water vapor mixing ratio at 2 meters",
+      "unit": "kg kg-1"
+    },
+    "QRFS": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated baseflow",
+      "unit": "m"
+    },
+    "QSLAT": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated groundwater lateral flow",
+      "unit": "m"
+    },
+    "QSPRINGS": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated seeping water",
+      "unit": "m"
+    },
+    "QVAPOR": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Water vapor mixing ratio",
+      "unit": "kg kg-1"
+    },
+    "RDN": {
+      "dimensions": [
+        "bottom_top"
+      ],
+      "type": "data",
+      "description": "Inverse d(eta) values between half (mass) levels",
+      "unit": ""
+    },
+    "RDNW": {
+      "dimensions": [
+        "bottom_top"
+      ],
+      "type": "data",
+      "description": "Inverse d(eta) values between full (w) levels",
+      "unit": ""
+    },
+    "RDX": {
+      "dimensions": [],
+      "type": "data",
+      "description": "Inverse X grid length",
+      "unit": "m-1"
+    },
+    "RDY": {
+      "dimensions": [],
+      "type": "data",
+      "description": "Inverse Y grid length",
+      "unit": "m-1"
+    },
+    "RECH": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated water table recharge",
+      "unit": "mm"
+    },
+    "SH2O": {
+      "dimensions": [
+        "time",
+        "soil_layers_stag",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Soil liquid water",
+      "unit": "m3 m-3"
+    },
+    "SHDMAX": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Annual maximum vegetation fraction",
+      "unit": "1"
+    },
+    "SHDMIN": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Annual minimum vegetation fraction",
+      "unit": "1"
+    },
+    "SINALPHA": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Local sine of map rotation",
+      "unit": ""
+    },
+    "SMCWTD": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Deep soil moisture",
+      "unit": "m3 m-3"
+    },
+    "SMOIS": {
+      "dimensions": [
+        "time",
+        "soil_layers_stag",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Soil moisture",
+      "unit": "m3 m-3"
+    },
+    "SNICE": {
+      "dimensions": [
+        "time",
+        "snow_layers_stag",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Snow layer ice",
+      "unit": "mm"
+    },
+    "SNLIQ": {
+      "dimensions": [
+        "time",
+        "snow_layers_stag",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Snow layer liquid",
+      "unit": "mm"
+    },
+    "SNOALB": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Annual maximum snow albedo in fraction",
+      "unit": "1"
+    },
+    "SNOW": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Snow water equivalent",
+      "unit": "kg m-2"
+    },
+    "SNOWC": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Snow cover fraction",
+      "unit": ""
+    },
+    "SNOWENERGY": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Energy content in snow relative to 273.16 K",
+      "unit": "kJ m-2"
+    },
+    "SNOWH": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Physical snow depth",
+      "unit": "m"
+    },
+    "SNOW_ACC_NC": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Accumulated snow water equivalent",
+      "unit": "mm"
+    },
+    "SOILENERGY": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Energy content in soil relative to 273.16 K",
+      "unit": "kJ m-2"
+    },
+    "SR": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Fraction of frozen precipitation",
+      "unit": "1"
+    },
+    "T00": {
+      "dimensions": [],
+      "type": "data",
+      "description": "Base state temperature",
+      "unit": "K"
+    },
+    "T2": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Temperature at 2 meters",
+      "unit": "K"
+    },
+    "TD2": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Dewpoint temperature at 2 meters",
+      "unit": "K"
+    },
+    "TISO": {
+      "dimensions": [],
+      "type": "data",
+      "description": "Temperature at which the base perturbation potential temperature turns constant",
+      "unit": "K"
+    },
+    "TK": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": null,
+      "unit": "K"
+    },
+    "TLP": {
+      "dimensions": [],
+      "type": "data",
+      "description": "Base state lapse rate",
+      "unit": ""
+    },
+    "TLP_STRAT": {
+      "dimensions": [],
+      "type": "data",
+      "description": "Base state lapse rate (DT/D(LN(P)) in stratosphere",
+      "unit": "K"
+    },
+    "TRAD": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Surface radiative temperature",
+      "unit": "K"
+    },
+    "TSK": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Surface skin temperature",
+      "unit": "K"
+    },
+    "TSLB": {
+      "dimensions": [
+        "time",
+        "soil_layers_stag",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Soil temperature",
+      "unit": "K"
+    },
+    "TSNO": {
+      "dimensions": [
+        "time",
+        "snow_layers_stag",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Snow temperature",
+      "unit": "K"
+    },
+    "TV": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Vegetation leaf temperature",
+      "unit": "K"
+    },
+    "U": {
+      "dimensions": [
+        "time",
+        "y",
+        "x_stag"
+      ],
+      "type": "data",
+      "description": "U-component of wind with respect to model grid",
+      "unit": "m s-1"
+    },
+    "U10": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "U-component of wind at 10 meters with respect to model grid",
+      "unit": "m s-1"
+    },
+    "V": {
+      "dimensions": [
+        "time",
+        "y_stag",
+        "x"
+      ],
+      "type": "data",
+      "description": "V-component of wind with respect to model grid",
+      "unit": "m s-1"
+    },
+    "V10": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "V-component of wind at 10 meters with respect to model grid",
+      "unit": "m s-1"
+    },
+    "VAR": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Orographic variance",
+      "unit": ""
+    },
+    "VAR_SSO": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Variance of subgrid-scale orography",
+      "unit": "m2"
+    },
+    "XLAND": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Land mask (1 for land, 2 for water)",
+      "unit": ""
+    },
+    "Z": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": null,
+      "unit": "meters MSL"
+    },
+    "ZETATOP": {
+      "dimensions": [],
+      "type": "data",
+      "description": "ZETA at model top",
+      "unit": ""
+    },
+    "ZNU": {
+      "dimensions": [
+        "bottom_top"
+      ],
+      "type": "data",
+      "description": "Eta values on half (mass) levels",
+      "unit": ""
+    },
+    "ZNW": {
+      "dimensions": [
+        "bottom_top_stag"
+      ],
+      "type": "data",
+      "description": "Eta values on full (w) levels",
+      "unit": ""
+    },
+    "ZS": {
+      "dimensions": [
+        "soil_layers_stag"
+      ],
+      "type": "data",
+      "description": "Depths of centers of soil layers",
+      "unit": "m"
+    },
+    "ZSNSO": {
+      "dimensions": [
+        "time",
+        "snso_layers_stag",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Layer-bottom depth from snow surface",
+      "unit": "m"
+    },
+    "ZWT": {
+      "dimensions": [
+        "time",
+        "y",
+        "x"
+      ],
+      "type": "data",
+      "description": "Water table depth",
+      "unit": "m"
+    },
+    "crs": {
+      "dimensions": [],
+      "type": "auxiliary",
+      "description": null,
+      "unit": null
+    },
+    "lat": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "auxiliary",
+      "description": "Latitude, south is negative",
+      "unit": "degree_north"
+    },
+    "lat_u": {
+      "dimensions": [
+        "y",
+        "x_stag"
+      ],
+      "type": "auxiliary",
+      "description": "Latitude, south is negative",
+      "unit": "degree_north"
+    },
+    "lat_v": {
+      "dimensions": [
+        "y_stag",
+        "x"
+      ],
+      "type": "auxiliary",
+      "description": "Latitude, south is negative",
+      "unit": "degree_north"
+    },
+    "lon": {
+      "dimensions": [
+        "y",
+        "x"
+      ],
+      "type": "auxiliary",
+      "description": "Longitude, west is negative",
+      "unit": "degree_east"
+    },
+    "lon_u": {
+      "dimensions": [
+        "y",
+        "x_stag"
+      ],
+      "type": "auxiliary",
+      "description": "Longitude, west is negative",
+      "unit": "degree_east"
+    },
+    "lon_v": {
+      "dimensions": [
+        "y_stag",
+        "x"
+      ],
+      "type": "auxiliary",
+      "description": "Longitude, west is negative",
+      "unit": "degree_east"
+    }
+  },
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -138.73136633818572,
+          17.647311306554393,
+          -57.06863671357211,
+          57.34342629122762
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          "1979-10-01T00:00:00Z",
+          "2022-10-01T00:00:00Z"
+        ]
+      ]
+    }
+  },
+  "license": "CC0-1.0",
+  "assets": {
+    "zarr-s3-osn": {
+      "href": "s3://hytest/conus404/conus404_daily.zarr/",
+      "type": "application/vnd+zarr",
+      "title": "Requester pays access to zarr via S3 API",
+      "description": "Free, public access to zarr data store via the S3 API. This data is stored on an Open Storage Network Pod.",
+      "xarray:open_kwargs": {
+        "chunks": {},
+        "engine": "zarr",
+        "consolidated": true
+      },
+      "xarray:storage_options": {
+        "anon": true,
+        "client_kwargs": {
+          "endpoint_url": "https://usgs.osn.mghpcc.org/"
+        }
+      },
+      "roles": [
+        "data",
+        "zarr",
+        "s3",
+        "osn"
+      ]
+    },
+    "zarr-s3-aws": {
+      "href": "s3://nhgf-development/conus404/conus404_daily_202210.zarr/",
+      "type": "application/vnd+zarr",
+      "title": "Free access to zarr via S3 API",
+      "description": "Requester pays, public access to zarr data store via the S3 API. This data is stored in an AWS S3 bucket.",
+      "xarray:open_kwargs": {
+        "chunks": {},
+        "engine": "zarr",
+        "consolidated": true
+      },
+      "xarray:storage_options": {
+        "requester_pays": true
+      },
+      "roles": [
+        "data",
+        "zarr",
+        "s3",
+        "aws",
+        "requester-pays"
+      ]
+    }
+  }
 }
