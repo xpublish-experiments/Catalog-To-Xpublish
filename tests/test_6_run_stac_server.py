@@ -87,7 +87,7 @@ def test_catalog_endpoints(client: fastapi.testclient.TestClient) -> None:
     assert response.status_code == 200
 
     # NOTE: this is not static as the STAC catalog is on GitLab and can change
-    for catalog in ['conus-404-hourly', 'sub-catalog']:
+    for catalog in ['conus404-daily', 'sub-catalog']:
         assert catalog in response.json()
 
     response = client.get('/parent_catalog')
