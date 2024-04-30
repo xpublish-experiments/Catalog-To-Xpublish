@@ -66,9 +66,7 @@ class STACRouter(CatalogRouter):
     def get_catalog_as_json(self) -> JSONResponse:
         """Returns the catalog as JSON."""
         return JSONResponse(
-            content=json.dumps(
-                self.catalog_endpoint_obj.catalog_obj.to_dict(),
-            ),
+            content=self.catalog_endpoint_obj.catalog_obj.to_dict(),
             media_type='application/json',
             status_code=200,
         )
