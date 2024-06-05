@@ -107,7 +107,7 @@ class STACCatalogSearch(CatalogSearcher):
         dataset_info_dicts: Dict[str, Dict[str, Any]],
     ) -> None:
         """Adds all assets to the list + dict of datasets."""
-        for child_name, child in pystac_obj.get_assets().items():
+        for child_name, child in pystac_obj.assets.items():
             # make sure the item type is supported
             url_path = child.get_absolute_href()
             if url_path.endswith('/'):
