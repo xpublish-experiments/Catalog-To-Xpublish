@@ -216,7 +216,8 @@ def create_app(
             router = app_inputs.catalog_implementation.catalog_router(
                 catalog_endpoint_obj=cat_end,
             )
-            app.include_router(router=router.router)
+            # add prefix?
+            app.include_router(router=router.router, prefix=cat_prefix)
     logger.info(
         f'Returning successfully created server application!',
     )
